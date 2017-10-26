@@ -12,10 +12,6 @@
     border-radius: 4px;
   }
 
-  .layout-content-main {
-    padding: 10px;
-  }
-
   .layout-copy {
     text-align: center;
     padding: 10px 0 20px;
@@ -34,6 +30,9 @@
             </div>
             <div>
               <p>{{ post.title }}</p>
+              <p>{{ post.author }}</p>
+              <p>{{ post.author }}</p>
+              <p><Tag v-for="tag in post.tags">{{ tag }}</Tag></p>
             </div>
           </Card>
         </Col>
@@ -46,7 +45,6 @@
 </template>
 
 <script>
-  // import fs from 'fs'
   import hexo from '../store/modules/Hexo'
 
   export default {
