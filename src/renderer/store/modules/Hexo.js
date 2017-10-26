@@ -1,29 +1,37 @@
+import when from 'when'
+
 const fs = require('fs')
 
 class Hexo {
   listPostFiles () {
-    var me = this
     var path = '/home/gaoyoubo/code/web/blog.mspring.org/source/_posts'
+    var deferred = when.defer()
     fs.readdir(path, null, (err, files) => {
       if (err) {
         console.log(err.message)
-        return
+        deferred.reject(err)
       }
+      var filenames = []
       files.forEach(file => {
-        me.readMarkdown(path + '/' + file)
+        filenames.push(path + '/' + file)
       })
+      deferred.resolve(filenames)
     })
+    return deferred.promise
   }
 
-  readMarkdown (filename) {
+  readPost (filename) {
+    var deferred = when.defer()
     var me = this
     fs.readFile(filename, 'utf8', (err, data) => {
       if (err) {
-        console.error(err)
+        console.error('文章信息读取错误', err)
+        deferred.reject(err)
       }
       var article = me.json(data)
-      console.log(article)
+      deferred.resolve(article)
     })
+    return deferred.promise
   }
 
   /**

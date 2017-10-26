@@ -1,10 +1,9 @@
-import hexo from './Hexo'
-
 export default {
   state: {},
   mutations: {
     scanTags (state) {
-      hexo.listPostFiles()
+      // hexo.listPostFiles()
+      console.log('scanTags...')
     }
   },
   actions: {
