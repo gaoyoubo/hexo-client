@@ -8,7 +8,7 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: require('@/components/Index').default
+      component: require('@/components/Template').default
     },
     {
       path: '*',
