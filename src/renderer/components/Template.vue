@@ -67,7 +67,7 @@
 </style>
 <template>
   <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}">
-    <el-aside width="300px" class="left">
+    <el-aside :width="asideWidth" class="left">
       <ul class="post-list">
         <li class="post-li" v-for="post in posts">
           <div class="post-table">
@@ -84,34 +84,22 @@
       </ul>
     </el-aside>
 
-    <el-container class="right">
-      <el-main>
-        <el-table :data="tableData">
-          <el-table-column prop="date" label="日期" width="140">
-          </el-table-column>
-          <el-table-column prop="name" label="姓名" width="120">
-          </el-table-column>
-          <el-table-column prop="address" label="地址">
-          </el-table-column>
-        </el-table>
-      </el-main>
+    <el-container class="right" :style="{'width': contentWidth}">
+      <editor></editor>
     </el-container>
   </el-container>
 </template>
 
 <script>
   import hexo from '../store/modules/Hexo'
+  import Editor from './Editor.vue'
 
   export default {
     data () {
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }
       return {
-        tableData: Array(20).fill(item),
-        windowHeight: '300px',
+        windowHeight: '300px', // 窗口高度
+        asideWidth: '300px', // 侧边宽度
+        contentWidth: '', // 内容宽度
         posts: []
       }
     },
@@ -119,7 +107,7 @@
     methods: {
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
-        console.log(this.windowHeight)
+        this.contentWidth = (document.documentElement.clientWidth - 300) + 'px'
       }
     },
 
@@ -140,6 +128,10 @@
 
     beforeDestroy () {
       window.removeEventListener('resize', this.handleResize)
+    },
+
+    components: {
+      Editor
     }
   }
 </script>
