@@ -76,9 +76,6 @@
               <h5>作者：{{ post.author }}</h5>
               <!--<p>Hi，李明明，申请交行信息卡，100元等你拿，李明明，申请交行信息卡，100元等你拿，</p>-->
             </div>
-            <div class="mui-table-cell mui-col-xs-2 mui-text-right">
-              <span class="mui-h5">{{ post.date }}</span>
-            </div>
           </div>
         </li>
       </ul>
