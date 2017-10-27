@@ -1,6 +1,7 @@
 'use strict'
 
 import { app, BrowserWindow } from 'electron'
+import path from 'path'
 
 /**
  * Set `__static` path to static files in production
@@ -22,7 +23,8 @@ function createWindow () {
   mainWindow = new BrowserWindow({
     height: 563,
     width: 1000,
-    useContentSize: true
+    useContentSize: true,
+    icon: path.join(__dirname, '../../build/icons/logo.png')
   })
 
   mainWindow.loadURL(winURL)
