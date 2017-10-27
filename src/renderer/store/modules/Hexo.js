@@ -49,11 +49,8 @@ class Hexo {
     // 解析普通属性
     meta.forEach(value => {
       let arr = value.split(':')
-      if (arr.length !== 2) {
-        return
-      }
       let key = arr[0]
-      let val = arr[1]
+      let val = arr.slice(1).join(':')
       if (key && val) {
         result[key] = val.trim()
       }
