@@ -9,76 +9,72 @@
   .left {
     overflow-x: hidden;
     overflow-y: auto;
-    background-color: rgb(238, 241, 246);
+    /*background-color: rgb(238, 241, 246);*/
   }
 
   .right {
   }
 
-  .post-list {
+  .article-list-item {
+    padding: 8px;
     position: relative;
-    margin-top: 0;
-    margin-bottom: 0;
-    padding-left: 0;
-    list-style: none;
-    background-color: transparent;
+    border-bottom: 1px solid rgba(110,100,102,0.15);
+    cursor: pointer;
   }
 
-  .post-list .post-li {
-    position: relative;
+  .article-list-item .article-title {
+    margin: 0px 0px 5px;
+    font-weight: 400;
+    font-size: 17px;
+    width: auto;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+  }
+
+  .article-list-item .article-desc {
+    margin: 0px 0px 5px;
+    color: #999999;
+    font-size: 13px;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .article-list-item .article-info {
+    margin: 0px;
     padding: 0px;
-  }
-
-  .post-list .post-li .post-table {
-    display: table;
-    width: 100%;
-    table-layout: fixed;
-  }
-
-  .post-list .post-li .post-table .post-table-cell {
-    position: relative;
-    display: table-cell;
-  }
-
-  .post-list .post-li .post-table .post-table-cell h4 {
-    line-height: 21px;
-    font-weight: 500;
+    font-size: 13px;
+    color: #CECECE;
+    line-height: 1em;
+    list-style: none;
     overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    font-size: 18px;
   }
 
-  .post-list .post-li .post-table .post-table-cell h5 {
-    font-size: 14px;
-    font-weight: 400;
-    color: #8f8f94;
-  }
-
-  .post-list .post-li .post-table .post-table-cell p {
-    font-size: 12px;
-    font-weight: 400;
-    color: #8f8f94;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
+  .article-list-item .article-info .meta {
+    float: left;
+    padding-right: 1em;
   }
 </style>
 <template>
   <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}">
     <el-aside :width="asideWidth" class="left">
-      <ul class="post-list">
-        <li class="post-li" v-for="post in posts">
-          <div class="post-table">
-            <div class="post-table-cell">
-              <h4>{{ post.title }}</h4>
-              <h5>作者：{{ post.author }}</h5>
-              <!--<p>Hi，李明明，申请交行信息卡，100元等你拿，李明明，申请交行信息卡，100元等你拿，</p>-->
-            </div>
-          </div>
-        </li>
-      </ul>
+      <div class="article-list-panel" v-for="post in posts">
+        <div class="article-list-item">
+          <h4 class="article-title">{{ post.title }}</h4>
+          <!--<p class="article-desc"></p>-->
+          <ul class="article-info">
+            <li class="meta">{{ post.author }}</li>
+            <li class="meta">{{ post.date }}</li>
+          </ul>
+        </div>
+      </div>
     </el-aside>
 
     <el-container class="right" :style="{'width': contentWidth}">
