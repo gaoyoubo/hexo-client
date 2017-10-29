@@ -87,9 +87,9 @@
 </script>
 <style>
   .editor {
-    width: 100%;
+    width: 99%;
     height: 100%;
-    margin: 10px;
+    margin: 10px 0px 10px 0px;
   }
 
   .marked-txt {

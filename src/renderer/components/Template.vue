@@ -103,9 +103,9 @@
       </div>
     </el-aside>
 
-    <el-container class="right" :style="{'width': contentWidth}">
+    <el-container class="right">
       <el-row style="width: 100%;">
-        <el-col :span="24">
+        <el-col :span="24" style="margin: 0px;">
           <editor ref="editor" :editor-height="editorHeight"></editor>
         </el-col>
         <el-col :span="24">
@@ -125,7 +125,6 @@
       return {
         windowHeight: '300px', // 窗口高度
         asideWidth: '300px', // 侧边宽度
-        contentWidth: '', // 内容宽度
         editorHeight: '300px', // 编辑器高度
         posts: []
       }
@@ -134,8 +133,7 @@
     methods: {
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
-        this.contentWidth = (document.documentElement.clientWidth - 300) + 'px'
-        this.editorHeight = (document.documentElement.clientHeight - 200) + 'px'
+        this.editorHeight = (document.documentElement.clientHeight - 120) + 'px'
       },
 
       edit (content) {
