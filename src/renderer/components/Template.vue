@@ -1,4 +1,30 @@
 <style>
+
+  ::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    border: 5px solid transparent;
+  }
+
+  ::-webkit-scrollbar-track {
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, .2) inset;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    min-height: 20px;
+    background-clip: content-box;
+    box-shadow: 0 0 0 5px rgba(0, 0, 0, .2) inset;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+
   html, body {
     height: 100%;
     overflow: hidden;
@@ -78,7 +104,14 @@
     </el-aside>
 
     <el-container class="right" :style="{'width': contentWidth}">
-      <editor ref="editor"></editor>
+      <el-row style="width: 100%;">
+        <el-col :span="24">
+          <editor ref="editor" :editor-height="editorHeight"></editor>
+        </el-col>
+        <el-col :span="24">
+          <el-button type="primary" style="float: right; margin-right: 10px;">保存</el-button>
+        </el-col>
+      </el-row>
     </el-container>
   </el-container>
 </template>
@@ -93,6 +126,7 @@
         windowHeight: '300px', // 窗口高度
         asideWidth: '300px', // 侧边宽度
         contentWidth: '', // 内容宽度
+        editorHeight: '300px', // 编辑器高度
         posts: []
       }
     },
@@ -101,6 +135,7 @@
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
         this.contentWidth = (document.documentElement.clientWidth - 300) + 'px'
+        this.editorHeight = (document.documentElement.clientHeight - 200) + 'px'
       },
 
       edit (content) {

@@ -1,10 +1,14 @@
 <template>
   <el-tabs v-model="activeName" @tab-click="handleClick" :active-name="activeName" class="editor">
     <el-tab-pane label="预览" name="preview">
-      <div class="marked-preview markdown-body" v-html="markdown"></div>
+      <div class="marked-preview markdown-body" v-html="markdown"
+           :style="{'height': editorHeight}"></div>
     </el-tab-pane>
     <el-tab-pane label="编辑" name="edit">
-      <textarea :id="editorId" ref="txt" class="marked-txt" :value="content" @input="update"></textarea>
+      <textarea :id="editorId" ref="txt" class="marked-txt"
+                :value="content"
+                @input="update"
+                :style="{'height': editorHeight}"></textarea>
     </el-tab-pane>
   </el-tabs>
 </template>
@@ -16,6 +20,10 @@
       value: {
         type: String,
         default: ''
+      },
+      editorHeight: {
+        type: String,
+        default: '400px'
       }
     },
     data () {
@@ -93,7 +101,7 @@
   }
 
   .marked-txt, .marked-preview {
-    height: 400px;
+    /*height: 400px;*/
     width: 100%;
     border: 1px solid #ccc;
     padding: 3px 10px;
