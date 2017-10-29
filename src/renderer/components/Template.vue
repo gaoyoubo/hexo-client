@@ -18,7 +18,7 @@
   .article-list-item {
     padding: 8px;
     position: relative;
-    border-bottom: 1px solid rgba(110,100,102,0.15);
+    border-bottom: 1px solid rgba(110, 100, 102, 0.15);
     cursor: pointer;
   }
 
@@ -65,7 +65,7 @@
 <template>
   <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}">
     <el-aside :width="asideWidth" class="left">
-      <div class="article-list-panel" v-for="post in posts">
+      <div class="article-list-panel" v-for="post in posts" @click="edit(post.content)">
         <div class="article-list-item">
           <h4 class="article-title">{{ post.title }}</h4>
           <!--<p class="article-desc"></p>-->
@@ -78,7 +78,7 @@
     </el-aside>
 
     <el-container class="right" :style="{'width': contentWidth}">
-      <editor></editor>
+      <editor ref="editor"></editor>
     </el-container>
   </el-container>
 </template>
@@ -101,6 +101,11 @@
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
         this.contentWidth = (document.documentElement.clientWidth - 300) + 'px'
+      },
+
+      edit (content) {
+        var me = this
+        me.$refs.editor.$emit('setContent', content)
       }
     },
 
@@ -113,7 +118,6 @@
         filenames.forEach(filename => {
           hexo.readPost(filename).then(post => {
             me.posts.push(post)
-            console.log(me.posts.length)
           })
         })
       })
