@@ -1,10 +1,16 @@
 import when from 'when'
 
 const fs = require('fs')
+const yaml = require('js-yaml')
+const dir = '/home/gaoyoubo/code/web/blog.mspring.org'
 
 class Hexo {
+  /**
+   * 列出所有文章
+   * @returns {*}
+   */
   listPostFiles () {
-    var path = '/home/gaoyoubo/code/web/blog.mspring.org/source/_posts'
+    var path = dir + '/source/_posts'
     var deferred = when.defer()
     fs.readdir(path, null, (err, files) => {
       if (err) {
@@ -20,6 +26,11 @@ class Hexo {
     return deferred.promise
   }
 
+  /**
+   * 读取文章
+   * @param filename
+   * @returns {*}
+   */
   readPost (filename) {
     var deferred = when.defer()
     var me = this
@@ -86,6 +97,10 @@ class Hexo {
     result['tags'] = tags
     result['categories'] = categories
     return result
+  }
+
+  getConfig () {
+    return yaml.safeLoad(fs.readFileSync(dir + '/_config.yml', 'utf8'))
   }
 }
 

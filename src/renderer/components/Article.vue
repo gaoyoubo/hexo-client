@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside :width="leftWidth" class="left">
-      <div class="article-list-panel" v-for="post in posts" @click="edit(post.content)">
+      <div class="article-list-panel" v-for="(post, index) in posts" @click="edit($event, post)" ref="post">
         <div class="article-list-item">
           <h4 class="article-title">{{ post.title }}</h4>
           <p class="article-desc"></p>
@@ -12,11 +12,14 @@
         </div>
       </div>
     </el-aside>
-    <el-main class="right" :style="{'width': contentWidth}">
-      <el-row style="width: 100%;">
+    <el-main class="main" :style="{'width': contentWidth}">
+      <el-row>
         <el-col :span="24" style="margin: 0px;">
-          <editor ref="editor" :editor-height="editorHeight"></editor>
+          <editor ref="editor" :editor-height="editorHeight" :value="curPost.content"
+                  v-model="curPost.content"></editor>
         </el-col>
+      </el-row>
+      <el-row>
         <el-col :span="24">
           <el-button type="primary" style="float: right; margin-right: 10px;">保存</el-button>
         </el-col>
@@ -36,7 +39,8 @@
         leftWidth: '300px', // 侧边宽度
         contentWidth: '200px', // 内容宽度
         editorHeight: '300px', // 编辑器高度
-        posts: []
+        posts: [], // 文章列表
+        curPost: {} // 当前文章
       }
     },
     methods: {
@@ -45,9 +49,19 @@
         this.editorHeight = (document.documentElement.clientHeight - 180) + 'px'
       },
 
-      edit (content) {
+      edit (event, post) {
         var me = this
-        me.$refs.editor.$emit('setContent', content)
+
+        // 设置当前选中数据
+        me.curPost = post
+
+        // 设置选中样式
+        me.$refs.post.forEach(item => {
+          item.classList.remove('active')
+        })
+        event.currentTarget.classList.add('active')
+
+        // me.$refs.editor.$emit('setContent', post)
       }
     },
 
@@ -76,21 +90,18 @@
 </script>
 
 <style>
-  html, body {
-    height: 100%;
-    /*overflow: hidden;*/
-    margin: 0px;
-    padding: 0px;
-  }
-
   .left {
     overflow-x: hidden;
     overflow-y: auto;
     background-color: rgb(238, 241, 246);
   }
 
-  .right {
+  .main {
     padding: 0px 0px 0px 5px;
+  }
+
+  .article-list-panel.active {
+    background-color: white;
   }
 
   .article-list-item {

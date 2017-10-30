@@ -44,6 +44,13 @@
   }
 </script>
 <style>
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+  }
+
   ::-webkit-scrollbar {
     width: 14px;
     height: 14px;

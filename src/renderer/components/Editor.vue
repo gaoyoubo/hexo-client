@@ -24,6 +24,10 @@
       editorHeight: {
         type: String,
         default: '400px'
+      },
+      inputActiveName: { // 默认打开的tab
+        type: String,
+        default: 'preview'
       }
     },
     data () {
@@ -31,14 +35,13 @@
         editorId: 'editor_' + new Date().getTime(),
         content: this.value,
         markdown: '',
-        activeName: 'preview' // 默认打开的tab
+        activeName: this.inputActiveName
       }
     },
     mounted () {
       // 设置编辑器内容
       this.$on('setContent', function (content) {
-        this.content = content
-        this.markdown = marked(this.content, {sanitize: true})
+        this.setContent(content)
       })
 
       // 插入图片
@@ -51,7 +54,7 @@
     },
     watch: {
       value (val) {
-        this.content = val
+        this.setContent(val)
       }
     },
     methods: {
@@ -80,6 +83,10 @@
         } else {
           obj.value += str
         }
+      },
+      setContent (content) {
+        this.content = content
+        this.markdown = marked(this.content, {sanitize: true})
       }
     },
     components: {}
@@ -89,7 +96,7 @@
   .editor {
     width: 99%;
     height: 100%;
-    margin: 10px 0px 10px 0px;
+    margin: 0px 0px 10px 0px;
   }
 
   .marked-txt {
