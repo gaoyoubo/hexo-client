@@ -7,8 +7,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'index',
+      name: 'template',
       component: require('@/components/Template').default
+    },
+    {
+      path: '/article',
+      name: 'article',
+      component: require('@/components/Article').default
+    },
+    {
+      path: '/config',
+      name: 'config',
+      component: require('@/components/Config').default
     },
     {
       path: '*',
