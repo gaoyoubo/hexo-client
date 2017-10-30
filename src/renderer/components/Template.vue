@@ -1,5 +1,4 @@
 <style>
-
   ::-webkit-scrollbar {
     width: 14px;
     height: 14px;
@@ -39,6 +38,10 @@
   }
 
   .right {
+  }
+
+  .header {
+    padding: 0px;
   }
 
   .article-list-item {
@@ -90,6 +93,9 @@
 </style>
 <template>
   <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}">
+    <el-header class="header">
+      <page-header></page-header>
+    </el-header>
     <el-aside :width="asideWidth" class="left">
       <div class="article-list-panel" v-for="post in posts" @click="edit(post.content)">
         <div class="article-list-item">
@@ -119,6 +125,7 @@
 <script>
   import hexo from '../store/modules/Hexo'
   import Editor from './Editor.vue'
+  import PageHeader from './PageHeader.vue'
 
   export default {
     data () {
@@ -163,7 +170,8 @@
     },
 
     components: {
-      Editor
+      Editor,
+      PageHeader
     }
   }
 </script>
