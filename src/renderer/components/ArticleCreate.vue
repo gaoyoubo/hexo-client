@@ -11,7 +11,8 @@
 
           <el-col :span="8">
             <el-form-item label="标签" prop="title">
-              <el-input v-model="post.title"></el-input>
+              <el-select v-model="post.tags" multiple filterable allow-create placeholder="请选择文章标签">
+              </el-select>
             </el-form-item>
           </el-col>
 
@@ -45,7 +46,8 @@
         post: {
           title: '',
           content: '',
-          author: ''
+          author: '',
+          tags: []
         }
       }
     },
