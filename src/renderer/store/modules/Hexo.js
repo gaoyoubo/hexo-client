@@ -2,7 +2,7 @@ import when from 'when'
 
 const fs = require('fs')
 const yaml = require('js-yaml')
-const dir = '/home/gaoyoubo/code/web/blog.mspring.org'
+const dir = '/Users/gaoyoubo/code/node/blog.mspring.org'
 
 class Hexo {
   /**
