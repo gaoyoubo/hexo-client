@@ -17,6 +17,16 @@ class HexoUtils {
       var post = me.readPost(filename)
       posts.push(post)
     })
+    posts.sort((p1, p2) => {
+      var t1 = Date.parse(p1.date)
+      var t2 = Date.parse(p2.date)
+      if (t1 > t2) {
+        return -1
+      } else if (t1 < t2) {
+        return 1
+      }
+      return 0
+    })
     return posts
   }
 
