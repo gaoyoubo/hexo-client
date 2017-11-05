@@ -12,6 +12,7 @@
           <el-col :span="8">
             <el-form-item label="标签" prop="title">
               <el-select v-model="post.tags" multiple filterable allow-create placeholder="请选择文章标签">
+                <el-option v-for="tag in tags" :key="tag" :label="tag" :value="tag"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
@@ -41,7 +42,7 @@
   export default {
     data () {
       return {
-        config: {},
+        tags: [],
         post: {
           title: '',
           content: '',
@@ -53,8 +54,8 @@
     methods: {},
 
     mounted () {
-      // this.config = hexo.getConfig()
-      // this.post.author = this.config.author
+      this.post.author = this.$store.state.Hexo.config.author
+      this.tags = this.$store.state.Hexo.tags
     },
 
     beforeDestroy () {
