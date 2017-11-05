@@ -2,11 +2,37 @@ import HexoUtils from '@/HexoUtils'
 
 export default {
   state: {
-    posts: []
+    config: {},
+    posts: [],
+    tags: [],
+    categories: []
   },
   mutations: {
     initHexo (state) {
-      state.posts = HexoUtils.listPosts()
+      state.config = HexoUtils.getConfig()
+
+      var posts = HexoUtils.listPosts()
+      var tags = []
+      var categories = []
+      posts.forEach(post => {
+        if (post.tags && post.tags.length > 0) {
+          post.tags.forEach(tag => {
+            if (tags.indexOf(tag) === -1) {
+              tags.push(tag)
+            }
+          })
+          if (post.categories && post.categories.length > 0) {
+            post.categories.forEach(category => {
+              if (categories.indexOf(category) === -1) {
+                categories.push(category)
+              }
+            })
+          }
+        }
+      })
+      state.posts = posts
+      state.tags = tags
+      state.categories = categories
     }
   },
   actions: {

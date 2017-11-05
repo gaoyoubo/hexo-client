@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" style="float: right; margin-right: 10px;" @click="gitTest">Git测试</el-button>
+    <el-button type="primary" style="float: right; margin-right: 10px;">Git测试</el-button>
     我是首页
   </div>
 </template>
