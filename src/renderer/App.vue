@@ -12,7 +12,7 @@
 </template>
 
 <script>
-  import PageHeader from './components/PageHeader.vue'
+  import PageHeader from '@/components/PageHeader.vue'
 
   export default {
     data () {
@@ -27,6 +27,10 @@
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
       }
+    },
+
+    created () {
+      this.$store.commit('initHexo')
     },
 
     mounted () {

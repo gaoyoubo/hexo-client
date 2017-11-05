@@ -29,7 +29,6 @@
 </template>
 
 <script>
-  import hexo from '@/store/modules/Hexo'
   import Editor from '@/components/Editor.vue'
 
   export default {
@@ -69,14 +68,7 @@
       this.handleResize()
       window.addEventListener('resize', this.handleResize)
 
-      var me = this
-      hexo.listPostFiles().then(filenames => {
-        filenames.forEach(filename => {
-          hexo.readPost(filename).then(post => {
-            me.posts.push(post)
-          })
-        })
-      })
+      this.posts = this.$store.state.Hexo.posts
     },
 
     beforeDestroy () {

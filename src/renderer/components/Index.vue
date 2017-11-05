@@ -6,16 +6,12 @@
 </template>
 
 <script>
-  import hexo from '@/store/modules/Hexo'
   export default {
     data () {
       return {}
     },
 
     methods: {
-      gitTest () {
-        hexo.listPostFiles()
-      }
     },
 
     beforeDestroy () {

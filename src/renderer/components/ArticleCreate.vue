@@ -36,7 +36,6 @@
 </template>
 
 <script>
-  import hexo from '@/store/modules/Hexo'
   import Editor from '@/components/Editor.vue'
 
   export default {
@@ -54,8 +53,8 @@
     methods: {},
 
     mounted () {
-      this.config = hexo.getConfig()
-      this.post.author = this.config.author
+      // this.config = hexo.getConfig()
+      // this.post.author = this.config.author
     },
 
     beforeDestroy () {
