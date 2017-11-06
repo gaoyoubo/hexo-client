@@ -30,7 +30,7 @@
     },
 
     created () {
-      this.$store.commit('initHexo')
+      this.$store.dispatch('initHexo')
     },
 
     mounted () {

@@ -8,9 +8,11 @@ export default {
     categories: []
   },
   mutations: {
-    initHexo (state) {
+    INIT_HEXO_CONFIG (state) {
       state.config = HexoUtils.getConfig()
+    },
 
+    INIT_HEXO_POST (state) {
       var posts = HexoUtils.listPosts()
       var tags = []
       var categories = []
@@ -36,8 +38,14 @@ export default {
     }
   },
   actions: {
-    // syncTags ({commit, state}) {
-    //   // let openRequest = window.indexedDB.open('music')
-    // }
+    initHexo (context) {
+      context.commit('INIT_HEXO_CONFIG')
+      context.commit('INIT_HEXO_POST')
+    },
+
+    writePost (context, post) {
+      HexoUtils.writePost(post)
+      context.commit('INIT_HEXO_POST')
+    }
   }
 }

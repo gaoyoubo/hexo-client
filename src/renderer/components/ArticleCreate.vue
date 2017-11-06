@@ -31,6 +31,11 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-button type="primary" style="float: right; margin-right: 10px;" @click="writePost">保存</el-button>
+          </el-col>
+        </el-row>
       </el-form>
     </el-main>
   </el-container>
@@ -51,7 +56,11 @@
         }
       }
     },
-    methods: {},
+    methods: {
+      writePost () {
+        this.$store.dispatch('writePost', this.post)
+      }
+    },
 
     mounted () {
       this.post.author = this.$store.state.Hexo.config.author
