@@ -1,92 +1,51 @@
-import when from 'when'
+import HexoUtils from '@/HexoUtils'
 
-const fs = require('fs')
+export default {
+  state: {
+    config: {},
+    posts: [],
+    tags: [],
+    categories: []
+  },
+  mutations: {
+    INIT_HEXO_CONFIG (state) {
+      state.config = HexoUtils.getConfig()
+    },
 
-class Hexo {
-  listPostFiles () {
-    var path = '/home/gaoyoubo/code/web/blog.mspring.org/source/_posts'
-    var deferred = when.defer()
-    fs.readdir(path, null, (err, files) => {
-      if (err) {
-        console.log(err.message)
-        deferred.reject(err)
-      }
-      var filenames = []
-      files.forEach(file => {
-        filenames.push(path + '/' + file)
+    INIT_HEXO_POST (state) {
+      var posts = HexoUtils.listPosts()
+      var tags = []
+      var categories = []
+      posts.forEach(post => {
+        if (post.tags && post.tags.length > 0) {
+          post.tags.forEach(tag => {
+            if (tags.indexOf(tag) === -1) {
+              tags.push(tag)
+            }
+          })
+          if (post.categories && post.categories.length > 0) {
+            post.categories.forEach(category => {
+              if (categories.indexOf(category) === -1) {
+                categories.push(category)
+              }
+            })
+          }
+        }
       })
-      deferred.resolve(filenames)
-    })
-    return deferred.promise
-  }
-
-  readPost (filename) {
-    var deferred = when.defer()
-    var me = this
-    fs.readFile(filename, 'utf8', (err, data) => {
-      if (err) {
-        console.error('文章信息读取错误', err)
-        deferred.reject(err)
-      }
-      var article = me.json(data)
-      deferred.resolve(article)
-    })
-    return deferred.promise
-  }
-
-  /**
-   * 把 markdown 文件内容转换成 JSON 格式.
-   *
-   * @param  {String} article
-   * @return {Object}
-   */
-  json (article) {
-    var temp = article.split('---\n')
-    var meta = temp[0].split('\n')
-    var result = {
-      content: temp[1]
+      state.posts = posts
+      state.tags = tags
+      state.categories = categories
     }
-    // 解析普通属性
-    meta.forEach(value => {
-      let arr = value.split(':')
-      let key = arr[0]
-      let val = arr.slice(1).join(':')
-      if (key && val) {
-        result[key] = val.trim()
-      }
-    })
-    // 解析标签和分类
-    var tags = []
-    var categories = []
-    var tagFlag = false
-    var catFlag = false
-    meta.forEach(value => {
-      value = value.trim()
-      if (value.startsWith('tags:')) {
-        tagFlag = true
-        catFlag = false
-      }
-      if (value.startsWith('categories:')) {
-        catFlag = true
-        tagFlag = false
-      }
-      if (tagFlag && value.startsWith('-')) {
-        var tag = value.substring(1, value.length)
-        if (tags.indexOf(tag) === -1) {
-          tags.push(tag)
-        }
-      }
-      if (catFlag && value.startsWith('-')) {
-        var cat = value.substring(1, value.length)
-        if (categories.indexOf(cat) === -1) {
-          categories.push(cat)
-        }
-      }
-    })
-    result['tags'] = tags
-    result['categories'] = categories
-    return result
+  },
+  actions: {
+    initHexo (context) {
+      context.commit('INIT_HEXO_CONFIG')
+      context.commit('INIT_HEXO_POST')
+    },
+
+    writePost (context, post) {
+      HexoUtils.writePost(post)
+      context.commit('INIT_HEXO_POST')
+    }
   }
 }
-
-export default new Hexo()
