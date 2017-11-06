@@ -33,7 +33,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-button type="primary" style="float: right; margin-right: 10px;" @click="writePost">保存</el-button>
+            <el-button type="primary" style="float: right; margin-right: 10px;" @click="writePost">发 表</el-button>
           </el-col>
         </el-row>
       </el-form>
