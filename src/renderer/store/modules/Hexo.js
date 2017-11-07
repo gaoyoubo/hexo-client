@@ -13,6 +13,7 @@ export default {
     },
 
     INIT_HEXO_POST (state) {
+      debugger
       var posts = HexoUtils.listPosts()
       var tags = []
       var categories = []
