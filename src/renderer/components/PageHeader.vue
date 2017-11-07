@@ -20,7 +20,7 @@
   export default {
     data () {
       return {
-        activeIndex: '/'
+        activeIndex: '/article'
       }
     },
     methods: {
