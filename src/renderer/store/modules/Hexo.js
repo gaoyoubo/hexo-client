@@ -13,6 +13,13 @@ export default {
     },
 
     INIT_HEXO_POST (state) {
+      var loading = Vue.prototype.$loading({
+        lock: true,
+        text: 'Loading',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+
       var posts = HexoUtils.listPosts()
       var tags = []
       var categories = []
@@ -35,6 +42,8 @@ export default {
       state.posts = posts
       state.tags = tags
       state.categories = categories
+
+      loading.close()
     }
   },
   actions: {
