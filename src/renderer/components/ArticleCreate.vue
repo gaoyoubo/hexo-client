@@ -26,7 +26,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item label="内容">
-              <editor ref="editor" editor-height="400px" input-active-name="edit" :value="post.content"
+              <editor ref="editor" :editor-height="editorHeight" input-active-name="edit" :value="post.content"
                       v-model="post.content"></editor>
             </el-form-item>
           </el-col>
@@ -47,6 +47,7 @@
   export default {
     data () {
       return {
+        editorHeight: '400px',
         tags: [],
         post: {
           title: '',
@@ -57,17 +58,24 @@
       }
     },
     methods: {
+      handleResize () {
+        this.editorHeight = (document.documentElement.clientHeight - 280) + 'px'
+      },
       writePost () {
         this.$store.dispatch('writePost', this.post)
       }
     },
 
     mounted () {
+      this.handleResize()
+      window.addEventListener('resize', this.handleResize)
+
       this.post.author = this.$store.state.Hexo.config.author
       this.tags = this.$store.state.Hexo.tags
     },
 
     beforeDestroy () {
+      window.removeEventListener('resize', this.handleResize)
     },
 
     components: {
