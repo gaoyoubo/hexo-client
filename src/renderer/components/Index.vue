@@ -7,7 +7,8 @@
 
 <script>
   import Datastore from '../Datastore'
-  import {remote} from 'electron'
+  import { remote } from 'electron'
+
   export default {
     data () {
       return {}
@@ -15,11 +16,6 @@
 
     methods: {
       test () {
-        debugger
-        remote.app.getPath('userData')
-        Datastore.insert({'id': '1', 'name': '高尤波'}, function () {
-          debugger
-        })
       }
     },
 

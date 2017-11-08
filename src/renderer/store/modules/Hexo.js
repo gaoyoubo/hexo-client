@@ -73,7 +73,6 @@ export default {
     },
 
     writePost (context, post) {
-      debugger
       var path = context.state.sysConfig.path
       if (path) {
         HexoUtils.writePost(path, post)
