@@ -1,13 +1,12 @@
 const fs = require('fs')
 const yaml = require('js-yaml')
-const dir = '/home/gaoyoubo/code/web/blog.mspring.org'
 
 class HexoUtils {
   /**
    * 列出所有文章
    * @returns {*}
    */
-  listPosts () {
+  listPosts (dir) {
     var me = this
     var path = dir + '/source/_posts'
     var files = fs.readdirSync(path, null)
@@ -39,25 +38,6 @@ class HexoUtils {
     var data = fs.readFileSync(filename, 'utf8')
     return this.json(data)
   }
-
-  // /**
-  //  * 读取文章
-  //  * @param filename
-  //  * @returns {*}
-  //  */
-  // readPost (filename) {
-  //   var deferred = when.defer()
-  //   var me = this
-  //   fs.readFile(filename, 'utf8', (err, data) => {
-  //     if (err) {
-  //       console.error('文章信息读取错误', err)
-  //       deferred.reject(err)
-  //     }
-  //     var article = me.json(data)
-  //     deferred.resolve(article)
-  //   })
-  //   return deferred.promise
-  // }
 
   /**
    * 把 markdown 文件内容转换成 JSON 格式.
@@ -113,7 +93,7 @@ class HexoUtils {
     return result
   }
 
-  writePost (post) {
+  writePost (dir, post) {
     var path = dir + '/source/_posts/' + post.title + '.md'
     var content = this.markdown(post)
     fs.writeFileSync(path, content)
@@ -150,8 +130,23 @@ class HexoUtils {
    * 获取配置
    * @returns {*}
    */
-  getConfig () {
+  getConfig (dir) {
     return yaml.safeLoad(fs.readFileSync(dir + '/_config.yml', 'utf8'))
+  }
+
+  /**
+   * 检查是否是合法的hexo目录
+   * @param dir
+   */
+  checkPath (dir) {
+    try {
+      fs.accessSync(dir, fs.constants.R_OK | fs.constants.W_OK)
+      fs.accessSync(dir + '/_config.yml', fs.constants.R_OK | fs.constants.W_OK)
+      fs.accessSync(dir + '/source', fs.constants.R_OK | fs.constants.W_OK)
+      return true
+    } catch (err) {
+      return false
+    }
   }
 
   /**

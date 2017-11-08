@@ -8,10 +8,10 @@
         background-color="#545c64"
         text-color="#fff"
         active-text-color="#ffd04b">
-      <el-menu-item index="/">首页</el-menu-item>
+      <!--<el-menu-item index="/">首页</el-menu-item>-->
       <el-menu-item index="/article">文章</el-menu-item>
       <el-menu-item index="/article/create">发表</el-menu-item>
-      <el-menu-item index="/config">配置</el-menu-item>
+      <!--<el-menu-item index="/config">配置</el-menu-item>-->
     </el-menu>
   </div>
 </template>

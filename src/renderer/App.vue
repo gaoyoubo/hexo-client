@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}">
+  <div id="app" v-loading.fullscreen.lock="!sysInited && sysConfigInited">
+    <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
       <el-header class="header">
         <page-header></page-header>
       </el-header>
@@ -8,6 +8,21 @@
       <router-view></router-view>
 
     </el-container>
+
+    <el-dialog title="请配置正确的路径" :visible="!sysConfigInited"
+               :close-on-click-modal="false"
+               :close-on-press-escape="false"
+               :show-close="false"
+               :center="true">
+      <el-form>
+        <el-form-item label="路径" label-width="50px">
+          <el-input v-model="path" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="setPath">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -19,18 +34,30 @@
       return {
         windowHeight: '300px', // 窗口高度
         leftWidth: '300px', // 侧边宽度
-        posts: []
+        path: ''
+      }
+    },
+
+    computed: {
+      sysConfigInited: function () {
+        return this.$store.getters.sysConfigInited
+      },
+      sysInited: function () {
+        return this.$store.getters.sysInited
       }
     },
 
     methods: {
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
+      },
+      setPath () {
+        this.$store.dispatch('setPath', this.path)
       }
     },
 
     created () {
-      this.$store.dispatch('initHexo')
+      this.$store.dispatch('init')
     },
 
     mounted () {
