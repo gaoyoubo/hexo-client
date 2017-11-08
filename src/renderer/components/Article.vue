@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside :width="leftWidth" class="left">
-      <div class="article-list-panel" v-for="(post, index) in posts" @click="edit($event, post)" ref="post">
+      <div class="article-list-panel" v-for="(post, index) in posts" @click="selectPost($event, post)" ref="post">
         <div class="article-list-item">
           <h4 class="article-title">{{ post.title }}</h4>
           <p class="article-desc"></p>
@@ -13,17 +13,40 @@
       </div>
     </el-aside>
     <el-main class="main" :style="{'width': contentWidth}">
-      <el-row>
-        <el-col :span="24" style="margin: 0px;">
-          <editor ref="editor" :editor-height="editorHeight" :value="curPost.content"
-                  v-model="curPost.content"></editor>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <el-button type="primary" style="float: right; margin-right: 10px;">保存</el-button>
-        </el-col>
-      </el-row>
+      <el-form ref="form" :model="curPost" label-width="60px">
+        <el-row>
+          <el-col :span="8">
+            <el-form-item label="标题" prop="title">
+              <el-input v-model="curPost.title"></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="作者" prop="title">
+              <el-input v-model="curPost.author"></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="标签" prop="title">
+              <el-select v-model="curPost.tags" multiple filterable allow-create placeholder="请选择文章标签">
+                <el-option v-for="tag in tags" :key="tag" :label="tag" :value="tag"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24" style="margin: 0px;">
+            <editor ref="editor" :editor-height="editorHeight" :value="curPost.content"
+                    v-model="curPost.content"></editor>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-button type="primary" style="float: right; margin-right: 10px;" @click="writePost">保存</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
     </el-main>
   </el-container>
 </template>
@@ -38,23 +61,28 @@
         leftWidth: '300px', // 侧边宽度
         contentWidth: '200px', // 内容宽度
         editorHeight: '300px', // 编辑器高度
+        tags: [],
         curPost: {} // 当前文章
       }
     },
     methods: {
       handleResize () {
         this.contentWidth = (document.documentElement.clientWidth - 320) + 'px'
-        this.editorHeight = (document.documentElement.clientHeight - 180) + 'px'
+        this.editorHeight = (document.documentElement.clientHeight - 280) + 'px'
       },
 
-      edit (event, post) {
+      selectPost (event, post) {
         // 设置当前选中数据
-        this.curPost = post
+        this.curPost = JSON.parse(JSON.stringify(post))
         // 设置选中样式
         this.$refs.post.forEach(item => {
           item.classList.remove('active')
         })
         event.currentTarget.classList.add('active')
+      },
+
+      writePost () {
+        this.$store.dispatch('writePost', this.curPost)
       }
     },
     computed: {
@@ -66,9 +94,11 @@
       this.handleResize()
       window.addEventListener('resize', this.handleResize)
 
+      this.tags = this.$store.state.Hexo.tags
+
       // 默认选中第一篇文章
       if (this.posts && this.posts.length > 0) {
-        this.curPost = this.posts[0]
+        this.curPost = JSON.parse(JSON.stringify(this.posts[0]))
         this.$refs.post[0].classList.add('active')
       }
     },
@@ -91,7 +121,7 @@
   }
 
   .main {
-    padding: 0px 0px 0px 5px;
+    padding: 10px 5px 5px 5px;
   }
 
   .article-list-panel.active {

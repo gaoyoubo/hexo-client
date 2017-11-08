@@ -1,11 +1,17 @@
 <template>
   <el-container>
     <el-main class="main">
-      <el-form ref="form" :model="post" label-width="80px">
+      <el-form ref="form" :model="post" label-width="60px">
         <el-row>
           <el-col :span="8">
             <el-form-item label="标题" prop="title">
               <el-input v-model="post.title"></el-input>
+            </el-form-item>
+          </el-col>
+
+          <el-col :span="8">
+            <el-form-item label="作者" prop="title">
+              <el-input v-model="post.author"></el-input>
             </el-form-item>
           </el-col>
 
@@ -16,19 +22,11 @@
               </el-select>
             </el-form-item>
           </el-col>
-
-          <el-col :span="8">
-            <el-form-item label="作者" prop="title">
-              <el-input v-model="post.author"></el-input>
-            </el-form-item>
-          </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="内容">
-              <editor ref="editor" :editor-height="editorHeight" input-active-name="edit" :value="post.content"
-                      v-model="post.content"></editor>
-            </el-form-item>
+            <editor ref="editor" :editor-height="editorHeight" input-active-name="edit" :value="post.content"
+                    v-model="post.content"></editor>
           </el-col>
         </el-row>
         <el-row>
@@ -92,7 +90,7 @@
   }
 
   .main {
-    padding: 10px 0px 0px 5px;
+    padding: 10px 5px 5px 5px;
   }
 
   .article-list-panel.active {

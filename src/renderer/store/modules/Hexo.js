@@ -73,12 +73,13 @@ export default {
     },
 
     writePost (context, post) {
-      var path = context.rootState.Config.sysConfig ? context.rootState.Config.sysConfig.path : null
+      debugger
+      var path = context.state.sysConfig.path
       if (path) {
         HexoUtils.writePost(path, post)
-        context.commit('INIT_HEXO_POST', path)
+        context.commit('INIT_HEXO', path)
       } else {
-        console.log('请先配置path')
+        window.alert('请先配置path')
       }
     },
 
