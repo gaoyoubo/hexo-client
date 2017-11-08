@@ -38,7 +38,6 @@
         leftWidth: '300px', // 侧边宽度
         contentWidth: '200px', // 内容宽度
         editorHeight: '300px', // 编辑器高度
-        posts: [], // 文章列表
         curPost: {} // 当前文章
       }
     },
@@ -63,12 +62,14 @@
         // me.$refs.editor.$emit('setContent', post)
       }
     },
-
+    computed: {
+      posts: function () {
+        return this.$store.getters.posts
+      }
+    },
     mounted () {
       this.handleResize()
       window.addEventListener('resize', this.handleResize)
-
-      this.posts = this.$store.state.Hexo.posts
     },
 
     beforeDestroy () {

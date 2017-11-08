@@ -137,6 +137,21 @@ class HexoUtils {
   }
 
   /**
+   * 检查是否是合法的hexo目录
+   * @param dir
+   */
+  checkPath (dir) {
+    try {
+      fs.accessSync(dir, fs.constants.R_OK | fs.constants.W_OK)
+      fs.accessSync(dir + '/_config.yml', fs.constants.R_OK | fs.constants.W_OK)
+      fs.accessSync(dir + '/source', fs.constants.R_OK | fs.constants.W_OK)
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+
+  /**
    * 日期格式化
    * @param date
    * @param fmt

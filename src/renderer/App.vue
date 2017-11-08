@@ -1,6 +1,6 @@
 <template>
-  <div id="app">
-    <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="!dialogFormVisible">
+  <div id="app" v-loading.fullscreen.lock="!sysInited">
+    <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
       <el-header class="header">
         <page-header></page-header>
       </el-header>
@@ -9,7 +9,7 @@
 
     </el-container>
 
-    <el-dialog title="请配置正确的路径" :visible.sync="dialogFormVisible"
+    <el-dialog title="请配置正确的路径" :visible="!sysConfigInited"
                :close-on-click-modal="false"
                :close-on-press-escape="false"
                :show-close="false"
@@ -28,16 +28,22 @@
 
 <script>
   import PageHeader from '@/components/PageHeader.vue'
-  // import { app, BrowserWindow } from 'electron'
-  const electron = require('electron')
 
   export default {
     data () {
       return {
         windowHeight: '300px', // 窗口高度
         leftWidth: '300px', // 侧边宽度
-        dialogFormVisible: false,
         path: ''
+      }
+    },
+
+    computed: {
+      sysConfigInited: function () {
+        return this.$store.getters.sysConfigInited
+      },
+      sysInited: function () {
+        return this.$store.getters.sysInited
       }
     },
 
@@ -46,23 +52,12 @@
         this.windowHeight = document.documentElement.clientHeight + 'px'
       },
       setPath () {
-        var me = this
-        me.$store.dispatch('setPath', me.path, () => {
-          debugger
-          console.log(electron)
-        })
+        this.$store.dispatch('setPath', this.path)
       }
-    },
-
-    beforeCreate () {
-      this.$store.dispatch('initConfig')
-      this.$store.dispatch('initHexo')
     },
 
     created () {
-      if ((!this.$store.state.Config.sysConfig) || (!this.$store.state.Config.sysConfig.path)) {
-        this.dialogFormVisible = true
-      }
+      this.$store.dispatch('init')
     },
 
     mounted () {
