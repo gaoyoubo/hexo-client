@@ -1,8 +1,8 @@
 {
   "name": "hexo-client",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "author": "GaoYoubo <gaoyoubo@foxmail.com>",
-  "description": "hexo client",
+  "description": "Hexo client",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -19,13 +19,14 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "hexo-client",
-    "appId": "org.simulatedgreg.electron-vue",
+    "productName": "HexoClient",
+    "appId": "org.mspring.hexo.client",
     "directories": {
       "output": "build"
     },
     "files": [
-      "dist/electron/**/*"
+      "dist/electron/**/*",
+      "build/icons/*"
     ],
     "dmg": {
       "contents": [
