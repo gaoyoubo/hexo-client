@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-loading.fullscreen.lock="!sysInited">
+  <div id="app" v-loading.fullscreen.lock="!sysInited && sysConfigInited">
     <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
       <el-header class="header">
         <page-header></page-header>

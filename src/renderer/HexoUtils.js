@@ -1,8 +1,6 @@
 const fs = require('fs')
 const yaml = require('js-yaml')
 
-// const dir = '/home/gaoyoubo/code/web/blog.mspring.org'
-
 class HexoUtils {
   /**
    * 列出所有文章
