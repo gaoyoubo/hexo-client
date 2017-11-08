@@ -48,18 +48,13 @@
       },
 
       edit (event, post) {
-        var me = this
-
         // 设置当前选中数据
-        me.curPost = post
-
+        this.curPost = post
         // 设置选中样式
-        me.$refs.post.forEach(item => {
+        this.$refs.post.forEach(item => {
           item.classList.remove('active')
         })
         event.currentTarget.classList.add('active')
-
-        // me.$refs.editor.$emit('setContent', post)
       }
     },
     computed: {
@@ -70,6 +65,12 @@
     mounted () {
       this.handleResize()
       window.addEventListener('resize', this.handleResize)
+
+      // 默认选中第一篇文章
+      if (this.posts && this.posts.length > 0) {
+        this.curPost = this.posts[0]
+        this.$refs.post[0].classList.add('active')
+      }
     },
 
     beforeDestroy () {
