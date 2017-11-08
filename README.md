@@ -1,6 +1,17 @@
 # hexo-client
 
-> hexo client
+> hexo桌面客户端
+
+## 功能截图
+![](http://file.mspring.org/FuhFYc8P08NElntWB1ND7qPVDUhm!detail)
+![](http://file.mspring.org/Ftb_mbD6AF7feEQbAjmX1ndtaQT0!detail)
+
+## Todo List
+- [] 文章删除
+- [] 配置页面
+- [] 集成七牛图片上传
+- [] 自动构建
+- [] 自动部署
 
 #### Build Setup
 
