@@ -2,6 +2,7 @@
   <dictionary name="gaoyoubo">
     <words>
       <w>autoload</w>
+      <w>inited</w>
     </words>
   </dictionary>
 </component>
