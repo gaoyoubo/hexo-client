@@ -2,6 +2,8 @@
 
 > hexo桌面客户端
 
+[本人基于Hexo的博客](http://blog.mspring.org)
+
 ## 功能截图
 ![](http://file.mspring.org/FuhFYc8P08NElntWB1ND7qPVDUhm!detail)
 ![](http://file.mspring.org/Ftb_mbD6AF7feEQbAjmX1ndtaQT0!detail)
