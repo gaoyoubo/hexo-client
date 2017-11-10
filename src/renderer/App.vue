@@ -1,16 +1,5 @@
 <template>
   <div id="app">
-    <!--
-    <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
-      <el-header class="header">
-        <page-header></page-header>
-      </el-header>
-
-      <router-view></router-view>
-
-    </el-container>
-    -->
-
     <section :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
       <header class="header">
         <page-header></page-header>
@@ -122,33 +111,33 @@
     padding: 0px;
   }
 
-  .layout {
-    border: 1px solid #d7dde4;
-    background: #f5f7f9;
-    position: relative;
-    border-radius: 4px;
-    overflow: hidden;
+  aside {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
   }
 
-  .layout-header {
-    height: 60px;
-    background: #fff;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+  section {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -webkit-box-sizing: border-box;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    box-sizing: border-box;
   }
 
-  .layout-left {
-
+  main {
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    box-sizing: border-box;
+    overflow: auto;
+    padding: 20px;
   }
 
-  .layout-content {
-    min-height: 200px;
-    margin: 15px;
-    overflow: hidden;
-    background: #fff;
-    border-radius: 4px;
-  }
-
-  .layout-content-main {
-    padding: 10px;
-  }
 </style>

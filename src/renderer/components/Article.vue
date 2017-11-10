@@ -1,6 +1,6 @@
 <template>
-  <div class="layout">
-    <aside :width="leftWidth" class="layout-left">
+  <div>
+    <aside class="left" :style="{'width': leftWidth}">
       <div class="article-list-panel" v-for="(post, index) in posts" @click="selectPost($event, post)" ref="post">
         <div class="article-list-item">
           <h4 class="article-title">{{ post.title }}</h4>
@@ -12,9 +12,9 @@
         </div>
       </div>
     </aside>
-    <section style="width: 500px;border: solid 2px red; background-color: red;">
+    <main class="main" :style="{'width': contentWidth}">
       我是内容
-    </section>
+    </main>
   </div>
   <!--
   <el-main class="main" :style="{'width': contentWidth}">

@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a8176cb6-3d39-4233-89e6-30ea0f64552b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/renderer/App.vue" afterPath="$PROJECT_DIR$/src/renderer/App.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/renderer/components/Article.vue" afterPath="$PROJECT_DIR$/src/renderer/components/Article.vue" />
     </list>
@@ -22,29 +21,35 @@
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
-              <caret line="17" column="49" lean-forward="true" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Article.vue" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/renderer/components/Article.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="78" lean-forward="false" selection-start-line="14" selection-start-column="78" selection-end-line="14" selection-end-column="78" />
+              <caret line="17" column="49" lean-forward="false" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
               <folding>
-                <element signature="n#style#0;n#section#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+                <marker date="1510305514625" expanded="true" signature="0:3448" ph="{&quot;name&quot;: &quot;hexo-client&quot;...}" />
+                <marker date="1510305514625" expanded="true" signature="1086:1696" ph="{&quot;productName&quot;: &quot;HexoClient&quot;...}" />
+                <marker date="1510305514625" expanded="true" signature="1667:1696" ph="{&quot;icon&quot;: &quot;build/icons&quot;...}" />
+                <marker date="1510305514625" expanded="true" signature="1813:2015" ph="{&quot;axios&quot;: &quot;^0.16.1&quot;...}" />
+                <marker date="1510305514625" expanded="true" signature="2038:3446" ph="{&quot;babel-core&quot;: &quot;^6.25.0&quot;...}" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="App.vue" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Article.vue" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/renderer/components/Article.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="225">
+              <caret line="15" column="9" lean-forward="false" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
+              <folding>
+                <element signature="e#612#1928#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="App.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/renderer/App.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+            <state relative-caret-position="717">
+              <caret line="140" column="3" lean-forward="false" selection-start-line="140" selection-start-column="3" selection-end-line="140" selection-end-column="3" />
               <folding>
                 <element signature="n#style#0;n#p#0;n#Modal#0;n#div#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#Modal#0;n#div#0;n#template#0;n#!!top" expanded="true" />
@@ -65,10 +70,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>HexoUt</find>
-      <find>INIT_HEXO_CONFIG</find>
-      <find>setSysConfig</find>
-      <find>mainWindow</find>
       <find>electron</find>
       <find>dialogFormVisible</find>
       <find>请先配置path</find>
@@ -95,6 +96,10 @@
       <find>loading</find>
       <find>close</find>
       <find>sysInited</find>
+      <find>windowHeight</find>
+      <find>leftWidth</find>
+      <find>contentWidth</find>
+      <find>editorHeight</find>
     </findStrings>
     <replaceStrings>
       <replace>date</replace>
@@ -145,8 +150,8 @@
         <option value="$PROJECT_DIR$/src/renderer/main.js" />
         <option value="$PROJECT_DIR$/src/renderer/router/index.js" />
         <option value="$PROJECT_DIR$/src/renderer/components/PageHeader.vue" />
-        <option value="$PROJECT_DIR$/src/renderer/App.vue" />
         <option value="$PROJECT_DIR$/src/renderer/components/Article.vue" />
+        <option value="$PROJECT_DIR$/src/renderer/App.vue" />
       </list>
     </option>
   </component>
@@ -402,7 +407,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="125651000" />
+    <option name="totallyTimeSpent" value="126680000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="50" y="23" width="1550" height="900" extended-state="6" />
@@ -733,8 +738,14 @@
     <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
-          <caret line="17" column="49" lean-forward="true" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
-          <folding />
+          <caret line="17" column="49" lean-forward="false" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
+          <folding>
+            <marker date="1510305514625" expanded="true" signature="0:3448" ph="{&quot;name&quot;: &quot;hexo-client&quot;...}" />
+            <marker date="1510305514625" expanded="true" signature="1086:1696" ph="{&quot;productName&quot;: &quot;HexoClient&quot;...}" />
+            <marker date="1510305514625" expanded="true" signature="1667:1696" ph="{&quot;icon&quot;: &quot;build/icons&quot;...}" />
+            <marker date="1510305514625" expanded="true" signature="1813:2015" ph="{&quot;axios&quot;: &quot;^0.16.1&quot;...}" />
+            <marker date="1510305514625" expanded="true" signature="2038:3446" ph="{&quot;babel-core&quot;: &quot;^6.25.0&quot;...}" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -786,23 +797,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/App.vue">
+    <entry file="file://$PROJECT_DIR$/src/renderer/components/Article.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="0" lean-forward="false" selection-start-line="19" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+        <state relative-caret-position="225">
+          <caret line="15" column="9" lean-forward="false" selection-start-line="15" selection-start-column="9" selection-end-line="15" selection-end-column="9" />
           <folding>
-            <element signature="n#style#0;n#p#0;n#Modal#0;n#div#0;n#template#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#Modal#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="e#612#1928#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/components/Article.vue">
+    <entry file="file://$PROJECT_DIR$/src/renderer/App.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="78" lean-forward="false" selection-start-line="14" selection-start-column="78" selection-end-line="14" selection-end-column="78" />
+        <state relative-caret-position="717">
+          <caret line="140" column="3" lean-forward="false" selection-start-line="140" selection-start-column="3" selection-end-line="140" selection-end-column="3" />
           <folding>
-            <element signature="n#style#0;n#section#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#p#0;n#Modal#0;n#div#0;n#template#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#div#0;n#Modal#0;n#div#0;n#template#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
