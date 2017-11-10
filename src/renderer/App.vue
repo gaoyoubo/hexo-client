@@ -11,8 +11,8 @@
     </el-container>
     -->
 
-    <div :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
-      <div class="header">
+    <div class="layout" :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
+      <div>
         <page-header></page-header>
       </div>
 
@@ -121,5 +121,35 @@
 
   .header {
     padding: 0px;
+  }
+
+  .layout {
+    border: 1px solid #d7dde4;
+    background: #f5f7f9;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .layout-header {
+    height: 60px;
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+  }
+
+  .layout-left {
+
+  }
+
+  .layout-content {
+    min-height: 200px;
+    margin: 15px;
+    overflow: hidden;
+    background: #fff;
+    border-radius: 4px;
+  }
+
+  .layout-content-main {
+    padding: 10px;
   }
 </style>

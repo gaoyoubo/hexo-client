@@ -1,6 +1,6 @@
 <template>
-  <el-container>
-    <el-aside :width="leftWidth" class="left">
+  <div class="layout">
+    <div :width="leftWidth" class="layout-left">
       <div class="article-list-panel" v-for="(post, index) in posts" @click="selectPost($event, post)" ref="post">
         <div class="article-list-item">
           <h4 class="article-title">{{ post.title }}</h4>
@@ -11,44 +11,49 @@
           </ul>
         </div>
       </div>
-    </el-aside>
-    <el-main class="main" :style="{'width': contentWidth}">
-      <el-form ref="form" :model="curPost" label-width="60px">
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="标题" prop="title">
-              <el-input v-model="curPost.title"></el-input>
-            </el-form-item>
-          </el-col>
+    </div>
+    <div>
+      我是表单
+    </div>
+  </div>
+  <!--
+  <el-main class="main" :style="{'width': contentWidth}">
+    <el-form ref="form" :model="curPost" label-width="60px">
+      <el-row>
+        <el-col :span="8">
+          <el-form-item label="标题" prop="title">
+            <el-input v-model="curPost.title"></el-input>
+          </el-form-item>
+        </el-col>
 
-          <el-col :span="8">
-            <el-form-item label="作者" prop="title">
-              <el-input v-model="curPost.author"></el-input>
-            </el-form-item>
-          </el-col>
+        <el-col :span="8">
+          <el-form-item label="作者" prop="title">
+            <el-input v-model="curPost.author"></el-input>
+          </el-form-item>
+        </el-col>
 
-          <el-col :span="8">
-            <el-form-item label="标签" prop="title">
-              <el-select v-model="curPost.tags" multiple filterable allow-create placeholder="请选择文章标签">
-                <el-option v-for="tag in tags" :key="tag" :label="tag" :value="tag"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24" style="margin: 0px;">
-            <editor ref="editor" :editor-height="editorHeight" :value="curPost.content"
-                    v-model="curPost.content"></editor>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-button type="primary" style="float: right; margin-right: 10px;" @click="writePost">保存</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-main>
-  </el-container>
+        <el-col :span="8">
+          <el-form-item label="标签" prop="title">
+            <el-select v-model="curPost.tags" multiple filterable allow-create placeholder="请选择文章标签">
+              <el-option v-for="tag in tags" :key="tag" :label="tag" :value="tag"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24" style="margin: 0px;">
+          <editor ref="editor" :editor-height="editorHeight" :value="curPost.content"
+                  v-model="curPost.content"></editor>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24">
+          <el-button type="primary" style="float: right; margin-right: 10px;" @click="writePost">保存</el-button>
+        </el-col>
+      </el-row>
+    </el-form>
+  </el-main>
+  -->
 </template>
 
 <script>
