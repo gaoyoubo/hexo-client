@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <section :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
+    <section class="is-vertical" :style="{'height': windowHeight}" v-if="sysInited">
       <header class="header">
         <page-header></page-header>
       </header>
@@ -111,6 +111,14 @@
     padding: 0px;
   }
 
+  header {
+    padding: 0 20px;
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    display: block;
+    height: 60px;
+  }
+
   aside {
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -131,6 +139,13 @@
     box-sizing: border-box;
   }
 
+  section.is-vertical {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
   main {
     -webkit-box-flex: 1;
     -ms-flex: 1;
@@ -139,5 +154,4 @@
     overflow: auto;
     padding: 20px;
   }
-
 </style>

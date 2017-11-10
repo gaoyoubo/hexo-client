@@ -1,21 +1,21 @@
 <template>
-  <div>
-    <aside class="left" :style="{'width': leftWidth}">
-      <div class="article-list-panel" v-for="(post, index) in posts" @click="selectPost($event, post)" ref="post">
-        <div class="article-list-item">
-          <h4 class="article-title">{{ post.title }}</h4>
-          <p class="article-desc"></p>
-          <ul class="article-info">
-            <li class="meta">{{ post.author }}</li>
-            <li class="meta">{{ post.date }}</li>
-          </ul>
-        </div>
+  <Row>
+    <Col class="left" :style="{'width': leftWidth}">
+    <div class="article-list-panel" v-for="(post, index) in posts" @click="selectPost($event, post)" ref="post">
+      <div class="article-list-item">
+        <h4 class="article-title">{{ post.title }}</h4>
+        <p class="article-desc"></p>
+        <ul class="article-info">
+          <li class="meta">{{ post.author }}</li>
+          <li class="meta">{{ post.date }}</li>
+        </ul>
       </div>
-    </aside>
-    <main class="main" :style="{'width': contentWidth}">
-      我是内容
-    </main>
-  </div>
+    </div>
+    </Col>
+    <Col class="main" :style="{'width': contentWidth}">
+    我是内容
+    </Col>
+  </Row>
   <!--
   <el-main class="main" :style="{'width': contentWidth}">
     <el-form ref="form" :model="curPost" label-width="60px">
@@ -123,6 +123,8 @@
     overflow-x: hidden;
     overflow-y: auto;
     background-color: rgb(238, 241, 246);
+    border:solid 1px red;
+    height: 100px;
   }
 
   .main {
