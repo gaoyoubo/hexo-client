@@ -1,21 +1,21 @@
 <template>
-  <Row>
-    <Col class="left" :style="{'width': leftWidth}">
-    <div class="article-list-panel" v-for="(post, index) in posts" @click="selectPost($event, post)" ref="post">
-      <div class="article-list-item">
-        <h4 class="article-title">{{ post.title }}</h4>
-        <p class="article-desc"></p>
-        <ul class="article-info">
-          <li class="meta">{{ post.author }}</li>
-          <li class="meta">{{ post.date }}</li>
-        </ul>
+  <section>
+    <aside class="left">
+      <div class="article-list-panel" v-for="(post, index) in posts" @click="selectPost($event, post)" ref="post">
+        <div class="article-list-item">
+          <h4 class="article-title">{{ post.title }}</h4>
+          <p class="article-desc"></p>
+          <ul class="article-info">
+            <li class="meta">{{ post.author }}</li>
+            <li class="meta">{{ post.date }}</li>
+          </ul>
+        </div>
       </div>
-    </div>
-    </Col>
-    <Col class="main" :style="{'width': contentWidth}">
-    我是内容
-    </Col>
-  </Row>
+    </aside>
+    <section class="main">
+      我是内容
+    </section>
+  </section>
   <!--
   <el-main class="main" :style="{'width': contentWidth}">
     <el-form ref="form" :model="curPost" label-width="60px">
@@ -63,7 +63,6 @@
     data () {
       return {
         windowHeight: '300px', // 窗口高度
-        leftWidth: '300px', // 侧边宽度
         contentWidth: '200px', // 内容宽度
         editorHeight: '300px', // 编辑器高度
         tags: [],
@@ -123,8 +122,7 @@
     overflow-x: hidden;
     overflow-y: auto;
     background-color: rgb(238, 241, 246);
-    border:solid 1px red;
-    height: 100px;
+    width: 300px;
   }
 
   .main {

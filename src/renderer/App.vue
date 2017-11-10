@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <section class="is-vertical" :style="{'height': windowHeight}" v-if="sysInited">
-      <header class="header">
+      <header>
         <page-header></page-header>
       </header>
       <router-view></router-view>
@@ -107,16 +107,13 @@
     background: transparent;
   }
 
-  .header {
-    padding: 0px;
-  }
-
   header {
     padding: 0 20px;
     box-sizing: border-box;
     -webkit-box-sizing: border-box;
     display: block;
     height: 60px;
+    padding: 0px;
   }
 
   aside {
@@ -128,30 +125,30 @@
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
+    flex: 1;
+    box-sizing: border-box;
+    flex-direction: row;
     -webkit-box-orient: horizontal;
     -webkit-box-direction: normal;
     -webkit-box-sizing: border-box;
     -ms-flex-direction: row;
-    flex-direction: row;
     -webkit-box-flex: 1;
     -ms-flex: 1;
-    flex: 1;
-    box-sizing: border-box;
   }
 
   section.is-vertical {
+    flex-direction: column;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -ms-flex-direction: column;
-    flex-direction: column;
   }
 
   main {
-    -webkit-box-flex: 1;
-    -ms-flex: 1;
     flex: 1;
     box-sizing: border-box;
     overflow: auto;
     padding: 20px;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
   }
 </style>
