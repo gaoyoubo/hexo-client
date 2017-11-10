@@ -1,5 +1,6 @@
 <template>
-  <div id="app" v-loading.fullscreen.lock="!sysInited && sysConfigInited">
+  <div id="app">
+    <!--
     <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
       <el-header class="header">
         <page-header></page-header>
@@ -8,7 +9,6 @@
       <router-view></router-view>
 
     </el-container>
-
     <el-dialog title="请配置正确的路径" :visible="!sysConfigInited"
                :close-on-click-modal="false"
                :close-on-press-escape="false"
@@ -23,6 +23,16 @@
         <el-button type="primary" @click="setPath">确 定</el-button>
       </div>
     </el-dialog>
+    -->
+    <div>
+      <Modal v-model="!sysConfigInited" title="请配置正确的路径" @on-ok="ok" @on-cancel="cancel">
+        <Form>
+          <FormItem label="路径">
+            <Input v-model="path" placeholder="请配置正确的Hexo路径"></Input>
+          </FormItem>
+        </Form>
+      </Modal>
+    </div>
   </div>
 </template>
 
@@ -30,6 +40,7 @@
   import PageHeader from '@/components/PageHeader.vue'
 
   export default {
+    name: 'hexo-client',
     data () {
       return {
         windowHeight: '300px', // 窗口高度
@@ -48,6 +59,12 @@
     },
 
     methods: {
+      ok () {
+        this.$Message.info('Clicked ok')
+      },
+      cancel () {
+        this.$Message.info('Clicked cancel')
+      },
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
       },

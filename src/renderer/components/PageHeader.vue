@@ -1,22 +1,24 @@
 <template>
   <div>
-    <el-menu
-        :default-active="activeIndex"
-        :router="true"
-        mode="horizontal"
-        @select="handleSelect"
-        background-color="#545c64"
-        text-color="#fff"
-        active-text-color="#ffd04b">
-      <!--<el-menu-item index="/">首页</el-menu-item>-->
-      <el-menu-item index="/article">文章</el-menu-item>
-      <el-menu-item index="/article/create">发表</el-menu-item>
-      <!--<el-menu-item index="/config">配置</el-menu-item>-->
-    </el-menu>
+    <Menu mode="horizontal" theme="light" :active-name="activeIndex">
+      <MenuItem name="/" @on-select="handleSelect">
+        <Icon type="ios-paper"></Icon>首页
+      </MenuItem>
+      <MenuItem name="/article">
+        <Icon type="ios-paper"></Icon>文章
+      </MenuItem>
+      <MenuItem name="/article/create">
+        <Icon type="ios-paper"></Icon>发表
+      </MenuItem>
+      <MenuItem name="/config">
+        <Icon type="ios-paper"></Icon>配置
+      </MenuItem>
+    </Menu>
   </div>
 </template>
 
 <script>
+  import router from '@/router'
   export default {
     data () {
       return {
@@ -25,7 +27,8 @@
     },
     methods: {
       handleSelect (key, keyPath) {
-        console.log(key, keyPath)
+        debugger
+        router.push()
       }
     }
   }

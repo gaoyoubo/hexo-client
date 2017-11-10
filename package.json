@@ -50,12 +50,13 @@
       "icon": "build/icons/icon.ico"
     },
     "linux": {
-      "icon": "build/icons"
+      "icon": "build/icons",
+      "category": "Education;Development"
     }
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "element-ui": "^2.0.0",
+    "iview": "^2.6.0",
     "js-yaml": "^3.10.0",
     "marked": "^0.3.6",
     "nedb": "^1.8.0",

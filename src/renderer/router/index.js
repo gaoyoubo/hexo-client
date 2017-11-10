@@ -8,8 +8,8 @@ export default new Router({
     {
       path: '/',
       name: 'index',
-      component: require('@/components/Article').default
-      // component: require('@/components/Index').default
+      // component: require('@/components/Article').default
+      component: require('@/components/Index').default
     },
     {
       path: '/article',
