@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Menu mode="horizontal" theme="light" :active-name="activeIndex">
-      <MenuItem name="/" @on-select="handleSelect">
+    <Menu mode="horizontal" theme="light" :active-name="activeIndex" @on-select="handleSelect">
+      <MenuItem name="/">
         <Icon type="ios-paper"></Icon>首页
       </MenuItem>
       <MenuItem name="/article">
@@ -26,9 +26,8 @@
       }
     },
     methods: {
-      handleSelect (key, keyPath) {
-        debugger
-        router.push()
+      handleSelect (name) {
+        router.push(name)
       }
     }
   }

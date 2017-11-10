@@ -9,30 +9,28 @@
       <router-view></router-view>
 
     </el-container>
-    <el-dialog title="请配置正确的路径" :visible="!sysConfigInited"
-               :close-on-click-modal="false"
-               :close-on-press-escape="false"
-               :show-close="false"
-               :center="true">
-      <el-form>
-        <el-form-item label="路径" label-width="50px">
-          <el-input v-model="path" auto-complete="off"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="setPath">确 定</el-button>
-      </div>
-    </el-dialog>
     -->
-    <div>
-      <Modal v-model="!sysConfigInited" title="请配置正确的路径" @on-ok="ok" @on-cancel="cancel">
-        <Form>
-          <FormItem label="路径">
-            <Input v-model="path" placeholder="请配置正确的Hexo路径"></Input>
-          </FormItem>
-        </Form>
-      </Modal>
+
+    <div :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
+      <div class="header">
+        <page-header></page-header>
+      </div>
+
+      <router-view></router-view>
     </div>
+
+    <Modal v-model="showPathConfig" width="360" :closable="false" :mask-closable="false">
+      <p slot="header" style="color:#f60;text-align:center">
+        <Icon type="information-circled"></Icon>
+        <span>请配置正确的路径</span>
+      </p>
+      <div style="text-align:center">
+        <Input v-model="path" placeholder="请配置正确的Hexo路径"/>
+      </div>
+      <div slot="footer">
+        <Button type="error" size="large" long @click="setPath"> 确 定 </Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -55,16 +53,13 @@
       },
       sysInited: function () {
         return this.$store.getters.sysInited
+      },
+      showPathConfig: function () {
+        return !this.$store.getters.sysConfigInited
       }
     },
 
     methods: {
-      ok () {
-        this.$Message.info('Clicked ok')
-      },
-      cancel () {
-        this.$Message.info('Clicked cancel')
-      },
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
       },
