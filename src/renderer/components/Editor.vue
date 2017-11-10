@@ -1,16 +1,16 @@
 <template>
-  <el-tabs v-model="activeName" @tab-click="handleClick" :active-name="activeName" class="editor">
-    <el-tab-pane label="预览" name="preview">
+  <Tabs v-model="activeName" @on-click="handleClick" :value="activeName" class="editor">
+    <TabPane label="预览" name="preview">
       <div class="marked-preview markdown-body" v-html="markdown"
            :style="{'height': editorHeight}"></div>
-    </el-tab-pane>
-    <el-tab-pane label="编辑" name="edit">
+    </TabPane>
+    <TabPane label="编辑" name="edit">
       <textarea :id="editorId" ref="txt" class="marked-txt"
                 :value="content"
                 @input="update"
                 :style="{'height': editorHeight}"></textarea>
-    </el-tab-pane>
-  </el-tabs>
+    </TabPane>
+  </Tabs>
 </template>
 <script>
   import marked from 'marked'

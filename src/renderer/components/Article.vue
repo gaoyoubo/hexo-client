@@ -12,48 +12,53 @@
         </div>
       </div>
     </aside>
-    <section class="main">
-      我是内容
-    </section>
-  </section>
-  <!--
-  <el-main class="main" :style="{'width': contentWidth}">
-    <el-form ref="form" :model="curPost" label-width="60px">
-      <el-row>
-        <el-col :span="8">
-          <el-form-item label="标题" prop="title">
-            <el-input v-model="curPost.title"></el-input>
-          </el-form-item>
-        </el-col>
+    <section class="main" style="border:solid 1px red;">
+      <Form ref="form" :model="curPost" :label-width="60" style="width: 100%;">
+        <Row>
+          <Col :span="12">
+          <FormItem label="标题" prop="title">
+            <Input v-model="curPost.title"></Input>
+          </FormItem>
+          </Col>
 
-        <el-col :span="8">
-          <el-form-item label="作者" prop="title">
-            <el-input v-model="curPost.author"></el-input>
-          </el-form-item>
-        </el-col>
+          <Col :span="12">
+          <FormItem label="作者" prop="title">
+            <Input v-model="curPost.author"></Input>
+          </FormItem>
+          </Col>
+          </Col>
+        </Row>
 
-        <el-col :span="8">
-          <el-form-item label="标签" prop="title">
-            <el-select v-model="curPost.tags" multiple filterable allow-create placeholder="请选择文章标签">
-              <el-option v-for="tag in tags" :key="tag" :label="tag" :value="tag"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24" style="margin: 0px;">
+        <Row>
+          <Col :span="24">
+          <FormItem label="标签" prop="title">
+            <!--
+            <Select v-model="curPost.tags" filterable multiple>
+              <Option v-for="tag in tags" :value="tag" :key="tag">{{ tag }}</Option>
+            </Select>
+            -->
+            <Tag v-for="tag in curPost.tags" :key="tag" :name="tag" closable @on-close="delTag">{{ tag }}</Tag>
+            <Button icon="ios-plus-empty" type="dashed" size="small" @click="addTag">添加标签</Button>
+          </FormItem>
+          </Col>
+        </Row>
+
+        <Row>
+          <Col :span="24" style="margin: 0px;">
           <editor ref="editor" :editor-height="editorHeight" :value="curPost.content"
                   v-model="curPost.content"></editor>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col :span="24">
-          <el-button type="primary" style="float: right; margin-right: 10px;" @click="writePost">保存</el-button>
-        </el-col>
-      </el-row>
-    </el-form>
-  </el-main>
-  -->
+          </Col>
+        </Row>
+
+        <Row>
+          <Col :span="24">
+          <Button type="primary" icon="ios-compose" style="float: right; margin-right: 10px;" @click="writePost">发表
+          </Button>
+          </Col>
+        </Row>
+      </Form>
+    </section>
+  </section>
 </template>
 
 <script>
@@ -75,6 +80,11 @@
         this.editorHeight = (document.documentElement.clientHeight - 280) + 'px'
       },
 
+      /**
+       * 选中文章
+       * @param event
+       * @param post
+       */
       selectPost (event, post) {
         // 设置当前选中数据
         this.curPost = JSON.parse(JSON.stringify(post))
@@ -85,8 +95,27 @@
         event.currentTarget.classList.add('active')
       },
 
+      /**
+       * 发表文章
+       */
       writePost () {
         this.$store.dispatch('writePost', this.curPost)
+      },
+
+      /**
+       * 添加标签
+       */
+      addTag () {
+      },
+
+      /**
+       * 删除标签
+       * @param event
+       * @param name
+       */
+      delTag (event, name) {
+        const index = this.curPost.tags.indexOf(name)
+        this.curPost.tags.splice(index, 1)
       }
     },
     computed: {
