@@ -11,13 +11,12 @@
     </el-container>
     -->
 
-    <div class="layout" :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
-      <div>
+    <section :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
+      <header class="header">
         <page-header></page-header>
-      </div>
-
+      </header>
       <router-view></router-view>
-    </div>
+    </section>
 
     <Modal v-model="showPathConfig" width="360" :closable="false" :mask-closable="false">
       <p slot="header" style="color:#f60;text-align:center">
