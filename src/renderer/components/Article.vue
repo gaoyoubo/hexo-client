@@ -35,11 +35,11 @@
             <Tag v-for="tag in curPost.tags" :key="tag" :name="tag" closable @on-close="delTag">{{ tag }}</Tag>
             <!--<Button icon="ios-plus-empty" type="dashed" size="small" @click="addTag">添加标签</Button>-->
             <AutoComplete
-                ref="tagSel"
                 :data="tags"
                 :filter-method="filterTags"
+                v-model="inputTagText"
                 @on-select="addTag"
-                @native.keydown="inputTag"
+                @keyup.native.enter="inputTag"
                 size="small"
                 placeholder="Input tag"
                 style="width:120px">
@@ -76,7 +76,8 @@
         contentWidth: '200px', // 内容宽度
         editorHeight: '300px', // 编辑器高度
         tags: [], // all tags
-        curPost: {} // 当前文章
+        curPost: {}, // 当前文章
+        inputTagText: ''
       }
     },
     methods: {
@@ -118,15 +119,25 @@
        * 添加标签
        */
       addTag (tag) {
-        console.log('add tag:', tag)
-        // this.$refs.tagSel.value = ''
-        // this.inputTagText = ''
-        this.curPost.tags.push(tag)
+        var contains = false
+        for (var i = 0; i < this.curPost.tags.length; i++) {
+          if (this.curPost.tags[i].toUpperCase() === tag.toUpperCase()) {
+            contains = true
+            break
+          }
+        }
+        if (contains) {
+          this.$Message.warning('tag exists')
+        } else {
+          this.curPost.tags.push(tag)
+        }
       },
 
+      /**
+       * input tag
+       */
       inputTag () {
-        var tag = this.$refs.tagSel.value
-        console.log('input tag', tag)
+        this.addTag(this.inputTagText)
       },
 
       /**

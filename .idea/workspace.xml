@@ -52,8 +52,8 @@
       <file leaf-file-name="Article.vue" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/renderer/components/Article.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="41" column="24" lean-forward="false" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
+            <state relative-caret-position="311">
+              <caret line="133" column="8" lean-forward="true" selection-start-line="133" selection-start-column="8" selection-end-line="133" selection-end-column="8" />
               <folding>
                 <element signature="n#style#0;n#Form#0;n#section#0;n#section#0;n#template#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#AutoComplete#0;n#FormItem#0;n#Row#1;n#Form#0;n#section#0;n#section#0;n#template#0;n#!!top" expanded="true" />
@@ -102,7 +102,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>title</find>
       <find>write</find>
       <find>alert</find>
       <find>curPost</find>
@@ -132,6 +131,7 @@
       <find>$ref</find>
       <find>contentWidth</find>
       <find>v-on</find>
+      <find>tagSel</find>
     </findStrings>
     <replaceStrings>
       <replace>date</replace>
@@ -206,10 +206,9 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="46" />
     <option name="y" value="23" />
-    <option name="width" value="1413" />
-    <option name="height" value="792" />
+    <option name="width" value="1440" />
+    <option name="height" value="797" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -311,15 +310,15 @@
     <property name="node.js.selected.package.standard" value="$PROJECT_DIR$/node_modules/eslint" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/renderer" />
-      <recent name="$PROJECT_DIR$/src/renderer/store/modules" />
-      <recent name="$PROJECT_DIR$/src/renderer/store" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/build/icons" />
       <recent name="$PROJECT_DIR$/src/renderer/components" />
       <recent name="$PROJECT_DIR$/src/renderer/assets" />
+      <recent name="$PROJECT_DIR$/src/renderer/store" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/renderer" />
+      <recent name="$PROJECT_DIR$/src/renderer/store/modules" />
       <recent name="$PROJECT_DIR$/src/renderer/store" />
     </key>
   </component>
@@ -443,12 +442,12 @@
       <workItem from="1509954371575" duration="5169000" />
       <workItem from="1510041173997" duration="11828000" />
       <workItem from="1510105468018" duration="18718000" />
-      <workItem from="1510373217273" duration="2377000" />
+      <workItem from="1510373217273" duration="3048000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="133527000" />
+    <option name="totallyTimeSpent" value="134198000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="6" />
@@ -823,8 +822,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/Article.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="41" column="24" lean-forward="false" selection-start-line="41" selection-start-column="24" selection-end-line="41" selection-end-column="24" />
+        <state relative-caret-position="311">
+          <caret line="133" column="8" lean-forward="true" selection-start-line="133" selection-start-column="8" selection-end-line="133" selection-end-column="8" />
           <folding>
             <element signature="n#style#0;n#Form#0;n#section#0;n#section#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#AutoComplete#0;n#FormItem#0;n#Row#1;n#Form#0;n#section#0;n#section#0;n#template#0;n#!!top" expanded="true" />
