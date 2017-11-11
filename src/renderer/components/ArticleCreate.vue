@@ -1,42 +1,54 @@
 <template>
-  <el-container>
-    <el-main class="main">
-      <el-form ref="form" :model="post" label-width="60px">
-        <el-row>
-          <el-col :span="8">
-            <el-form-item label="标题" prop="title">
-              <el-input v-model="post.title"></el-input>
-            </el-form-item>
-          </el-col>
+  <section class="main">
+    <Form ref="form" :model="post" :label-width="60" style="width: 100%;">
+      <Row>
+        <Col :span="12">
+        <FormItem label="标题" prop="title">
+          <Input v-model="post.title"></Input>
+        </FormItem>
+        </Col>
 
-          <el-col :span="8">
-            <el-form-item label="作者" prop="title">
-              <el-input v-model="post.author"></el-input>
-            </el-form-item>
-          </el-col>
+        <Col :span="12">
+        <FormItem label="作者" prop="title">
+          <Input v-model="post.author"></Input>
+        </FormItem>
+        </Col>
+        </Col>
+      </Row>
 
-          <el-col :span="8">
-            <el-form-item label="标签" prop="title">
-              <el-select v-model="post.tags" multiple filterable allow-create placeholder="请选择文章标签">
-                <el-option v-for="tag in tags" :key="tag" :label="tag" :value="tag"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <editor ref="editor" :editor-height="editorHeight" input-active-name="edit" :value="post.content"
-                    v-model="post.content"></editor>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-button type="primary" style="float: right; margin-right: 10px;" @click="writePost">发 表</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-main>
-  </el-container>
+      <Row>
+        <Col :span="24">
+        <FormItem label="标签" prop="title">
+          <Tag v-for="tag in post.tags" :key="tag" :name="tag" closable @on-close="delTag">{{ tag }}</Tag>
+          <AutoComplete
+              :data="tags"
+              :filter-method="filterTags"
+              v-model="inputTagText"
+              @on-select="addTag"
+              @keyup.native.enter="inputTag"
+              size="small"
+              placeholder="Input tag"
+              style="width:120px">
+          </AutoComplete>
+        </FormItem>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col :span="24" style="margin: 0px;">
+        <editor ref="editor" :editor-height="editorHeight" :value="post.content"
+                v-model="post.content"></editor>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col :span="24">
+        <Button type="primary" icon="ios-compose" style="float: right; margin-right: 10px;" @click="writePost">发表
+        </Button>
+        </Col>
+      </Row>
+    </Form>
+  </section>
 </template>
 
 <script>
@@ -52,7 +64,8 @@
           content: '',
           author: '',
           tags: []
-        }
+        },
+        inputTagText: ''
       }
     },
     methods: {
@@ -61,6 +74,48 @@
       },
       writePost () {
         this.$store.dispatch('writePost', this.post)
+      },
+
+      /**
+       * search tags
+       */
+      filterTags (value, option) {
+        return option.toUpperCase().indexOf(value.toUpperCase()) !== -1
+      },
+
+      /**
+       * 添加标签
+       */
+      addTag (tag) {
+        var contains = false
+        for (var i = 0; i < this.curPost.tags.length; i++) {
+          if (this.curPost.tags[i].toUpperCase() === tag.toUpperCase()) {
+            contains = true
+            break
+          }
+        }
+        if (contains) {
+          this.$Message.warning('tag exists')
+        } else {
+          this.curPost.tags.push(tag)
+        }
+      },
+
+      /**
+       * input tag
+       */
+      inputTag () {
+        this.addTag(this.inputTagText)
+      },
+
+      /**
+       * 删除标签
+       * @param event
+       * @param name
+       */
+      delTag (event, name) {
+        const index = this.curPost.tags.indexOf(name)
+        this.curPost.tags.splice(index, 1)
       }
     },
 
