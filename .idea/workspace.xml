@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a8176cb6-3d39-4233-89e6-30ea0f64552b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/renderer/components/ArticleCreate.vue" afterPath="$PROJECT_DIR$/src/renderer/components/ArticleCreate.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/renderer/components/Config.vue" afterPath="$PROJECT_DIR$/src/renderer/components/Config.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/renderer/components/Index.vue" afterPath="$PROJECT_DIR$/src/renderer/components/Index.vue" />
-    </list>
+    <list default="true" id="a8176cb6-3d39-4233-89e6-30ea0f64552b" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -49,8 +45,8 @@
           <file leaf-file-name="Config.vue" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/renderer/components/Config.vue">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="30">
-                  <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+                <state relative-caret-position="195">
+                  <caret line="13" column="9" lean-forward="true" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
                   <folding />
                 </state>
               </provider>
@@ -240,36 +236,6 @@
               <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
               <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
-              <item name=".electron-vue" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="renderer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="renderer" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="renderer" type="462c0819:PsiDirectoryNode" />
-              <item name="router" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -430,12 +396,12 @@
       <workItem from="1509954371575" duration="5169000" />
       <workItem from="1510041173997" duration="11828000" />
       <workItem from="1510105468018" duration="18718000" />
-      <workItem from="1510373217273" duration="3407000" />
+      <workItem from="1510373217273" duration="3628000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="134557000" />
+    <option name="totallyTimeSpent" value="134778000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="6" />
@@ -819,8 +785,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/Config.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+        <state relative-caret-position="195">
+          <caret line="13" column="9" lean-forward="true" selection-start-line="13" selection-start-column="9" selection-end-line="13" selection-end-column="9" />
           <folding />
         </state>
       </provider>
