@@ -1,6 +1,6 @@
 <template>
   <section>
-    <aside class="left">
+    <aside class="left" width="300px;">
       <div class="article-list-panel" v-for="(post, index) in posts" @click="selectPost($event, post)" ref="post">
         <div class="article-list-item">
           <h4 class="article-title">{{ post.title }}</h4>
@@ -12,7 +12,7 @@
         </div>
       </div>
     </aside>
-    <section class="main" style="border:solid 1px red;">
+    <section class="main" :style="{'width': contentWidth}">
       <Form ref="form" :model="curPost" :label-width="60" style="width: 100%;">
         <Row>
           <Col :span="12">
@@ -32,11 +32,6 @@
         <Row>
           <Col :span="24">
           <FormItem label="标签" prop="title">
-            <!--
-            <Select v-model="curPost.tags" filterable multiple>
-              <Option v-for="tag in tags" :value="tag" :key="tag">{{ tag }}</Option>
-            </Select>
-            -->
             <Tag v-for="tag in curPost.tags" :key="tag" :name="tag" closable @on-close="delTag">{{ tag }}</Tag>
             <Button icon="ios-plus-empty" type="dashed" size="small" @click="addTag">添加标签</Button>
           </FormItem>
