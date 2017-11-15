@@ -1,5 +1,7 @@
 import HexoUtils from '@/HexoUtils'
 import DBUtils from '@/DBUtils'
+import router from '@/router'
+import vue from 'vue'
 
 export default {
   state: {
@@ -72,11 +74,43 @@ export default {
       })
     },
 
-    writePost (context, post) {
+    /**
+     * 写文章
+     * @param context
+     * @param post
+     */
+    craetePost (context, post) {
       var path = context.state.sysConfig.path
       if (path) {
-        HexoUtils.writePost(path, post)
+        HexoUtils.craetePost(path, post)
         context.commit('INIT_HEXO', path)
+        vue.prototype.$notify({
+          title: '系统消息',
+          message: '文章创建成功',
+          type: 'success'
+        })
+        router.push('/article')
+      } else {
+        window.alert('请先配置path')
+      }
+    },
+
+    /**
+     * 更新文章
+     * @param context
+     * @param data
+     */
+    updatePost (context, data) {
+      var path = context.state.sysConfig.path
+      if (path) {
+        HexoUtils.updatePost(path, data.originPost, data.post)
+        vue.prototype.$notify({
+          title: '系统消息',
+          message: '文章修改成功',
+          type: 'success'
+        })
+        context.commit('INIT_HEXO', path)
+        router.push('/article')
       } else {
         window.alert('请先配置path')
       }

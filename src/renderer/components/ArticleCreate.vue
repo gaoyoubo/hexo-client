@@ -3,21 +3,22 @@
     <el-main class="main">
       <el-form ref="form" :model="post" label-width="60px">
         <el-row>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="标题" prop="title">
               <el-input v-model="post.title"></el-input>
             </el-form-item>
           </el-col>
-
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form-item label="作者" prop="title">
               <el-input v-model="post.author"></el-input>
             </el-form-item>
           </el-col>
-
-          <el-col :span="8">
+        </el-row>
+        <el-row>
+          <el-col :span="24">
             <el-form-item label="标签" prop="title">
-              <el-select v-model="post.tags" multiple filterable allow-create placeholder="请选择文章标签">
+              <el-select v-model="post.tags" multiple filterable allow-create placeholder="请选择文章标签"
+                         style="width: 100%;">
                 <el-option v-for="tag in tags" :key="tag" :label="tag" :value="tag"></el-option>
               </el-select>
             </el-form-item>
@@ -31,7 +32,7 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-button type="primary" style="float: right; margin-right: 10px;" @click="writePost">发 表</el-button>
+            <el-button type="primary" style="float: right; margin-right: 10px;" @click="createPost">发 表</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -57,10 +58,10 @@
     },
     methods: {
       handleResize () {
-        this.editorHeight = (document.documentElement.clientHeight - 280) + 'px'
+        this.editorHeight = (document.documentElement.clientHeight - 320) + 'px'
       },
-      writePost () {
-        this.$store.dispatch('writePost', this.post)
+      createPost () {
+        this.$store.dispatch('createPost', this.post)
       }
     },
 

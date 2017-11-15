@@ -93,8 +93,26 @@ class HexoUtils {
     return result
   }
 
-  writePost (dir, post) {
+  craetePost (dir, post) {
+    // TODO 检查文件是否存在
     var path = dir + '/source/_posts/' + post.title + '.md'
+    var content = this.markdown(post)
+    fs.writeFileSync(path, content)
+  }
+
+  /**
+   * 修改文章
+   * @param dir 路径
+   * @param originPost 原文章
+   * @param post 修改后的文章
+   */
+  updatePost (dir, originPost, post) {
+    // TODO 检查文件是否存在
+    var originPath = dir + '/source/_posts/' + originPost.title + '.md' // 原路径
+    var path = dir + '/source/_posts/' + post.title + '.md' // 新路径
+    if (originPost.title !== post.title) { // 如果修改了文件名称，需要先rename一下
+      fs.renameSync(originPath, path)
+    }
     var content = this.markdown(post)
     fs.writeFileSync(path, content)
   }
