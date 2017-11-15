@@ -80,7 +80,7 @@
     methods: {
       handleResize () {
         this.contentWidth = (document.documentElement.clientWidth - 320) + 'px'
-        this.editorHeight = (document.documentElement.clientHeight - 320) + 'px'
+        this.editorHeight = (document.documentElement.clientHeight - 340) + 'px'
       },
 
       selectPost (event, post) {

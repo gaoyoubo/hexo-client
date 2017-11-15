@@ -68,7 +68,7 @@
     },
     methods: {
       handleResize () {
-        this.editorHeight = (document.documentElement.clientHeight - 320) + 'px'
+        this.editorHeight = (document.documentElement.clientHeight - 340) + 'px'
       },
       createPost () {
         this.$refs.form.validate((valid) => {
