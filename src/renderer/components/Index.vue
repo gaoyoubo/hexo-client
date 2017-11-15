@@ -6,9 +6,6 @@
 </template>
 
 <script>
-  import Datastore from '../Datastore'
-  import { remote } from 'electron'
-
   export default {
     data () {
       return {}
