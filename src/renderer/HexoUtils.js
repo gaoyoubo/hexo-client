@@ -118,6 +118,16 @@ class HexoUtils {
   }
 
   /**
+   * 删除文章
+   * @param dir
+   * @param title
+   */
+  deletePost (dir, title) {
+    var path = dir + '/source/_posts/' + title + '.md'
+    fs.unlinkSync(path)
+  }
+
+  /**
    * 文章对象转成markdown
    * @param post
    * @returns {string}

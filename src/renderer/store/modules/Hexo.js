@@ -79,15 +79,14 @@ export default {
      * @param context
      * @param post
      */
-    craetePost (context, post) {
+    createPost (context, post) {
       var path = context.state.sysConfig.path
       if (path) {
         HexoUtils.craetePost(path, post)
         context.commit('INIT_HEXO', path)
-        vue.prototype.$notify({
-          title: '系统消息',
-          message: '文章创建成功',
-          type: 'success'
+        vue.prototype.$message({
+          type: 'success',
+          message: '文章创建成功!'
         })
         router.push('/article')
       } else {
@@ -104,15 +103,31 @@ export default {
       var path = context.state.sysConfig.path
       if (path) {
         HexoUtils.updatePost(path, data.originPost, data.post)
-        vue.prototype.$notify({
-          title: '系统消息',
-          message: '文章修改成功',
-          type: 'success'
+        vue.prototype.$message({
+          type: 'success',
+          message: '文章修改成功!'
         })
         context.commit('INIT_HEXO', path)
         router.push('/article')
       } else {
         window.alert('请先配置path')
+      }
+    },
+
+    /**
+     * 删除文章
+     * @param context
+     * @param title
+     */
+    deletePost (context, title) {
+      var path = context.state.sysConfig.path
+      if (path) {
+        HexoUtils.deletePost(path, title)
+        vue.prototype.$message({
+          type: 'success',
+          message: '文章删除成功!'
+        })
+        context.commit('INIT_HEXO', path)
       }
     },
 

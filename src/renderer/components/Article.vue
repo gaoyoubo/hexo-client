@@ -45,8 +45,9 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
-            <el-button type="primary" style="float: right; margin-right: 10px;" @click="updatePost">保存</el-button>
+          <el-col :span="24" style="text-align: right; margin-right: 10px;">
+            <el-button type="primary" @click="updatePost">保存</el-button>
+            <el-button type="danger" @click="deletePost">删除</el-button>
           </el-col>
         </el-row>
       </el-form>
@@ -103,6 +104,20 @@
             })
           }
         })
+      },
+
+      deletePost () {
+        /*
+        var me = this
+        this.$confirm('此操作将删除该文章, 是否继续?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          me.$store.dispatch('deletePost', me.originPost.title)
+        })
+        */
+        if (window.confirm('此操作将删除该文章, 是否继续?')) {
+          this.$store.dispatch('deletePost', this.originPost.title)
+        }
       }
     },
     computed: {
