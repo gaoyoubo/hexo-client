@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-main class="main">
-      <el-form ref="form" :model="post" label-width="60px">
+      <el-form ref="form" :model="post" :rules="validateRules" label-width="60px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="标题" prop="title">
@@ -9,14 +9,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="作者" prop="title">
+            <el-form-item label="作者" prop="author">
               <el-input v-model="post.author"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="标签" prop="title">
+            <el-form-item label="标签" prop="tags">
               <el-select v-model="post.tags" multiple filterable allow-create placeholder="请选择文章标签"
                          style="width: 100%;">
                 <el-option v-for="tag in tags" :key="tag" :label="tag" :value="tag"></el-option>
@@ -26,8 +26,10 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <editor ref="editor" :editor-height="editorHeight" input-active-name="edit" :value="post.content"
-                    v-model="post.content"></editor>
+            <el-form-item label="" prop="content">
+              <editor ref="editor" :editor-height="editorHeight" input-active-name="edit" :value="post.content"
+                      v-model="post.content"></editor>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -53,6 +55,14 @@
           content: '',
           author: '',
           tags: []
+        },
+        validateRules: {
+          title: [
+            {required: true, message: '请输入文章标题', trigger: 'blur'}
+          ],
+          content: [
+            {required: true, message: '请输入文章内容', trigger: 'blur'}
+          ]
         }
       }
     },
@@ -61,7 +71,11 @@
         this.editorHeight = (document.documentElement.clientHeight - 320) + 'px'
       },
       createPost () {
-        this.$store.dispatch('createPost', this.post)
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            this.$store.dispatch('createPost', this.post)
+          }
+        })
       }
     },
 

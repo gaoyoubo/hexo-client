@@ -3,10 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="a8176cb6-3d39-4233-89e6-30ea0f64552b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/renderer/HexoUtils.js" afterPath="$PROJECT_DIR$/src/renderer/HexoUtils.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/renderer/components/Article.vue" afterPath="$PROJECT_DIR$/src/renderer/components/Article.vue" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/renderer/components/ArticleCreate.vue" afterPath="$PROJECT_DIR$/src/renderer/components/ArticleCreate.vue" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/renderer/store/modules/Hexo.js" afterPath="$PROJECT_DIR$/src/renderer/store/modules/Hexo.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -25,8 +23,8 @@
           <file leaf-file-name="ArticleCreate.vue" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/renderer/components/ArticleCreate.vue">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-414">
-                  <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+                <state relative-caret-position="72">
+                  <caret line="16" column="16" lean-forward="true" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
                   <folding>
                     <element signature="n#style#0;n#el-select#0;n#el-form-item#0;n#el-col#0;n#el-row#1;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#el-button#0;n#el-col#0;n#el-row#3;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
@@ -39,7 +37,7 @@
             <entry file="file://$PROJECT_DIR$/src/renderer/components/Article.vue">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="168">
-                  <caret line="85" column="0" lean-forward="true" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
+                  <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
                   <folding>
                     <element signature="n#style#0;n#el-select#0;n#el-form-item#0;n#el-col#0;n#el-row#1;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
                     <element signature="n#style#0;n#el-button#0;n#el-col#0;n#el-row#3;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
@@ -62,13 +60,26 @@
       </split-first>
       <split-second>
         <leaf>
-          <file leaf-file-name="Hexo.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="Hexo.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/Hexo.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="212">
                   <caret line="103" column="14" lean-forward="false" selection-start-line="103" selection-start-column="14" selection-end-line="103" selection-end-column="14" />
                   <folding>
                     <element signature="e#0#35#0" expanded="true" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="Article.vue" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/renderer/components/Article.vue">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="636">
+                  <caret line="99" column="44" lean-forward="false" selection-start-line="99" selection-start-column="34" selection-end-line="99" selection-end-column="44" />
+                  <folding>
+                    <element signature="n#style#0;n#el-select#0;n#el-form-item#0;n#el-col#0;n#el-row#1;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
+                    <element signature="n#style#0;n#el-button#0;n#el-col#0;n#el-row#3;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
                   </folding>
                 </state>
               </provider>
@@ -169,9 +180,9 @@
         <option value="$PROJECT_DIR$/src/renderer/components/Index.vue" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/src/renderer/HexoUtils.js" />
+        <option value="$PROJECT_DIR$/src/renderer/store/modules/Hexo.js" />
         <option value="$PROJECT_DIR$/src/renderer/components/ArticleCreate.vue" />
         <option value="$PROJECT_DIR$/src/renderer/components/Article.vue" />
-        <option value="$PROJECT_DIR$/src/renderer/store/modules/Hexo.js" />
       </list>
     </option>
   </component>
@@ -248,6 +259,24 @@
               <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
               <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
               <item name="dist" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="renderer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hexo-client" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hexo-client" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="renderer" type="462c0819:PsiDirectoryNode" />
+              <item name="components" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -409,7 +438,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="108803000" />
+    <option name="totallyTimeSpent" value="109205000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="50" y="0" width="1550" height="900" extended-state="6" />
@@ -796,10 +825,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/Hexo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="212">
+          <caret line="103" column="14" lean-forward="false" selection-start-line="103" selection-start-column="14" selection-end-line="103" selection-end-column="14" />
+          <folding>
+            <element signature="e#0#35#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/renderer/components/ArticleCreate.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-414">
-          <caret line="10" column="0" lean-forward="false" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+        <state relative-caret-position="72">
+          <caret line="16" column="16" lean-forward="true" selection-start-line="16" selection-start-column="16" selection-end-line="16" selection-end-column="16" />
           <folding>
             <element signature="n#style#0;n#el-select#0;n#el-form-item#0;n#el-col#0;n#el-row#1;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-button#0;n#el-col#0;n#el-row#3;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
@@ -810,20 +849,10 @@
     <entry file="file://$PROJECT_DIR$/src/renderer/components/Article.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="168">
-          <caret line="85" column="0" lean-forward="true" selection-start-line="85" selection-start-column="0" selection-end-line="85" selection-end-column="0" />
+          <caret line="40" column="0" lean-forward="false" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
           <folding>
             <element signature="n#style#0;n#el-select#0;n#el-form-item#0;n#el-col#0;n#el-row#1;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#el-button#0;n#el-col#0;n#el-row#3;n#el-form#0;n#el-main#0;n#el-container#0;n#template#0;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/renderer/store/modules/Hexo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="103" column="14" lean-forward="false" selection-start-line="103" selection-start-column="14" selection-end-line="103" selection-end-column="14" />
-          <folding>
-            <element signature="e#0#35#0" expanded="true" />
           </folding>
         </state>
       </provider>

@@ -13,7 +13,7 @@
       </div>
     </el-aside>
     <el-main class="main" :style="{'width': contentWidth}">
-      <el-form ref="form" :model="curPost" label-width="60px">
+      <el-form ref="form" :model="curPost" :rules="validateRules" label-width="60px">
         <el-row>
           <el-col :span="12">
             <el-form-item label="标题" prop="title">
@@ -21,14 +21,14 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="作者" prop="title">
+            <el-form-item label="作者" prop="author">
               <el-input v-model="curPost.author"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="标签" prop="title">
+            <el-form-item label="标签" prop="tags">
               <el-select v-model="curPost.tags" multiple filterable allow-create placeholder="请选择文章标签"
                          style="width: 100%;">
                 <el-option v-for="tag in tags" :key="tag" :label="tag" :value="tag"></el-option>
@@ -38,8 +38,10 @@
         </el-row>
         <el-row>
           <el-col :span="24" style="margin: 0px;">
-            <editor ref="editor" :editor-height="editorHeight" :value="curPost.content"
-                    v-model="curPost.content"></editor>
+            <el-form-item label="" prop="content">
+              <editor ref="editor" :editor-height="editorHeight" :value="curPost.content"
+                      v-model="curPost.content"></editor>
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -64,7 +66,15 @@
         editorHeight: '300px', // 编辑器高度
         tags: [],
         curPost: {}, // 当前文章
-        originPost: {} // 保留一份没修改的文章对象
+        originPost: {}, // 保留一份没修改的文章对象
+        validateRules: {
+          title: [
+            {required: true, message: '请输入文章标题', trigger: 'blur'}
+          ],
+          content: [
+            {required: true, message: '请输入文章内容', trigger: 'blur'}
+          ]
+        }
       }
     },
     methods: {
@@ -85,9 +95,13 @@
       },
 
       updatePost () {
-        this.$store.dispatch('updatePost', {
-          originPost: this.originPost,
-          post: this.curPost
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            this.$store.dispatch('updatePost', {
+              originPost: this.originPost,
+              post: this.curPost
+            })
+          }
         })
       }
     },
