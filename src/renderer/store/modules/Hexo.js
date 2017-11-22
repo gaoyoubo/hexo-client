@@ -144,6 +144,17 @@ export default {
       } else {
         window.alert('错误的目录配置:' + path)
       }
+    },
+
+    /**
+     * 保存系统配置
+     * @param context
+     * @param sysConfig
+     */
+    setSysConfig (context, sysConfig) {
+      DBUtils.setSysConfigs(sysConfig).then(() => {
+        context.dispatch('init')
+      })
     }
   },
   getters: {
