@@ -11,7 +11,7 @@
       <!--<el-menu-item index="/">首页</el-menu-item>-->
       <el-menu-item index="/article">文章</el-menu-item>
       <el-menu-item index="/article/create">发表</el-menu-item>
-      <!--<el-menu-item index="/config">配置</el-menu-item>-->
+      <el-menu-item index="/config">配置</el-menu-item>
     </el-menu>
   </div>
 </template>
