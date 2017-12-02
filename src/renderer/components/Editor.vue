@@ -1,19 +1,32 @@
 <template>
-  <el-tabs v-model="activeName" @tab-click="handleClick" :active-name="activeName" class="editor">
+  <el-tabs v-model="activeName" @tab-click="handleClick" :active-name="activeName" class="editor"
+           v-loading="uploading" :element-loading-text="uploadingText">
     <el-tab-pane label="预览" name="preview">
       <div class="marked-preview markdown-body" v-html="markdown"
            :style="{'height': editorHeight}"></div>
     </el-tab-pane>
     <el-tab-pane label="编辑" name="edit">
-      <textarea :id="editorId" ref="txt" class="marked-txt"
+      <textarea class="marked-txt"
+                ref="txt"
+                :class="{'is-dragover': dragover}"
+                :id="editorId"
                 :value="content"
                 @input="update"
+                @drop.prevent="onDrop"
+                @dragover.prevent="onDragover"
+                @dragleave.prevent="dragover = false"
                 :style="{'height': editorHeight}"></textarea>
     </el-tab-pane>
   </el-tabs>
 </template>
 <script>
   import marked from 'marked'
+  import qiniuJs from 'qiniu.js'
+  import When from 'when'
+
+  var qiniu = require('qiniu')
+  var fs = require('fs')
+  var md5 = require('md5')
 
   export default {
     props: {
@@ -35,7 +48,10 @@
         editorId: 'editor_' + new Date().getTime(),
         content: this.value,
         markdown: '',
-        activeName: this.inputActiveName
+        activeName: this.inputActiveName,
+        dragover: false,
+        uploading: false,
+        uploadingText: 'loading...'
       }
     },
     mounted () {
@@ -46,10 +62,7 @@
 
       // 插入图片
       this.$on('insertImage', function (imageUrl) {
-        var editor = document.getElementById(this.editorId)
-        this.insertText(editor, '![](' + imageUrl + ')')
-
-        this.content = editor.value
+        this.insertText('![](' + imageUrl + ')\n')
       })
     },
     watch: {
@@ -68,25 +81,111 @@
         }
       },
       // 光标位置插入内容
-      insertText (obj, str) {
+      insertText (str) {
+        var editor = this.$refs.txt
         if (document.selection) {
           var sel = document.selection.createRange()
           sel.text = str
-        } else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
-          var startPos = obj.selectionStart
-          var endPos = obj.selectionEnd
+        } else if (typeof editor.selectionStart === 'number' && typeof editor.selectionEnd === 'number') {
+          var startPos = editor.selectionStart
+          var endPos = editor.selectionEnd
           var cursorPos = startPos
-          var tmpStr = obj.value
-          obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length)
+          var tmpStr = editor.value
+          editor.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length)
           cursorPos += str.length
-          obj.selectionStart = obj.selectionEnd = cursorPos
+          editor.selectionStart = editor.selectionEnd = cursorPos
         } else {
-          obj.value += str
+          editor.value += str
         }
+        this.content = editor.value
       },
       setContent (content) {
         this.content = content
         this.markdown = marked(this.content, {sanitize: true})
+      },
+      onDragover () {
+        this.dragover = true
+      },
+      onDrop (e) {
+        var me = this
+        this.dragover = false
+        var files = e.dataTransfer.files
+        if (!files || files.length === 0) {
+          return
+        }
+
+        // 检查文件合法性
+        var checkSuccess = true
+        for (var j = 0; j < files.length; j++) {
+          if (!files[j].type.match(/image*/)) {
+            console.log('仅支持上传图片...', files[j])
+            checkSuccess = false
+            break
+          }
+        }
+        if (!checkSuccess) {
+          this.$notify.error({
+            message: '只能上传图片文件'
+          })
+          return
+        }
+
+        var promises = []
+        for (var i = 0; i < files.length; i++) {
+          if (!files[i].type.match(/image*/)) {
+            console.log('仅支持上传图片...', files[i])
+          } else {
+            promises.push(this.doUpload(files[i]))
+          }
+        }
+
+        this.uploading = true
+        this.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+        When.all(promises).then(results => {
+          console.log(results)
+          results.forEach(image => {
+            me.$emit('insertImage', image.url())
+          })
+          me.uploading = false
+        }, errs => {
+          me.$notify.error({
+            message: '图片上传失败：' + errs
+          })
+          me.uploading = false
+        })
+      },
+      doUpload (file) {
+        var buf = fs.readFileSync(file.path)
+        var key = md5(buf)
+        var upToken = this.getUpToken(key)
+
+        var imagesBucket = qiniuJs.bucket('m-spring', {
+          putToken: upToken,
+          url: 'http://file.mspring.org'
+        })
+
+        var deferred = When.defer()
+        imagesBucket.putFile(key, file, {
+          progress: function (precent, loaded, total) {
+          }
+        }).then(function (rsp) {
+          var image = imagesBucket.key(rsp.key)
+          deferred.resolve(image)
+        }, function (err) {
+          deferred.reject(err)
+        })
+        return deferred.promise
+      },
+      getUpToken (key) {
+        var config = new qiniu.conf.Config()
+        config.zone = qiniu.zone.Zone_z0
+
+        var accessKey = 'fFLsq2BPeDEXYsnkEpFlICPfsU6pYCfXV21GL8zY'
+        var secretKey = 'S3Qr4jS8WH5Fp-ubtVFelQnDk37M3j71q2Td5Xj2'
+        var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
+
+        var putPolicy = new qiniu.rs.PutPolicy({scope: 'm-spring' + ':' + key})
+        return putPolicy.uploadToken(mac)
       }
     },
     components: {}
@@ -97,6 +196,10 @@
     width: 99%;
     height: 100%;
     margin: 0px 0px 10px 0px;
+  }
+
+  .is-dragover {
+    border: 1px solid red;
   }
 
   .marked-txt {
