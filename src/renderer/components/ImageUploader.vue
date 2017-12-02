@@ -19,8 +19,9 @@
 </template>
 
 <script>
-  import qiniu from 'qiniu'
+  import qiniuJs from 'qiniu.js'
 
+  var qiniu = require('qiniu')
   var fs = require('fs')
   var md5 = require('md5')
 
@@ -32,7 +33,37 @@
       }
     },
     methods: {
-      doUpload (arg) {
+      doUpload (event) {
+        debugger
+        var buf = fs.readFileSync(event.file.path)
+        var key = md5(buf)
+        var upToken = this.getUpToken(key)
+        console.log(upToken)
+
+        var imagesBucket = qiniuJs.bucket('m-spring', {
+          putToken: upToken,
+          url: 'http://file.mspring.org'
+        })
+        imagesBucket.putFile(key, event.file, {
+          progress: function (precent, loaded, total) {
+          }
+        }).then(function (rsp) {
+          var image = imagesBucket.key(rsp.key)
+          console.log(image)
+          /*
+          if (onSuccess) {
+            onSuccess({
+              key: rsp.key,
+              hash: rsp.hash,
+              url: image.url()
+            })
+          }
+          */
+        }, function (err) {
+          console.log(err)
+        })
+      },
+      getUpToken (key) {
         var config = new qiniu.conf.Config()
         config.zone = qiniu.zone.Zone_z0
 
@@ -40,30 +71,8 @@
         var secretKey = 'S3Qr4jS8WH5Fp-ubtVFelQnDk37M3j71q2Td5Xj2'
         var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
 
-        var localFile = arg.file.path
-        var buf = fs.readFileSync(localFile)
-        var key = md5(buf)
-
-        var options = {
-          scope: 'm-spring' + ':' + key
-        }
-        var putPolicy = new qiniu.rs.PutPolicy(options)
-        var uploadToken = putPolicy.uploadToken(mac)
-
-        var formUploader = new qiniu.form_up.FormUploader(config)
-        var putExtra = new qiniu.form_up.PutExtra()
-        formUploader.putFile(uploadToken, key, localFile, putExtra,
-          function (respErr, respBody, respInfo) {
-            if (respErr) {
-              throw respErr
-            }
-            if (respInfo.statusCode === 200) {
-              console.log(respBody)
-            } else {
-              console.log(respInfo.statusCode)
-              console.log(respBody)
-            }
-          })
+        var putPolicy = new qiniu.rs.PutPolicy({scope: 'm-spring' + ':' + key})
+        return putPolicy.uploadToken(mac)
       },
       handleRemove (file, fileList) {
         console.log(file, fileList)
