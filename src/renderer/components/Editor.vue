@@ -6,6 +6,11 @@
            :style="{'height': editorHeight}"></div>
     </el-tab-pane>
     <el-tab-pane label="编辑" name="edit">
+      <el-alert
+          title="图片拖拽到编辑器可上传。"
+          type="info"
+          close-text="知道了">
+      </el-alert>
       <textarea class="marked-txt"
                 ref="txt"
                 :class="{'is-dragover': dragover}"
@@ -198,12 +203,13 @@
     margin: 0px 0px 10px 0px;
   }
 
-  .is-dragover {
-    border: 1px solid red;
-  }
-
   .marked-txt {
     background-color: #f6f6f6;
+  }
+
+  .marked-txt.is-dragover {
+    background-color: rgba(32, 159, 255, .06);
+    border: 2px dashed #409eff;
   }
 
   .marked-preview {
