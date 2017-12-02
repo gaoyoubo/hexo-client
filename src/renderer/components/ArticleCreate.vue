@@ -32,6 +32,11 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <!--<el-row>-->
+          <!--<el-col :span="24">-->
+            <!--<image-uploader></image-uploader>-->
+          <!--</el-col>-->
+        <!--</el-row>-->
         <el-row>
           <el-col :span="24">
             <el-button type="primary" style="float: right; margin-right: 10px;" @click="createPost">发 表</el-button>
@@ -44,6 +49,7 @@
 
 <script>
   import Editor from '@/components/Editor.vue'
+  import ImageUploader from '@/components/ImageUploader.vue'
 
   export default {
     data () {
@@ -92,7 +98,8 @@
     },
 
     components: {
-      Editor
+      Editor,
+      ImageUploader
     }
   }
 </script>
