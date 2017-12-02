@@ -185,11 +185,13 @@
         var config = new qiniu.conf.Config()
         config.zone = qiniu.zone.Zone_z0
 
-        var accessKey = 'fFLsq2BPeDEXYsnkEpFlICPfsU6pYCfXV21GL8zY'
-        var secretKey = 'S3Qr4jS8WH5Fp-ubtVFelQnDk37M3j71q2Td5Xj2'
+        var sysConfig = this.$store.state.Hexo.sysConfig
+        var accessKey = sysConfig.qiniuAccessKey
+        var secretKey = sysConfig.qiniuSecretKey
+        var bucket = sysConfig.qiniuBucket
         var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
 
-        var putPolicy = new qiniu.rs.PutPolicy({scope: 'm-spring' + ':' + key})
+        var putPolicy = new qiniu.rs.PutPolicy({scope: bucket + ':' + key})
         return putPolicy.uploadToken(mac)
       }
     },
