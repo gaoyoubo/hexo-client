@@ -21,6 +21,9 @@
 <script>
   import qiniu from 'qiniu'
 
+  var fs = require('fs')
+  var md5 = require('md5')
+
   export default {
     data () {
       return {
@@ -37,20 +40,20 @@
         var secretKey = 'S3Qr4jS8WH5Fp-ubtVFelQnDk37M3j71q2Td5Xj2'
         var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
 
-        var key = 'qiniu.mp4' // TODO 使用文件md5作为key
+        var localFile = arg.file.path
+        var buf = fs.readFileSync(localFile)
+        var key = md5(buf)
+
         var options = {
           scope: 'm-spring' + ':' + key
         }
         var putPolicy = new qiniu.rs.PutPolicy(options)
         var uploadToken = putPolicy.uploadToken(mac)
 
-        var localFile = arg.file.path
         var formUploader = new qiniu.form_up.FormUploader(config)
         var putExtra = new qiniu.form_up.PutExtra()
-        // 文件上传
         formUploader.putFile(uploadToken, key, localFile, putExtra,
           function (respErr, respBody, respInfo) {
-            debugger
             if (respErr) {
               throw respErr
             }
