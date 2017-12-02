@@ -33,9 +33,9 @@
       }
     },
     methods: {
-      doUpload (event) {
-        debugger
-        var buf = fs.readFileSync(event.file.path)
+      doUpload (config) {
+        console.log(config)
+        var buf = fs.readFileSync(config.file.path)
         var key = md5(buf)
         var upToken = this.getUpToken(key)
         console.log(upToken)
@@ -44,23 +44,19 @@
           putToken: upToken,
           url: 'http://file.mspring.org'
         })
-        imagesBucket.putFile(key, event.file, {
+        imagesBucket.putFile(key, config.file, {
           progress: function (precent, loaded, total) {
+            config.onProgress({'percent': precent})
           }
         }).then(function (rsp) {
           var image = imagesBucket.key(rsp.key)
-          console.log(image)
-          /*
-          if (onSuccess) {
-            onSuccess({
-              key: rsp.key,
-              hash: rsp.hash,
-              url: image.url()
-            })
-          }
-          */
+          config.onSuccess({
+            key: rsp.key,
+            hash: rsp.hash,
+            url: image.url()
+          })
         }, function (err) {
-          console.log(err)
+          config.onError(err)
         })
       },
       getUpToken (key) {
