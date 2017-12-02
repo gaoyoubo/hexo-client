@@ -103,6 +103,7 @@
           editor.value += str
         }
         this.content = editor.value
+        this.$emit('input', this.content)
       },
       setContent (content) {
         this.content = content
