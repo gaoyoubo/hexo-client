@@ -77,6 +77,70 @@
   </el-container>
 </template>
 
+<script>
+  var Hexo = require('hexo')
+  export default {
+    data () {
+      const item = {
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      }
+      return {
+        windowHeight: '300px', // 窗口高度
+        tableData: Array(20).fill(item),
+        loading: null
+      }
+    },
+
+    methods: {
+      handleResize () {
+        this.windowHeight = document.documentElement.clientHeight + 'px'
+      },
+
+      showLoading () {
+        this.loading = this.$loading({
+          lock: true,
+          text: 'Loading...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+      },
+
+      closeLoading () {
+        if (this.loading) {
+          this.loading.close()
+        }
+      }
+    },
+
+    mounted () {
+      var me = this
+      window.addEventListener('resize', me.handleResize)
+
+      me.handleResize()
+      me.showLoading()
+
+      window.hexo = new Hexo('/Users/gaoyoubo/code/node/blog.mspring.org', {
+        debug: true
+      })
+      console.log('hexo init...')
+      window.hexo.init().then(function () {
+        console.log('hexo init...finished')
+        console.log('hexo loading...')
+        window.hexo.watch().then(function () {
+          console.log('hexo loading...finished')
+          me.closeLoading()
+        })
+      })
+    },
+
+    beforeDestroy () {
+      window.removeEventListener('resize', this.handleResize)
+      window.hexo.unwatch()
+    }
+  }
+</script>
 
 <style>
   .el-header {
@@ -95,36 +159,6 @@
     margin: 0px;
     padding: 0px;
   }
+
 </style>
-
-<script>
-  export default {
-    data () {
-      const item = {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }
-      return {
-        windowHeight: '300px', // 窗口高度
-        tableData: Array(20).fill(item)
-      }
-    },
-
-    methods: {
-      handleResize () {
-        this.windowHeight = document.documentElement.clientHeight + 'px'
-      }
-    },
-
-    mounted () {
-      this.handleResize()
-      window.addEventListener('resize', this.handleResize)
-    },
-
-    beforeDestroy () {
-      window.removeEventListener('resize', this.handleResize)
-    }
-  }
-</script>
 
