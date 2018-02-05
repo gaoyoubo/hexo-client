@@ -1,53 +1,9 @@
 <template>
   <el-container :style="{'height': windowHeight, 'border': 'solid 1px #eee;'}">
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-      <el-menu :default-openeds="['1', '3']">
-        <el-submenu index="1">
-          <template slot="title"><i class="el-icon-message"></i>导航一</template>
-          <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <el-menu-item index="1-1">选项1</el-menu-item>
-            <el-menu-item index="1-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="1-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="1-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="1-4-1">选项4-1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-submenu index="2">
-          <template slot="title"><i class="el-icon-menu"></i>导航二</template>
-          <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <el-menu-item index="2-1">选项1</el-menu-item>
-            <el-menu-item index="2-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="2-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="2-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="2-4-1">选项4-1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-        <el-submenu index="3">
-          <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-          <el-menu-item-group>
-            <template slot="title">分组一</template>
-            <el-menu-item index="3-1">选项1</el-menu-item>
-            <el-menu-item index="3-2">选项2</el-menu-item>
-          </el-menu-item-group>
-          <el-menu-item-group title="分组2">
-            <el-menu-item index="3-3">选项3</el-menu-item>
-          </el-menu-item-group>
-          <el-submenu index="3-4">
-            <template slot="title">选项4</template>
-            <el-menu-item index="3-4-1">选项4-1</el-menu-item>
-          </el-submenu>
-        </el-submenu>
-      </el-menu>
+
+      <article-list></article-list>
+
     </el-aside>
 
     <el-container>
@@ -78,8 +34,10 @@
 </template>
 
 <script>
-  var Hexo = require('hexo')
+  import ArticleList from './ArticleList'
   export default {
+    name: 'main-page',
+    components: {ArticleList},
     data () {
       const item = {
         date: '2016-05-02',
@@ -115,24 +73,8 @@
     },
 
     mounted () {
-      var me = this
-      window.addEventListener('resize', me.handleResize)
-
-      me.handleResize()
-      me.showLoading()
-
-      window.hexo = new Hexo('/Users/gaoyoubo/code/node/blog.mspring.org', {
-        debug: true
-      })
-      console.log('hexo init...')
-      window.hexo.init().then(function () {
-        console.log('hexo init...finished')
-        console.log('hexo loading...')
-        window.hexo.watch().then(function () {
-          console.log('hexo loading...finished')
-          me.closeLoading()
-        })
-      })
+      window.addEventListener('resize', this.handleResize)
+      this.handleResize()
     },
 
     beforeDestroy () {
@@ -143,6 +85,13 @@
 </script>
 
 <style>
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+  }
+
   .el-header {
     background-color: #B3C0D1;
     color: #333;
@@ -153,12 +102,55 @@
     color: #333;
   }
 
-  html, body {
-    height: 100%;
-    overflow: hidden;
-    margin: 0px;
-    padding: 0px;
+  .article-list-panel.active {
+    background-color: white;
   }
 
+  .article-list-item {
+    padding: 8px;
+    position: relative;
+    border-bottom: 1px solid rgba(110, 100, 102, 0.15);
+    cursor: pointer;
+  }
+
+  .article-list-item .article-title {
+    margin: 0px 0px 5px;
+    font-weight: 400;
+    font-size: 17px;
+    width: auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-wrap: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+  }
+
+  .article-list-item .article-desc {
+    margin: 0px 0px 5px;
+    color: #999999;
+    font-size: 13px;
+    line-height: 1.2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .article-list-item .article-info {
+    margin: 0px;
+    padding: 0px;
+    font-size: 13px;
+    color: #CECECE;
+    line-height: 1em;
+    list-style: none;
+    overflow: hidden;
+  }
+
+  .article-list-item .article-info .meta {
+    float: left;
+    padding-right: 1em;
+  }
 </style>
 
