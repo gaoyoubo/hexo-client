@@ -1,6 +1,6 @@
 <template>
-  <div>
 
+  <div>
     <div class="article-list-panel" v-for="(post, index) in posts" ref="post">
       <div class="article-list-item">
         <h4 class="article-title">{{ post.title }}</h4>
@@ -11,8 +11,8 @@
         </ul>
       </div>
     </div>
-
   </div>
+
 </template>
 
 <script>
