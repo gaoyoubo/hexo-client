@@ -1,5 +1,5 @@
 <template>
-  <div id="app" :style="{'height': windowHeight, 'border': 'solid 1px #eee;'}">
+  <div id="app" :style="{'height': windowHeight}">
     <router-view v-if="inited"></router-view>
   </div>
 </template>
@@ -66,6 +66,21 @@
     margin: 0px;
     padding: 0px;
     font-family: "Segoe UI", "Lucida Grande", Helvetica, Arial, "Microsoft YaHei", FreeSans, Arimo, "Droid Sans", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", FontAwesome, sans-serif;
+  }
+
+  #app {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    box-sizing: border-box;
+    min-width: 0;
   }
 
   .el-header {

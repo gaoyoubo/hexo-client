@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)">
+    <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected($event, post.id)">
       <div class="article-list-item">
         <h4 class="article-title">{{ post.title }}</h4>
         <p class="article-desc"></p>
@@ -24,8 +24,13 @@
     },
 
     methods: {
-      selected: function (id) {
+      selected: function (event, id) {
         this.$emit('selectedArticle', id)
+        // 设置选中样式
+        this.$refs.post.forEach(item => {
+          item.classList.remove('active')
+        })
+        event.currentTarget.classList.add('active')
       }
     },
 
@@ -44,6 +49,10 @@
 </script>
 
 <style>
+  .article-list-panel.active {
+    background-color: white;
+  }
+
   .article-list-item {
     padding: 8px;
     position: relative;
