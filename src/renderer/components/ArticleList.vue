@@ -7,7 +7,7 @@
         <p class="article-desc"></p>
         <ul class="article-info">
           <li class="meta">{{ post.author }}</li>
-          <li class="meta">{{ post.date.format('YYYY-MM-DD') }}</li>
+          <li class="meta">{{ post.date }}</li>
         </ul>
       </div>
     </div>
@@ -26,7 +26,15 @@
     methods: {},
 
     mounted () {
-      this.posts = window.hexo.locals.get('posts').data
+      var me = this
+      window.hexo.locals.get('posts').sort('date', -1).forEach(post => {
+        me.posts.push({
+          id: post._id,
+          title: post.title,
+          date: post.date.format('YYYY-MM-DD'),
+          author: post.author
+        })
+      })
     }
   }
 </script>
