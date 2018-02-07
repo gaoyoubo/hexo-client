@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :style="{'height': windowHeight, 'border': 'solid 1px #eee;'}">
     <router-view v-if="inited"></router-view>
   </div>
 </template>
@@ -12,7 +12,8 @@
 
     data () {
       return {
-        inited: false
+        inited: false,
+        windowHeight: '300px' // 窗口高度
       }
     },
 
@@ -38,10 +39,42 @@
           loading.close()
         })
       })
+    },
+
+    mounted () {
+      window.addEventListener('resize', this.handleResize)
+      this.handleResize()
+    },
+
+    beforeDestroy () {
+      window.removeEventListener('resize', this.handleResize)
+      window.hexo.unwatch()
+    },
+
+    methods: {
+      handleResize () {
+        this.windowHeight = document.documentElement.clientHeight + 'px'
+      }
     }
   }
 </script>
 
 <style>
-  /* CSS */
+  html, body {
+    height: 100%;
+    overflow: hidden;
+    margin: 0px;
+    padding: 0px;
+    font-family: "Segoe UI", "Lucida Grande", Helvetica, Arial, "Microsoft YaHei", FreeSans, Arimo, "Droid Sans", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", FontAwesome, sans-serif;
+  }
+
+  .el-header {
+    color: #333;
+    line-height: 60px;
+    padding: 0px;
+  }
+
+  .el-aside {
+    color: #333;
+  }
 </style>
