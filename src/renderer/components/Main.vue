@@ -1,28 +1,33 @@
 <template>
   <el-container :style="{'height': windowHeight, 'border': 'solid 1px #eee;'}">
     <el-header style="text-align: right; font-size: 12px">
-      <main-menu></main-menu>
+      <main-menu active="posts"></main-menu>
     </el-header>
     <el-container>
       <el-aside width="300px" style="background-color: rgb(238, 241, 246)">
-        <article-list></article-list>
+        <article-list v-on:selectedArticle="selectedArticle"></article-list>
       </el-aside>
 
-      <el-main>Main</el-main>
+      <el-main>
+        <article-view :id="selectedId"></article-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
-  import ArticleList from './ArticleList'
   import MainMenu from './MainMenu'
+  import ArticleList from './ArticleList'
+  import ArticleView from './ArticleView'
+  import ArticleEdit from './ArticleEdit'
   export default {
     name: 'main-page',
-    components: {ArticleList, MainMenu},
+    components: {ArticleList, MainMenu, ArticleView, ArticleEdit},
     data () {
       return {
         windowHeight: '300px', // 窗口高度
-        loading: null
+        loading: null,
+        selectedId: '' // 已经选中的文章编号
       }
     },
 
@@ -44,6 +49,10 @@
         if (this.loading) {
           this.loading.close()
         }
+      },
+
+      selectedArticle (id) {
+        this.selectedId = id
       }
     },
 

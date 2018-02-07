@@ -1,7 +1,7 @@
 <template>
 
   <div>
-    <div class="article-list-panel" v-for="(post, index) in posts" ref="post">
+    <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)">
       <div class="article-list-item">
         <h4 class="article-title">{{ post.title }}</h4>
         <p class="article-desc"></p>
@@ -23,7 +23,11 @@
       }
     },
 
-    methods: {},
+    methods: {
+      selected: function (id) {
+        this.$emit('selectedArticle', id)
+      }
+    },
 
     mounted () {
       var me = this
