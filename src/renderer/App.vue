@@ -27,7 +27,7 @@
       })
 
       window.hexo = new Hexo(base, {
-        debug: true
+        debug: false
       })
       console.log('hexo init...')
       window.hexo.init().then(function () {
