@@ -19,12 +19,33 @@
               <div class="preview" v-html="previewContent"></div>
             </el-tab-pane>
           </el-tabs>
-
         </el-form-item>
+
+        <el-form-item label="标签" prop="tags">
+          <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
+                     placeholder="请选择标签">
+            <el-option v-for="tag in tags"
+                       :key="tag"
+                       :label="tag"
+                       :value="tag">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="分类" prop="categories">
+          <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
+                     placeholder="请选择分类">
+            <el-option v-for="tag in tags"
+                       :key="tag"
+                       :label="tag"
+                       :value="tag">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item>
-          <el-button @click="preview">预览</el-button>
-          <el-button type="primary" @click="submitForm('postForm')">立即创建</el-button>
-          <el-button @click="resetForm('postForm')">重置</el-button>
+          <el-button type="primary" @click="submitForm()">立即创建</el-button>
+          <el-button @click="resetForm()">重置</el-button>
         </el-form-item>
       </el-form>
 
@@ -41,7 +62,9 @@
       return {
         postForm: {
           title: '',
-          content: ''
+          content: '',
+          tags: [],
+          categories: []
         },
         postFormRules: {
           title: [
@@ -52,33 +75,56 @@
             {required: true, message: '请输入内容', trigger: 'blur'}
           ]
         },
+        tags: [],
+        categories: [],
         previewContent: ''
       }
     },
+    mounted () {
+      window.hexo.locals.get('tags').forEach(tag => this.tags.push(tag.name))
+      window.hexo.locals.get('categories').forEach(category => this.categories.push(category.name))
+    },
     methods: {
-      preview () {
-        var me = this
-        if (me.postForm.content) {
-          window.hexo.post.render(new Date().getTime() + '.md', {content: this.postForm.content})
-            .then(function (previewData) {
-              me.previewContent = previewData.content
-            })
-        } else {
-          me.previewContent = ''
+      preview (tabPanel) {
+        if (tabPanel.name === 'preview') {
+          var me = this
+          if (me.postForm.content) {
+            window.hexo.post.render(new Date().getTime() + '.md', {content: this.postForm.content})
+              .then(function (previewData) {
+                me.previewContent = previewData.content
+              })
+          } else {
+            me.previewContent = ''
+          }
         }
       },
-      submitForm (formName) {
-        this.$refs[formName].validate((valid) => {
+      submitForm () {
+        var me = this
+        this.$refs.postForm.validate((valid) => {
           if (valid) {
-            alert('submit!')
+            window.hexo.post.create(me.postForm, false).then(function () {
+              me.$notify({
+                title: '成功',
+                message: '发布成功',
+                type: 'success'
+              })
+            }, function () {
+              me.$notify.error({
+                title: '错误',
+                message: '发布失败'
+              })
+            })
           } else {
-            console.log('error submit!!')
+            me.$notify.error({
+              title: '错误',
+              message: '表单验证失败'
+            })
             return false
           }
         })
       },
-      resetForm (formName) {
-        this.$refs[formName].resetFields()
+      resetForm () {
+        this.$refs.postForm.resetFields()
       }
     }
   }
