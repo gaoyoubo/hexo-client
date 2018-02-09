@@ -1,7 +1,8 @@
 <template>
 
   <div class="article-list">
-    <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected($event, post.id)">
+    <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)"
+         :data-id="post.id">
       <div class="article-list-item">
         <h4 class="article-title">{{ post.title }}</h4>
         <p class="article-desc"></p>
@@ -10,8 +11,11 @@
           <li class="meta">{{ post.date }}</li>
         </ul>
 
-        <a class="article-edit-link">
+        <a class="article-edit-btn" @click="editPost(post.id)">
           <i class="el-icon-edit-outline"></i>
+        </a>
+        <a class="article-delete-btn" @click="deletePost(post.id)">
+          <i class="el-icon-delete"></i>
         </a>
       </div>
     </div>
@@ -28,19 +32,28 @@
     },
 
     methods: {
-      selected: function (event, id) {
-        this.$emit('selectedArticle', id)
-        // 设置选中样式
+      selected: function (selectedId) {
+        this.$emit('selectedArticle', selectedId)
         this.$refs.post.forEach(item => {
           item.classList.remove('active')
+          if (item.attributes['data-id'].nodeValue === selectedId) {
+            item.classList.add('active')
+          }
         })
-        event.currentTarget.classList.add('active')
+        window.selectedPostId = selectedId
+      },
+      editPost: function (id) {
+      },
+      deletePost: function (id) {
       }
     },
 
     mounted () {
       var me = this
       window.hexo.locals.get('posts').sort('date', -1).forEach(post => {
+        if (!window.selectedPostId) {
+          window.selectedPostId = post._id
+        }
         me.posts.push({
           id: post._id,
           title: post.title,
@@ -48,6 +61,11 @@
           author: post.author
         })
       })
+    },
+
+    updated () {
+      console.log('window.selectedPostId=', window.selectedPostId)
+      this.selected(window.selectedPostId)
     }
   }
 </script>
@@ -116,7 +134,7 @@
     padding-right: 1em;
   }
 
-  .article-edit-link {
+  .article-edit-btn {
     top: 5px;
     right: 0px;
     opacity: 0;
@@ -127,14 +145,31 @@
     font-size: 14px;
     line-height: 1;
     transition: opacity 0.3s ease, background-color 0.1s ease;
+    background-color: #d5d5d5;
   }
 
-  .article-edit-link:hover {
-    background-color: white;
+  .article-delete-btn {
+    top: 5px;
+    right: 30px;
+    opacity: 0;
+    position: absolute;
+    padding: 5px 6px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    transition: opacity 0.3s ease, background-color 0.1s ease;
+    background-color: #d5d5d5;
   }
 
-  .article-list-panel:hover .article-edit-link {
+  .article-edit-btn:hover, .article-delete-btn:hover {
+    background-color: #ffffed;
+  }
+
+  .article-list-panel:hover .article-edit-btn,
+  .article-list-panel:hover .article-delete-btn {
     opacity: 1;
   }
+
 </style>
 
