@@ -1,6 +1,6 @@
 <template>
 
-  <div>
+  <div class="article-list">
     <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected($event, post.id)">
       <div class="article-list-item">
         <h4 class="article-title">{{ post.title }}</h4>
@@ -9,6 +9,10 @@
           <li class="meta">{{ post.author }}</li>
           <li class="meta">{{ post.date }}</li>
         </ul>
+
+        <a class="article-edit-link">
+          <i class="el-icon-edit-outline"></i>
+        </a>
       </div>
     </div>
   </div>
@@ -49,8 +53,20 @@
 </script>
 
 <style>
+  .article-list {
+    background-color: #F7FAFF;
+  }
+
   .article-list-panel.active {
-    background-color: white;
+    background-color: #DFEBFF;
+  }
+
+  .article-list-panel.active:hover {
+    background-color: #DFEBFF;
+  }
+
+  .article-list-panel:hover {
+    background-color: #ECF3FF;
   }
 
   .article-list-item {
@@ -98,6 +114,27 @@
   .article-list-item .article-info .meta {
     float: left;
     padding-right: 1em;
+  }
+
+  .article-edit-link {
+    top: 5px;
+    right: 0px;
+    opacity: 0;
+    position: absolute;
+    padding: 5px 6px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    transition: opacity 0.3s ease, background-color 0.1s ease;
+  }
+
+  .article-edit-link:hover {
+    background-color: white;
+  }
+
+  .article-list-panel:hover .article-edit-link {
+    opacity: 1;
   }
 </style>
 
