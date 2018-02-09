@@ -24,6 +24,7 @@
 </template>
 
 <script>
+  const fs = require('fs')
   export default {
     data () {
       return {
@@ -42,30 +43,77 @@
         })
         window.selectedPostId = selectedId
       },
+
       editPost: function (id) {
+        console.log('edit', id)
       },
+
       deletePost: function (id) {
+        if (confirm('是否确认删除该文章？')) {
+          var me = this
+          var post = window.hexo.locals.get('posts').findOne({_id: id})
+          if (!post) {
+            me.$message.error('文章不存在')
+          } else {
+            fs.unlink(post.full_source, (err) => {
+              if (err) {
+                console.error('删除文件失败:' + post.full_source)
+                me.$notify.error({
+                  title: '删除失败',
+                  message: err.message
+                })
+              } else {
+                // 从数组中删除
+                var index = -1
+                for (var i = 0; i < me.posts.length; i++) {
+                  if (me.posts[i].id === id) {
+                    index = i
+                    break
+                  }
+                }
+                if (index !== -1) {
+                  me.posts.splice(index, 1)
+                }
+
+                me.$notify({
+                  title: '成功',
+                  message: '删除成功',
+                  type: 'success'
+                })
+              }
+            })
+          }
+        }
       }
     },
 
     mounted () {
       var me = this
-      window.hexo.locals.get('posts').sort('date', -1).forEach(post => {
-        if (!window.selectedPostId) {
-          window.selectedPostId = post._id
-        }
-        me.posts.push({
-          id: post._id,
-          title: post.title,
-          date: post.date.format('YYYY-MM-DD'),
-          author: post.author
+      var posts = window.hexo.locals.get('posts').sort('date', -1)
+      if (posts && posts.length > 0) {
+        window.lastPostId = posts.data[0]._id // 最后一篇文章
+        me.posts.splice(0, me.posts.length) // 清空列表中所有数据
+        posts.forEach(post => {
+          if (!window.selectedPostId) {
+            window.selectedPostId = post._id
+          }
+          me.posts.push({
+            id: post._id,
+            title: post.title,
+            date: post.date.format('YYYY-MM-DD'),
+            author: post.author
+          })
         })
-      })
+      }
     },
 
     updated () {
-      console.log('window.selectedPostId=', window.selectedPostId)
-      this.selected(window.selectedPostId)
+      var selectedPost = window.hexo.locals.get('posts').findOne({_id: window.selectedPostId})
+      if (selectedPost) { // 如果上次选中的文章还存在，那么优先展示上次选中的
+        this.selected(window.selectedPostId)
+      } else { // 否则展示最新的那篇文章
+        this.selected(window.lastPostId)
+      }
     }
   }
 </script>

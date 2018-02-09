@@ -108,6 +108,7 @@
                 message: '发布成功',
                 type: 'success'
               })
+              me.$router.replace('/posts')
             }, function () {
               me.$notify.error({
                 title: '错误',
