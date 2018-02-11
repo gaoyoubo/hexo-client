@@ -16,6 +16,11 @@ export default new Router({
       component: require('@/components/Create').default
     },
     {
+      path: '/edit',
+      name: 'edit',
+      component: require('@/components/Edit').default
+    },
+    {
       path: '/settings',
       name: 'settings',
       component: require('@/components/Settings').default

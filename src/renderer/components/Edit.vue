@@ -1,13 +1,13 @@
 <template>
   <el-container>
     <el-header>
-      <main-menu active="/create"></main-menu>
+      <main-menu active="/posts"></main-menu>
     </el-header>
     <el-main>
 
       <el-form :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
         <el-form-item label="标题" prop="title">
-          <el-input v-model="postForm.title"></el-input>
+          <el-input v-model="postForm.title" :readonly="true" :disabled="true"></el-input>
         </el-form-item>
 
         <el-form-item label="内容" prop="content">
@@ -44,8 +44,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submitForm()">立即创建</el-button>
-          <el-button @click="resetForm()">重置</el-button>
+          <el-button type="primary" @click="submitForm()">保存修改</el-button>
         </el-form-item>
       </el-form>
 
@@ -83,6 +82,17 @@
     mounted () {
       window.hexo.locals.get('tags').forEach(tag => this.tags.push(tag.name))
       window.hexo.locals.get('categories').forEach(category => this.categories.push(category.name))
+
+      var postId = this.$route.params.postId
+      var post = window.hexo.locals.get('posts').findOne({_id: postId})
+      this.postForm.title = post.title
+      this.postForm.content = post._content
+      post.tags.forEach(tag => {
+        this.postForm.tags.push(tag.name)
+      })
+      post.categories.forEach(cat => {
+        this.postForm.categories.push(cat.name)
+      })
     },
     methods: {
       preview (tabPanel) {
@@ -102,16 +112,16 @@
         var me = this
         this.$refs.postForm.validate((valid) => {
           if (valid) {
-            window.hexo.post.create(me.postForm, false).then(function () {
+            window.hexo.post.create(me.postForm, true).then(function () {
               me.$notify({
                 title: '成功',
-                message: '发布成功',
+                message: '修改成功',
                 type: 'success'
               })
             }, function () {
               me.$notify.error({
                 title: '错误',
-                message: '发布失败'
+                message: '修改成功'
               })
             })
           } else {
@@ -122,9 +132,6 @@
             return false
           }
         })
-      },
-      resetForm () {
-        this.$refs.postForm.resetFields()
       }
     }
   }

@@ -19,10 +19,10 @@
   import MainMenu from './MainMenu'
   import ArticleList from './Posts/ArticleList'
   import ArticleView from './Posts/ArticleView'
-  import ArticleEdit from './Posts/ArticleEdit'
+
   export default {
     name: 'main-page',
-    components: {MainMenu, ArticleList, ArticleView, ArticleEdit},
+    components: {MainMenu, ArticleList, ArticleView},
     data () {
       return {
         selectedId: '' // 已经选中的文章编号

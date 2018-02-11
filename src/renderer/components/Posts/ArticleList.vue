@@ -45,7 +45,7 @@
       },
 
       editPost: function (id) {
-        console.log('edit', id)
+        this.$router.push({name: 'edit', params: {postId: id}})
       },
 
       deletePost: function (id) {
