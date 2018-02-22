@@ -6,9 +6,18 @@
       background-color="#545c64"
       text-color="#fff"
       active-text-color="#ffd04b">
-    <el-menu-item index="/posts">文章</el-menu-item>
-    <el-menu-item index="/create">发表</el-menu-item>
-    <el-menu-item index="/settings">配置</el-menu-item>
+    <el-menu-item index="/posts">
+      <i class="el-icon-document"></i>
+      <span slot="title">文章</span>
+    </el-menu-item>
+    <el-menu-item index="/create">
+      <i class="el-icon-edit"></i>
+      <span slot="title">发表</span>
+    </el-menu-item>
+    <el-menu-item index="/settings">
+      <i class="el-icon-setting"></i>
+      <span slot="title">配置</span>
+    </el-menu-item>
   </el-menu>
 </template>
 
