@@ -157,31 +157,42 @@
           return
         }
 
-        this.uploading = true
-        this.uploadingText = '正在上传 ' + files.length + ' 张图片...'
-
-        var accessKey = ''
-        var secretKey = ''
-        var bucket = ''
-        var uploadToken = HexoClient.uploadToken(accessKey, secretKey, bucket)
-
-        var promises = []
-        for (var i = 0; i < files.length; i++) {
-          promises.push(HexoClient.upload(files[i], uploadToken))
-        }
-
         var me = this
-        When.all(promises).then(results => {
-          results.forEach(result => {
-            var imageUrl = 'http://file.mspring.org/' + result.key
-            me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
+        HexoClient.dbGet('sysConfig').then(sysConfig => {
+          var accessKey = sysConfig.qiniuAccessKey
+          var secretKey = sysConfig.qiniuSecretKey
+          var bucket = sysConfig.qiniuBucket
+          var host = sysConfig.qiniuHost
+
+          if (!accessKey || !secretKey || !bucket || !host) {
+            me.$notify.error({
+              message: '请先完成七牛配置！'
+            })
+            return
+          }
+
+          me.uploading = true
+          me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+
+          var uploadToken = HexoClient.uploadToken(accessKey, secretKey, bucket)
+
+          var promises = []
+          for (var i = 0; i < files.length; i++) {
+            promises.push(HexoClient.upload(files[i], uploadToken))
+          }
+
+          When.all(promises).then(results => {
+            results.forEach(result => {
+              var imageUrl = host + '/' + result.key
+              me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
+            })
+            me.uploading = false
+          }, errs => {
+            me.$notify.error({
+              message: '图片上传失败：' + errs
+            })
+            me.uploading = false
           })
-          me.uploading = false
-        }, errs => {
-          me.$notify.error({
-            message: '图片上传失败：' + errs
-          })
-          me.uploading = false
         })
       }
     }

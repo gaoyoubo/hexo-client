@@ -1,8 +1,17 @@
 import qiniu from 'qiniu'
 import When from 'when'
+import Nedb from 'nedb'
+import path from 'path'
 
 var fs = require('fs')
 var md5 = require('md5')
+
+const HOME_PATH = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE
+const DB_PATH = `${path.resolve(HOME_PATH, '.hexo-client/db')}`
+var db = new Nedb({
+  autoload: true,
+  filename: DB_PATH
+})
 
 class HexoClient {
   /**
@@ -73,6 +82,59 @@ class HexoClient {
       editor.value += str
     }
     return editor.value
+  }
+
+  /**
+   * 保存单个属性
+   * @param id
+   * @param property
+   * @param value
+   * @returns {*}
+   */
+  dbSetProperty (id, property, value) {
+    var doc = {}
+    doc[property] = value
+    return this.dbSet(id, doc)
+  }
+
+  /**
+   * 保存文档
+   * @param id
+   * @param doc
+   */
+  dbSet (id, doc) {
+    var deferred = When.defer()
+    doc['_id'] = id
+    db.update(
+      {
+        _id: id
+      },
+      {
+        $set: doc
+      },
+      {
+        multi: true,
+        upsert: true
+      },
+      (err, affected, doc, upsert) => {
+        if (err) {
+          deferred.reject(err)
+        }
+        deferred.resolve()
+      }
+    )
+    return deferred.promise
+  }
+
+  dbGet (id) {
+    var deferred = When.defer()
+    db.findOne({_id: id}, (err, doc) => {
+      if (err) {
+        deferred.reject(err)
+      }
+      deferred.resolve(doc)
+    })
+    return deferred.promise
   }
 }
 
