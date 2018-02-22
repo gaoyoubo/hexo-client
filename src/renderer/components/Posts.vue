@@ -4,7 +4,7 @@
       <main-menu active="/posts"></main-menu>
     </el-header>
     <el-container>
-      <el-aside width="300px">
+      <el-aside style="min-width: 300px;">
         <article-list v-on:selectedArticle="selectedArticle"></article-list>
       </el-aside>
 
