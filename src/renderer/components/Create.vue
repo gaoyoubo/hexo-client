@@ -11,9 +11,15 @@
         </el-form-item>
 
         <el-form-item label="内容" prop="content">
-          <el-tabs value="edit" @tab-click="preview">
+          <el-tabs value="edit" @tab-click="preview"
+                   v-loading="uploading" :element-loading-text="uploadingText">
             <el-tab-pane label="编辑" name="edit">
-              <textarea v-model="postForm.content" class="content" placeholder="请输入内容"></textarea>
+              <textarea v-model="postForm.content" class="content" placeholder="请输入内容"
+                        ref="txt"
+                        :class="{'is-dragover': dragover}"
+                        @drop.prevent="onDrop"
+                        @dragover.prevent="dragover = true"
+                        @dragleave.prevent="dragover = false"></textarea>
             </el-tab-pane>
             <el-tab-pane label="预览" name="preview">
               <div class="preview" v-html="previewContent"></div>
@@ -55,6 +61,8 @@
 
 <script>
   import MainMenu from './MainMenu'
+  import HexoClient from '@/HexoClient'
+  import When from 'when'
 
   export default {
     components: {MainMenu},
@@ -77,7 +85,10 @@
         },
         tags: [],
         categories: [],
-        previewContent: ''
+        previewContent: '',
+        dragover: false,
+        uploading: false,
+        uploadingText: 'loading...'
       }
     },
     mounted () {
@@ -125,6 +136,53 @@
       },
       resetForm () {
         this.$refs.postForm.resetFields()
+      },
+      onDrop (e) {
+        this.dragover = false
+        var files = e.dataTransfer.files
+
+        // 检查文件合法性
+        var checkSuccess = true
+        for (var j = 0; j < files.length; j++) {
+          if (!files[j].type.match(/image*/)) {
+            console.log('仅支持上传图片...', files[j])
+            checkSuccess = false
+            break
+          }
+        }
+        if (!checkSuccess) {
+          this.$notify.error({
+            message: '只能上传图片文件'
+          })
+          return
+        }
+
+        this.uploading = true
+        this.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+
+        var accessKey = ''
+        var secretKey = ''
+        var bucket = ''
+        var uploadToken = HexoClient.uploadToken(accessKey, secretKey, bucket)
+
+        var promises = []
+        for (var i = 0; i < files.length; i++) {
+          promises.push(HexoClient.upload(files[i], uploadToken))
+        }
+
+        var me = this
+        When.all(promises).then(results => {
+          results.forEach(result => {
+            var imageUrl = 'http://file.mspring.org/' + result.key
+            me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
+          })
+          me.uploading = false
+        }, errs => {
+          me.$notify.error({
+            message: '图片上传失败：' + errs
+          })
+          me.uploading = false
+        })
       }
     }
   }
@@ -148,6 +206,11 @@
     -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
     transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
     font-family: 'Monaco', courier, monospace;
+  }
+
+  .content.is-dragover {
+    background-color: rgba(32, 159, 255, .06);
+    border: 2px dashed #409eff;
   }
 
   .preview {
