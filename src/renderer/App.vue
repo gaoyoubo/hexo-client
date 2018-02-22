@@ -1,49 +1,47 @@
 <template>
   <div id="app" :style="{'height': windowHeight}">
     <router-view v-if="inited"></router-view>
+
+    <el-dialog title="请先填写正确的Hexo地址：" :visible.sync="dialogFormVisible" :modal="true"
+               :close-on-click-modal="false"
+               :close-on-press-escape="false"
+               :show-close="true"
+               :before-close="beforeCloseDialog">
+      <el-form>
+        <el-form-item>
+          <el-input v-model="base" auto-complete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="setBase">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+  import HexoClient from '@/HexoClient'
+
   var Hexo = require('hexo')
-  var base = '/Users/gaoyoubo/code/node/blog.mspring.org'
   export default {
     name: 'hexo-client',
-
     data () {
       return {
+        base: '',
+        dialogFormVisible: false,
         inited: false,
         windowHeight: '300px' // 窗口高度
       }
     },
 
     beforeCreate () {
-      var me = this
-      var loading = this.$loading({
-        lock: true,
-        text: 'Loading...',
-        spinner: 'el-icon-loading',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
 
-      window.hexo = new Hexo(base, {
-        debug: true
-      })
-      console.log('hexo init...')
-      window.hexo.init().then(function () {
-        console.log('hexo init...finished')
-        console.log('hexo loading...')
-        window.hexo.watch().then(function () {
-          console.log('hexo loading...finished')
-          me.inited = true
-          loading.close()
-        })
-      })
     },
 
     mounted () {
       window.addEventListener('resize', this.handleResize)
       this.handleResize()
+      this.init()
     },
 
     beforeDestroy () {
@@ -54,6 +52,50 @@
     methods: {
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
+      },
+      init () {
+        var me = this
+        HexoClient.dbGet('sysConfig').then(sysConfig => {
+          if (sysConfig.base) {
+            me.initHexo(sysConfig.base)
+          } else {
+            me.dialogFormVisible = true
+          }
+        })
+      },
+      initHexo (path) {
+        var me = this
+        var loading = this.$loading({
+          lock: true,
+          text: 'Loading...',
+          spinner: 'el-icon-loading'
+        })
+
+        window.hexo = new Hexo(path, {
+          debug: false
+        })
+        console.log('1. hexo init...')
+        window.hexo.init().then(function () {
+          console.log('2. hexo init...finished')
+          console.log('3. hexo loading...')
+          window.hexo.watch().then(function () {
+            console.log('4. hexo loading...finished')
+            me.inited = true
+            loading.close()
+          })
+        })
+      },
+      setBase () {
+        this.dialogFormVisible = false
+        var me = this
+        var base = me.base
+        HexoClient.dbSetProperty('sysConfig', 'base', base).then(doc => {
+          me.init()
+        })
+      },
+      beforeCloseDialog () {
+        alert('请先填写正确的Hexo地址')
+        return false
       }
     }
   }

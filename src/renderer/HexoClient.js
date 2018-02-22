@@ -114,13 +114,14 @@ class HexoClient {
       },
       {
         multi: true,
-        upsert: true
+        upsert: true,
+        returnUpdatedDocs: true
       },
       (err, affected, doc, upsert) => {
         if (err) {
           deferred.reject(err)
         }
-        deferred.resolve()
+        deferred.resolve(doc)
       }
     )
     return deferred.promise
