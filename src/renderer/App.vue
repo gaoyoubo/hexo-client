@@ -1,113 +1,137 @@
 <template>
-  <div id="app" v-loading.fullscreen.lock="!sysInited && sysConfigInited">
-    <el-container :style="{'height': windowHeight, 'border': 'solid 1px red;'}" v-if="sysInited">
-      <el-header class="header">
-        <page-header></page-header>
-      </el-header>
+  <div id="app" :style="{'height': windowHeight}">
+    <router-view v-if="inited"></router-view>
 
-      <router-view></router-view>
-
-    </el-container>
-
-    <el-dialog title="请配置正确的路径" :visible="!sysConfigInited"
+    <el-dialog title="请先填写正确的Hexo地址：" :visible.sync="dialogFormVisible" :modal="true"
                :close-on-click-modal="false"
                :close-on-press-escape="false"
-               :show-close="false"
-               :center="true">
+               :show-close="true"
+               :before-close="beforeCloseDialog">
       <el-form>
-        <el-form-item label="路径" label-width="50px">
-          <el-input v-model="path" auto-complete="off"></el-input>
+        <el-form-item>
+          <el-input v-model="base" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="setPath">确 定</el-button>
+        <el-button type="primary" @click="setBase">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import PageHeader from '@/components/PageHeader.vue'
+  import HexoClient from '@/HexoClient'
 
+  var Hexo = require('hexo')
   export default {
+    name: 'hexo-client',
     data () {
       return {
-        windowHeight: '300px', // 窗口高度
-        leftWidth: '300px', // 侧边宽度
-        path: ''
+        base: '',
+        dialogFormVisible: false,
+        inited: false,
+        windowHeight: '300px' // 窗口高度
       }
     },
 
-    computed: {
-      sysConfigInited: function () {
-        return this.$store.getters.sysConfigInited
-      },
-      sysInited: function () {
-        return this.$store.getters.sysInited
-      }
+    beforeCreate () {
+
+    },
+
+    mounted () {
+      window.addEventListener('resize', this.handleResize)
+      this.handleResize()
+      this.init()
+    },
+
+    beforeDestroy () {
+      window.removeEventListener('resize', this.handleResize)
+      window.hexo.unwatch()
     },
 
     methods: {
       handleResize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
       },
-      setPath () {
-        this.$store.dispatch('setPath', this.path)
+      init () {
+        var me = this
+        HexoClient.dbGet('sysConfig').then(sysConfig => {
+          if (sysConfig.base) {
+            me.initHexo(sysConfig.base)
+          } else {
+            me.dialogFormVisible = true
+          }
+        })
+      },
+      initHexo (path) {
+        var me = this
+        var loading = this.$loading({
+          lock: true,
+          text: 'Loading...',
+          spinner: 'el-icon-loading'
+        })
+
+        window.hexo = new Hexo(path, {
+          debug: false
+        })
+        console.log('1. hexo init...')
+        window.hexo.init().then(function () {
+          console.log('2. hexo init...finished')
+          console.log('3. hexo loading...')
+          window.hexo.watch().then(function () {
+            console.log('4. hexo loading...finished')
+            me.inited = true
+            loading.close()
+          })
+        })
+      },
+      setBase () {
+        this.dialogFormVisible = false
+        var me = this
+        var base = me.base
+        HexoClient.dbSetProperty('sysConfig', 'base', base).then(doc => {
+          me.init()
+        })
+      },
+      beforeCloseDialog () {
+        alert('请先填写正确的Hexo地址')
+        return false
       }
-    },
-
-    created () {
-      this.$store.dispatch('init')
-    },
-
-    mounted () {
-      this.handleResize()
-      window.addEventListener('resize', this.handleResize)
-    },
-
-    beforeDestroy () {
-      window.removeEventListener('resize', this.handleResize)
-    },
-
-    components: {
-      PageHeader
     }
   }
 </script>
+
 <style>
   html, body {
     height: 100%;
     overflow: hidden;
     margin: 0px;
     padding: 0px;
+    font-family: "Segoe UI", "Lucida Grande", Helvetica, Arial, "Microsoft YaHei", FreeSans, Arimo, "Droid Sans", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", FontAwesome, sans-serif;
   }
 
-  ::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
+  #app {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    box-sizing: border-box;
+    min-width: 0;
   }
 
-  ::-webkit-scrollbar-track,
-  ::-webkit-scrollbar-thumb {
-    border-radius: 999px;
-    border: 5px solid transparent;
-  }
-
-  ::-webkit-scrollbar-track {
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, .2) inset;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    min-height: 20px;
-    background-clip: content-box;
-    box-shadow: 0 0 0 5px rgba(0, 0, 0, .2) inset;
-  }
-
-  ::-webkit-scrollbar-corner {
-    background: transparent;
-  }
-
-  .header {
+  .el-header {
+    color: #333;
+    line-height: 60px;
     padding: 0px;
+  }
+
+  .el-aside {
+    color: #333;
   }
 </style>

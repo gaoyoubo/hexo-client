@@ -6,29 +6,28 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
-      name: 'index',
-      component: require('@/components/Article').default
-      // component: require('@/components/Index').default
+      path: '/posts',
+      name: 'posts',
+      component: require('@/components/Posts').default
     },
     {
-      path: '/article',
-      name: 'article',
-      component: require('@/components/Article').default
+      path: '/create',
+      name: 'create',
+      component: require('@/components/Create').default
     },
     {
-      path: '/article/create',
-      name: 'articleCreate',
-      component: require('@/components/ArticleCreate').default
+      path: '/edit',
+      name: 'edit',
+      component: require('@/components/Edit').default
     },
     {
-      path: '/config',
-      name: 'config',
-      component: require('@/components/Config').default
+      path: '/settings',
+      name: 'settings',
+      component: require('@/components/Settings').default
     },
     {
       path: '*',
-      redirect: '/'
+      redirect: '/posts'
     }
   ]
 })

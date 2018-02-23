@@ -1,0 +1,245 @@
+<template>
+  <el-container>
+    <el-header>
+      <main-menu active="/posts"></main-menu>
+    </el-header>
+    <el-main>
+
+      <el-form :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
+        <el-form-item label="标题" prop="title">
+          <el-input v-model="postForm.title" :readonly="true" :disabled="true"></el-input>
+        </el-form-item>
+
+        <el-form-item label="内容" prop="content">
+          <el-tabs value="edit" @tab-click="preview">
+            <el-tab-pane label="编辑" name="edit">
+              <textarea v-model="postForm.content" class="content" placeholder="请输入内容"
+                        ref="txt"
+                        :class="{'is-dragover': dragover}"
+                        @drop.prevent="onDrop"
+                        @dragover.prevent="dragover = true"
+                        @dragleave.prevent="dragover = false"></textarea>
+            </el-tab-pane>
+            <el-tab-pane label="预览" name="preview">
+              <div class="preview" v-html="previewContent"></div>
+            </el-tab-pane>
+          </el-tabs>
+        </el-form-item>
+
+        <el-form-item label="标签" prop="tags">
+          <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
+                     placeholder="请选择标签">
+            <el-option v-for="tag in tags"
+                       :key="tag"
+                       :label="tag"
+                       :value="tag">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="分类" prop="categories">
+          <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
+                     placeholder="请选择分类">
+            <el-option v-for="tag in tags"
+                       :key="tag"
+                       :label="tag"
+                       :value="tag">
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item>
+          <el-button type="primary" @click="submitForm()">保存修改</el-button>
+        </el-form-item>
+      </el-form>
+
+    </el-main>
+  </el-container>
+</template>
+
+<script>
+  import MainMenu from './MainMenu'
+  import HexoClient from '@/HexoClient'
+  import When from 'when'
+
+  export default {
+    components: {MainMenu},
+    data () {
+      return {
+        postForm: {
+          title: '',
+          content: '',
+          tags: [],
+          categories: []
+        },
+        postFormRules: {
+          title: [
+            {required: true, message: '请输入标题', trigger: 'blur'},
+            {min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur'}
+          ],
+          content: [
+            {required: true, message: '请输入内容', trigger: 'blur'}
+          ]
+        },
+        tags: [],
+        categories: [],
+        previewContent: '',
+        dragover: false,
+        uploading: false,
+        uploadingText: 'loading...'
+      }
+    },
+    mounted () {
+      window.hexo.locals.get('tags').forEach(tag => this.tags.push(tag.name))
+      window.hexo.locals.get('categories').forEach(category => this.categories.push(category.name))
+
+      var postId = this.$route.params.postId
+      var post = window.hexo.locals.get('posts').findOne({_id: postId})
+      this.postForm.title = post.title
+      this.postForm.content = post._content.trim()
+      post.tags.forEach(tag => {
+        this.postForm.tags.push(tag.name)
+      })
+      post.categories.forEach(cat => {
+        this.postForm.categories.push(cat.name)
+      })
+    },
+    methods: {
+      preview (tabPanel) {
+        if (tabPanel.name === 'preview') {
+          var me = this
+          if (me.postForm.content) {
+            window.hexo.post.render(new Date().getTime() + '.md', {content: this.postForm.content})
+              .then(function (previewData) {
+                me.previewContent = previewData.content
+              })
+          } else {
+            me.previewContent = ''
+          }
+        }
+      },
+      submitForm () {
+        var me = this
+        this.$refs.postForm.validate((valid) => {
+          if (valid) {
+            window.hexo.post.create(me.postForm, true).then(function () {
+              me.$notify({
+                title: '成功',
+                message: '修改成功',
+                type: 'success'
+              })
+            }, function () {
+              me.$notify.error({
+                title: '错误',
+                message: '修改成功'
+              })
+            })
+          } else {
+            me.$notify.error({
+              title: '错误',
+              message: '表单验证失败'
+            })
+            return false
+          }
+        })
+      },
+      onDrop (e) {
+        this.dragover = false
+        var files = e.dataTransfer.files
+
+        // 检查文件合法性
+        var checkSuccess = true
+        for (var j = 0; j < files.length; j++) {
+          if (!files[j].type.match(/image*/)) {
+            console.log('仅支持上传图片...', files[j])
+            checkSuccess = false
+            break
+          }
+        }
+        if (!checkSuccess) {
+          this.$notify.error({
+            message: '只能上传图片文件'
+          })
+          return
+        }
+
+        var me = this
+        HexoClient.dbGet('sysConfig').then(sysConfig => {
+          var accessKey = sysConfig.qiniuAccessKey
+          var secretKey = sysConfig.qiniuSecretKey
+          var bucket = sysConfig.qiniuBucket
+          var host = sysConfig.qiniuHost
+
+          if (!accessKey || !secretKey || !bucket || !host) {
+            me.$notify.error({
+              message: '请先完成七牛配置！'
+            })
+            return
+          }
+
+          me.uploading = true
+          me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+
+          var uploadToken = HexoClient.uploadToken(accessKey, secretKey, bucket)
+
+          var promises = []
+          for (var i = 0; i < files.length; i++) {
+            promises.push(HexoClient.upload(files[i], uploadToken))
+          }
+
+          When.all(promises).then(results => {
+            results.forEach(result => {
+              var imageUrl = host + '/' + result.key
+              me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
+            })
+            me.uploading = false
+          }, errs => {
+            me.$notify.error({
+              message: '图片上传失败：' + errs
+            })
+            me.uploading = false
+          })
+        })
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .content {
+    height: 400px;
+    width: 100%;
+    display: block;
+    resize: vertical;
+    padding: 5px 15px;
+    line-height: 1.5;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: inherit;
+    color: #606266;
+    background: #fff none;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    font-family: 'Monaco', courier, monospace;
+  }
+
+  .content.is-dragover {
+    background-color: rgba(32, 159, 255, .06);
+    border: 2px dashed #409eff;
+  }
+
+  .preview {
+    height: 400px;
+    width: 100%;
+    overflow: auto;
+    border: 1px solid #ccc;
+    padding: 3px 10px;
+    display: inline-block;
+    vertical-align: top;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-family: 'Monaco', courier, monospace;
+  }
+</style>
