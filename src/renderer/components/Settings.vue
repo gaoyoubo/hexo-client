@@ -26,6 +26,8 @@
         </el-tabs>
         <el-form-item>
           <el-button type="primary" @click="saveConfig">保存</el-button>
+          <el-button type="success" icon="el-icon-check" @click="generate">生成</el-button>
+          <el-button type="success" icon="el-icon-upload2" @click="deploy">发布</el-button>
         </el-form-item>
       </el-form>
     </el-main>
@@ -65,8 +67,39 @@
             type: 'success'
           })
         })
+      },
+      generate () {
+        var loading = this.$loading({
+          lock: true,
+          text: '生成中...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        window.hexo.call('generate').then(function () {
+          loading.close()
+          return window.hexo.exit()
+        }).catch(function (err) {
+          console.error(err)
+          loading.close()
+          return window.hexo.exit(err)
+        })
+      },
+      deploy () {
+        var loading = this.$loading({
+          lock: true,
+          text: '发布中...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        window.hexo.call('deploy').then(function () {
+          loading.close()
+          return window.hexo.exit()
+        }).catch(function (err) {
+          console.error(err)
+          loading.close()
+          return window.hexo.exit(err)
+        })
       }
     }
   }
 </script>
-
