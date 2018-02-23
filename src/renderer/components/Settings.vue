@@ -6,7 +6,8 @@
     <el-main>
       <el-form label-width="80px" :model="sysConfig">
         <el-tabs value="system" tab-position="left">
-          <el-tab-pane label="系统配置" name="system">
+          <el-tab-pane name="system">
+            <span slot="label"><i class="el-icon-setting"></i> 系统配置</span>
             <el-form-item label="Hexo目录" label-width="120px">
               <el-input v-model="sysConfig.base"/>
             </el-form-item>
