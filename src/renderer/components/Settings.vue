@@ -28,7 +28,7 @@
         <el-form-item>
           <el-button type="primary" @click="saveConfig">保存</el-button>
           <el-button type="success" icon="el-icon-check" @click="generate">生成</el-button>
-          <el-button type="success" icon="el-icon-upload2" @click="deploy">发布</el-button>
+          <!--<el-button type="success" icon="el-icon-upload2" @click="deploy">发布</el-button>-->
         </el-form-item>
       </el-form>
     </el-main>
