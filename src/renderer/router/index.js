@@ -26,6 +26,11 @@ export default new Router({
       component: require('@/components/Settings').default
     },
     {
+      path: '/about',
+      name: 'about',
+      component: require('@/components/About').default
+    },
+    {
       path: '*',
       redirect: '/posts'
     }
