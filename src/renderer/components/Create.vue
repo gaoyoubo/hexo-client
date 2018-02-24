@@ -23,7 +23,7 @@
                         @dragleave.prevent="dragover = false"></textarea>
             </el-tab-pane>
             <el-tab-pane label="预览" name="preview">
-              <div class="preview" v-html="previewContent"></div>
+              <div class="preview"  v-html="previewContent" :style="{height: contentHeight}"></div>
             </el-tab-pane>
           </el-tabs>
         </el-form-item>
@@ -51,8 +51,12 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submitForm()">立即创建</el-button>
-          <el-button @click="resetForm()">重置</el-button>
+          <el-form-item style="display:inline-block;">
+            <el-button type="primary" @click="submitForm()">保存修改</el-button>
+          </el-form-item>
+          <el-form-item label="开启文章目录" style="display:inline-block;">
+            <el-switch v-model="postForm.toc"></el-switch>
+          </el-form-item>
         </el-form-item>
       </el-form>
 
@@ -73,7 +77,8 @@
           title: '',
           content: '',
           tags: [],
-          categories: []
+          categories: [],
+          toc: false
         },
         postFormRules: {
           title: [
@@ -140,9 +145,6 @@
             return false
           }
         })
-      },
-      resetForm () {
-        this.$refs.postForm.resetFields()
       },
       onDrop (e) {
         this.dragover = false
@@ -235,15 +237,25 @@
   }
 
   .preview {
-    height: 400px;
     width: 100%;
+    min-height: 300px;
     overflow: auto;
     border: 1px solid #ccc;
-    padding: 3px 10px;
-    display: inline-block;
-    vertical-align: top;
+    width: 100%;
+    min-height: 300px;
+    display: block;
+    resize: vertical;
+    padding: 5px 15px;
+    line-height: 1.5;
+    -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    font-size: 14px;
+    font-size: inherit;
+    color: #606266;
+    background: #fff none;
+    border: 1px solid #dcdfe6;
+    border-radius: 4px;
+    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
     font-family: 'Monaco', courier, monospace;
   }
 </style>

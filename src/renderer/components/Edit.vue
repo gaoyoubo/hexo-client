@@ -22,7 +22,7 @@
                         @dragleave.prevent="dragover = false"></textarea>
             </el-tab-pane>
             <el-tab-pane label="预览" name="preview">
-              <div class="preview" v-html="previewContent"></div>
+              <div class="preview" v-html="previewContent" :style="{height: contentHeight}"></div>
             </el-tab-pane>
           </el-tabs>
         </el-form-item>
@@ -50,7 +50,12 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="submitForm()">保存修改</el-button>
+          <el-form-item style="display:inline-block;">
+            <el-button type="primary" @click="submitForm()">保存修改</el-button>
+          </el-form-item>
+          <el-form-item label="开启文章目录" style="display:inline-block;">
+            <el-switch v-model="postForm.toc"></el-switch>
+          </el-form-item>
         </el-form-item>
       </el-form>
 
@@ -72,7 +77,8 @@
           content: '',
           tags: [],
           categories: [],
-          date: ''
+          date: '',
+          toc: false
         },
         postFormRules: {
           title: [
@@ -124,12 +130,13 @@
           case 'date':
             me.postForm.date = post.date.format('YYYY-MM-DD HH:mm:ss')
             break
+          case 'toc':
+            me.postForm.toc = post.toc
+            break
           default:
             break
         }
       })
-      debugger
-      console.log(this.postForm)
     },
     beforeDestroy () {
       window.removeEventListener('resize', this.handleResize)
@@ -264,8 +271,8 @@
   }
 
   .preview {
-    height: 400px;
     width: 100%;
+    min-height: 300px;
     overflow: auto;
     border: 1px solid #ccc;
     padding: 3px 10px;
