@@ -17,6 +17,7 @@
               <textarea v-model="postForm.content" class="content" placeholder="请输入内容"
                         ref="txt"
                         :class="{'is-dragover': dragover}"
+                        :style="{height: contentHeight}"
                         @drop.prevent="onDrop"
                         @dragover.prevent="dragover = true"
                         @dragleave.prevent="dragover = false"></textarea>
@@ -29,7 +30,7 @@
 
         <el-form-item label="标签" prop="tags">
           <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
-                     placeholder="请选择标签">
+                     style="width:100%;" placeholder="请选择标签">
             <el-option v-for="tag in tags"
                        :key="tag"
                        :label="tag"
@@ -40,7 +41,7 @@
 
         <el-form-item label="分类" prop="categories">
           <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
-                     placeholder="请选择分类">
+                     style="width:100%;" placeholder="请选择分类">
             <el-option v-for="tag in tags"
                        :key="tag"
                        :label="tag"
@@ -88,12 +89,18 @@
         previewContent: '',
         dragover: false,
         uploading: false,
-        uploadingText: 'loading...'
+        uploadingText: 'loading...',
+        contentHeight: ''
       }
     },
     mounted () {
+      this.handleResize()
+      window.addEventListener('resize', this.handleResize)
       window.hexo.locals.get('tags').forEach(tag => this.tags.push(tag.name))
       window.hexo.locals.get('categories').forEach(category => this.categories.push(category.name))
+    },
+    beforeDestroy () {
+      window.removeEventListener('resize', this.handleResize)
     },
     methods: {
       preview (tabPanel) {
@@ -194,6 +201,9 @@
             me.uploading = false
           })
         })
+      },
+      handleResize () {
+        this.contentHeight = (document.documentElement.clientHeight - 430) + 'px'
       }
     }
   }
@@ -201,8 +211,8 @@
 
 <style scoped>
   .content {
-    height: 400px;
     width: 100%;
+    min-height: 300px;
     display: block;
     resize: vertical;
     padding: 5px 15px;
