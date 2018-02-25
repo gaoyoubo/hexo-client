@@ -125,7 +125,7 @@
         var me = this
         this.$refs.postForm.validate((valid) => {
           if (valid) {
-            window.hexo.post.create(me.postForm, false).then(function () {
+            window.hexo.post.create(me.postForm, true).then(function () {
               me.$notify({
                 title: '成功',
                 message: '发布成功',
