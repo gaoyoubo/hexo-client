@@ -138,7 +138,7 @@
   .article-list-item {
     padding: 8px;
     position: relative;
-    border-bottom: 1px solid rgba(110, 100, 102, 0.15);
+    border-bottom: 1px solid #ebeef5;
     cursor: pointer;
   }
 
@@ -171,7 +171,7 @@
     margin: 0px;
     padding: 0px;
     font-size: 13px;
-    color: #CECECE;
+    color: #909399;
     line-height: 1em;
     list-style: none;
     overflow: hidden;
