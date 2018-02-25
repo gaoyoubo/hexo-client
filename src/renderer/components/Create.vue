@@ -42,10 +42,10 @@
         <el-form-item label="分类" prop="categories">
           <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
                      style="width:100%;" placeholder="请选择分类">
-            <el-option v-for="tag in tags"
-                       :key="tag"
-                       :label="tag"
-                       :value="tag">
+            <el-option v-for="category in categories"
+                       :key="category"
+                       :label="category"
+                       :value="category">
             </el-option>
           </el-select>
         </el-form-item>
