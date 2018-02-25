@@ -23,7 +23,7 @@
                         @dragleave.prevent="dragover = false"></textarea>
             </el-tab-pane>
             <el-tab-pane label="预览" name="preview">
-              <div class="preview"  v-html="previewContent" :style="{height: contentHeight}"></div>
+              <div class="preview" v-html="previewContent" :style="{height: contentHeight}"></div>
             </el-tab-pane>
           </el-tabs>
         </el-form-item>

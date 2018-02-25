@@ -58,11 +58,10 @@
             fs.unlink(post.full_source, (err) => {
               if (err) {
                 console.error('删除文件失败:' + post.full_source)
-                me.$notify.error({
-                  title: '删除失败',
-                  message: err.message
-                })
+                me.$notify.error({title: '删除失败', message: err.message})
               } else {
+                // 清理缓存
+                window.hexo.locals.invalidate()
                 // 从数组中删除
                 var index = -1
                 for (var i = 0; i < me.posts.length; i++) {
@@ -75,11 +74,7 @@
                   me.posts.splice(index, 1)
                 }
 
-                me.$notify({
-                  title: '成功',
-                  message: '删除成功',
-                  type: 'success'
-                })
+                me.$notify({title: '成功', message: '删除成功', type: 'success'})
               }
             })
           }
