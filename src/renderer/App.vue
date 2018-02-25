@@ -56,7 +56,7 @@
       init () {
         var me = this
         HexoClient.dbGet('sysConfig').then(sysConfig => {
-          if (sysConfig.base) {
+          if (sysConfig && sysConfig.base) {
             me.initHexo(sysConfig.base)
           } else {
             me.dialogFormVisible = true
