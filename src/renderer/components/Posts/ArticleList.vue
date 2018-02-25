@@ -7,8 +7,8 @@
         <h4 class="article-title">{{ post.title }}</h4>
         <p class="article-desc"></p>
         <ul class="article-info">
-          <li class="meta">{{ post.author }}</li>
           <li class="meta">{{ post.date }}</li>
+          <!--<li class="meta">{{ post.author }}</li>-->
         </ul>
 
         <a class="article-edit-btn" @click="editPost(post.id)">
@@ -100,8 +100,10 @@
           me.posts.push({
             id: post._id,
             title: post.title,
-            date: post.date.format('YYYY-MM-DD'),
-            author: post.author
+            date: post.date.format('YYYY-MM-DD hh:mm:ss'),
+            author: post.author,
+            tags: post.tags.data,
+            categories: post.categories.data
           })
         })
       }
