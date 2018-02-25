@@ -19,6 +19,7 @@
 </template>
 
 <script>
+  var electron = require('electron')
   export default {
     props: {
       id: {
@@ -29,6 +30,21 @@
     data () {
       return {
         post: null
+      }
+    },
+    updated () {
+      var articleDom = document.getElementsByClassName('article')
+      if (articleDom && articleDom.length > 0) {
+        var links = articleDom[0].getElementsByTagName('a')
+        for (var i = 0; i < links.length; i++) {
+          links[i].onclick = function (event) {
+            var href = event.target.getAttribute('href')
+            if (href) {
+              electron.shell.openExternal(href)
+            }
+            return false
+          }
+        }
       }
     },
     watch: {
@@ -49,6 +65,11 @@
 
   .article img {
     max-width: 100%;
+  }
+
+  .article a,
+  .article a:visited{
+    color: blue;
   }
 
   .article .article-inner {
