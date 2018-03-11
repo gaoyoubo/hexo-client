@@ -107,6 +107,13 @@
     beforeDestroy () {
       window.removeEventListener('resize', this.handleResize)
     },
+    beforeRouteLeave (to, from, next) {
+      if (window.confirm('确认离开该页面吗，离开前请检查是否有没保存的内容。')) {
+        next()
+      } else {
+        next(false)
+      }
+    },
     methods: {
       preview (tabPanel) {
         if (tabPanel.name === 'preview') {
