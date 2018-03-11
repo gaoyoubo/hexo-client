@@ -23,7 +23,7 @@
                         @dragleave.prevent="dragover = false"></textarea>
             </el-tab-pane>
             <el-tab-pane label="预览" name="preview">
-              <div class="preview" v-html="previewContent" :style="{height: contentHeight}"></div>
+              <div class="preview article-entry" v-html="previewContent" :style="{height: contentHeight}"></div>
             </el-tab-pane>
           </el-tabs>
         </el-form-item>
@@ -52,7 +52,7 @@
 
         <el-form-item>
           <el-form-item style="display:inline-block;">
-            <el-button type="primary" @click="submitForm()">保存修改</el-button>
+            <el-button type="primary" @click="submitForm()">保存</el-button>
           </el-form-item>
           <el-form-item label="开启文章目录" style="display:inline-block;">
             <el-switch v-model="postForm.toc"></el-switch>
@@ -128,7 +128,7 @@
             window.hexo.post.create(me.postForm, true).then(function () {
               me.$notify({
                 title: '成功',
-                message: '发布成功',
+                message: '保存成功',
                 type: 'success'
               })
             }, function () {
@@ -245,7 +245,7 @@
     min-height: 300px;
     display: block;
     resize: vertical;
-    padding: 5px 15px;
+    padding: 0px 5px;
     line-height: 1.5;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
