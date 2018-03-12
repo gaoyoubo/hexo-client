@@ -27,8 +27,9 @@
         </el-tabs>
         <el-form-item>
           <el-button type="primary" @click="saveConfig">保存</el-button>
-          <el-button type="success" icon="el-icon-check" @click="generate">生成</el-button>
+          <!--<el-button type="success" icon="el-icon-check" @click="generate">生成</el-button>-->
           <!--<el-button type="success" icon="el-icon-upload2" @click="deploy">发布</el-button>-->
+          <el-button type="primary" icon="el-icon-upload" @click="generateAndDeploy">发布</el-button>
         </el-form-item>
       </el-form>
     </el-main>
@@ -69,36 +70,68 @@
           })
         })
       },
-      generate () {
+      generateAndDeploy () {
+        var me = this
         var loading = this.$loading({
           lock: true,
           text: '生成中...',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
-        window.hexo.call('generate').then(function () {
+
+        window.hexo.call('generate', {}, function (err) {
+          if (err) {
+            loading.close()
+            console.error(err)
+            me.$notify.error('生成成功')
+          } else {
+            loading.text = '发布中...'
+            window.hexo.call('deploy', {}, function (err) {
+              loading.close()
+              if (err) {
+                console.error(err)
+                me.$notify.error('发布失败')
+              } else {
+                me.$notify.success('发布成功')
+              }
+            })
+          }
+        })
+      },
+      generate () {
+        var me = this
+        var loading = this.$loading({
+          lock: true,
+          text: '生成中...',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        window.hexo.call('generate', {}, function (err) {
           loading.close()
-          return window.hexo.exit()
-        }).catch(function (err) {
-          console.error(err)
-          loading.close()
-          return window.hexo.exit(err)
+          if (err) {
+            console.error(err)
+            me.$notify.error('生成成功')
+          } else {
+            me.$notify.success('生成成功')
+          }
         })
       },
       deploy () {
+        var me = this
         var loading = this.$loading({
           lock: true,
           text: '发布中...',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
-        window.hexo.call('deploy').then(function () {
+        window.hexo.call('deploy', {}, function (err) {
           loading.close()
-          return window.hexo.exit()
-        }).catch(function (err) {
-          console.error(err)
-          loading.close()
-          return window.hexo.exit(err)
+          if (err) {
+            console.error(err)
+            me.$notify.error('发布失败')
+          } else {
+            me.$notify.success('发布成功')
+          }
         })
       }
     }
