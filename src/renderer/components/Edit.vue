@@ -17,6 +17,7 @@
                         ref="txt"
                         :class="{'is-dragover': dragover}"
                         :style="{height: contentHeight}"
+                        @input="formChanged = true"
                         @drop.prevent="onDrop"
                         @dragover.prevent="dragover = true"
                         @dragleave.prevent="dragover = false"></textarea>
@@ -29,7 +30,7 @@
 
         <el-form-item label="标签" prop="tags">
           <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
-                     style="width:100%;" placeholder="请选择标签">
+                     style="width:100%;" placeholder="请选择标签" @input="formChanged = true">
             <el-option v-for="tag in tags"
                        :key="tag"
                        :label="tag"
@@ -40,7 +41,7 @@
 
         <el-form-item label="分类" prop="categories">
           <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
-                     style="width:100%;" placeholder="请选择分类">
+                     style="width:100%;" placeholder="请选择分类" @input="formChanged = true">
             <el-option v-for="category in categories"
                        :key="category"
                        :label="category"
@@ -54,7 +55,7 @@
             <el-button type="primary" @click="submitForm()">保存修改</el-button>
           </el-form-item>
           <el-form-item label="开启文章目录" style="display:inline-block;">
-            <el-switch v-model="postForm.toc"></el-switch>
+            <el-switch v-model="postForm.toc" @input="formChanged = true"></el-switch>
           </el-form-item>
         </el-form-item>
       </el-form>
@@ -95,7 +96,8 @@
         dragover: false,
         uploading: false,
         uploadingText: 'loading...',
-        contentHeight: ''
+        contentHeight: '',
+        formChanged: false
       }
     },
     mounted () {
@@ -142,10 +144,14 @@
       window.removeEventListener('resize', this.handleResize)
     },
     beforeRouteLeave (to, from, next) {
-      if (window.confirm('确认离开该页面吗，离开前请检查是否有没保存的内容。')) {
-        next()
+      if (this.formChanged) {
+        if (window.confirm('有未保存的更改，确认离开吗？')) {
+          next()
+        } else {
+          next(false)
+        }
       } else {
-        next(false)
+        next()
       }
     },
     methods: {
@@ -167,6 +173,7 @@
         this.$refs.postForm.validate((valid) => {
           if (valid) {
             window.hexo.post.create(me.postForm, true).then(function () {
+              me.formChanged = false
               me.$notify({
                 title: '成功',
                 message: '修改成功',
