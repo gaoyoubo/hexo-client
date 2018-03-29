@@ -9,4 +9,6 @@ npm-debug.log.*
 thumbs.db
 !.gitkeep
 
-.idea/workspace.xml
+debug.log
+package-lock.json
+.idea/*
