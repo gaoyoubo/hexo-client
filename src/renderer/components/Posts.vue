@@ -4,8 +4,8 @@
       <main-menu active="/posts"></main-menu>
     </el-header>
     <el-container>
-      <el-aside style="min-width: 300px;">
-        <article-list v-on:selectedArticle="selectedArticle"></article-list>
+      <el-aside style="min-width: 300px;" id="articleListContainer" @scroll.native="articleListScroll">
+        <article-list v-on:selectedArticle="selectedArticle" v-on:loaded="articleLoaded"></article-list>
       </el-aside>
 
       <el-main>
@@ -28,10 +28,23 @@
         selectedId: '' // 已经选中的文章编号
       }
     },
-
     methods: {
       selectedArticle (id) {
         this.selectedId = id
+      },
+      articleListScroll (e) {
+        var ele = e.srcElement
+        window.articleListScroll = {
+          scrollTop: ele.scrollTop,
+          scrollLeft: ele.scrollLeft
+        }
+      },
+      articleLoaded () {
+        var ele = document.getElementById('articleListContainer')
+        if (window.articleListScroll) {
+          ele.scrollTop = window.articleListScroll.scrollTop
+          ele.scrollLeft = window.articleListScroll.scrollLeft
+        }
       }
     }
   }

@@ -111,6 +111,8 @@
       } else { // 否则展示最新的那篇文章
         this.selected(window.lastPostId)
       }
+
+      this.$emit('loaded')
     }
   }
 </script>
