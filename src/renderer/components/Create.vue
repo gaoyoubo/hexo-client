@@ -21,7 +21,8 @@
                         @input="formChanged = true"
                         @drop.prevent="onDrop"
                         @dragover.prevent="dragover = true"
-                        @dragleave.prevent="dragover = false"></textarea>
+                        @dragleave.prevent="dragover = false"
+                        @paste="onPaste"></textarea>
             </el-tab-pane>
             <el-tab-pane label="预览" name="preview">
               <div class="preview article-entry" v-html="previewContent" :style="{height: contentHeight}"></div>
@@ -160,6 +161,7 @@
           }
         })
       },
+
       onDrop (e) {
         this.dragover = false
         var files = e.dataTransfer.files
@@ -180,6 +182,42 @@
           return
         }
 
+        this.uploadImages(files)
+      },
+
+      onPaste (event) {
+        var images = getPasteImages(event)
+        if (!images || images.length <= 0) {
+          return
+        }
+        event.preventDefault()
+        console.log('找到图片：' + images.length)
+        this.uploadImages(images)
+
+        function getPasteImages (event) {
+          var images = []
+          if (!event.clipboardData || !event.clipboardData.items) {
+            return images
+          }
+          for (var i = 0; i < event.clipboardData.items.length; i++) {
+            if (event.clipboardData.items[i].type.indexOf('image') !== -1) {
+              images.push(event.clipboardData.items[i].getAsFile())
+            }
+          }
+          // if (blob !== null) {
+          //   var reader = new FileReader()
+          //   reader.onload = function (event) {
+          //     // event.target.result 即为图片的Base64编码字符串
+          //     var base64 = event.target.result
+          //     console.log(base64)
+          //   }
+          //   reader.readAsDataURL(blob)
+          // }
+          return images
+        }
+      },
+
+      uploadImages (files) {
         var me = this
         HexoClient.dbGet('sysConfig').then(sysConfig => {
           var accessKey = sysConfig.qiniuAccessKey
@@ -218,6 +256,7 @@
           })
         })
       },
+
       handleResize () {
         this.contentHeight = (document.documentElement.clientHeight - 430) + 'px'
       }

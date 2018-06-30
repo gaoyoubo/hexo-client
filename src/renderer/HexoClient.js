@@ -47,7 +47,7 @@ class HexoClient {
 
     // 文件上传
     var deferred = When.defer()
-    formUploader.putFile(uploadToken, key, file.path, putExtra, function (respErr, respBody, respInfo) {
+    formUploader.put(uploadToken, key, buf, putExtra, function (respErr, respBody, respInfo) {
       if (respErr) {
         deferred.reject(respErr)
       } else {
