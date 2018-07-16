@@ -14,20 +14,35 @@ var db = new Nedb({
 })
 
 class HexoClient {
-  /**
-   * 获取上传令牌
-   * @param accessKey
-   * @param secretKey
-   * @param bucket
-   * @returns {string}
-   */
-  uploadToken (accessKey, secretKey, bucket) {
-    var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
-    var putPolicy = new qiniu.rs.PutPolicy({
-      scope: bucket,
-      expires: 7200
+  prepareUpload (key) {
+    var deferred = When.defer()
+    this.sysConfig().then(sysConfig => {
+      var accessKey = sysConfig.qiniuAccessKey
+      var secretKey = sysConfig.qiniuSecretKey
+      var bucket = sysConfig.qiniuBucket
+      var host = sysConfig.qiniuHost
+
+      if (!accessKey || !secretKey || !bucket || !host) {
+        deferred.reject('请先完成七牛配置！')
+      }
+
+      var scope = bucket
+      if (key) { // 如果需要覆盖上传，那么将文件key拼接到scope中
+        scope = scope + ':' + key
+      }
+
+      var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
+      var putPolicy = new qiniu.rs.PutPolicy({
+        scope: scope,
+        expires: 7200
+      })
+      var uploadToken = putPolicy.uploadToken(mac)
+      deferred.resolve({
+        uploadToken: uploadToken,
+        host: host
+      })
     })
-    return putPolicy.uploadToken(mac)
+    return deferred.promise
   }
 
   /**
@@ -136,6 +151,10 @@ class HexoClient {
       deferred.resolve(doc)
     })
     return deferred.promise
+  }
+
+  sysConfig () {
+    return this.dbGet('sysConfig')
   }
 }
 

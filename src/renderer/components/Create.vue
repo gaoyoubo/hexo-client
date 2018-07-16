@@ -70,6 +70,9 @@
   import MainMenu from './MainMenu'
   import HexoClient from '@/HexoClient'
   import When from 'when'
+  import * as qiniu from 'qiniu-js'
+
+  var md5 = require('md5')
 
   export default {
     components: {MainMenu},
@@ -192,7 +195,52 @@
         }
         event.preventDefault()
         console.log('找到图片：' + images.length)
-        this.uploadImages(images)
+
+        for (var i = 0; i < images.length; i++) {
+          upload(images[i])
+        }
+
+        var me = this
+
+        function upload (image) {
+          var reader = new FileReader()
+          reader.onload = function (event) {
+            var key = md5(event.target.result)
+            HexoClient.prepareUpload(key).then(
+              uploadConfig => {
+                var putExtra = {
+                  fname: '',
+                  params: {},
+                  mimeType: [] || null
+                }
+                var config = {
+                  useCdnDomain: true,
+                  disableStatisticsReport: false,
+                  retryCount: 6
+                }
+                var observable = qiniu.upload(image, key, uploadConfig.uploadToken, putExtra, config)
+                var observer = {
+                  next (res) {
+                  },
+                  error (err) {
+                    console.log(err)
+                  },
+                  complete (res) {
+                    var imageUrl = uploadConfig.host + '/' + res.key
+                    me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
+                  }
+                }
+                observable.subscribe(observer)
+              },
+              msg => {
+                me.$notify.error({
+                  message: msg
+                })
+              }
+            )
+          }
+          reader.readAsDataURL(image)
+        }
 
         function getPasteImages (event) {
           var images = []
@@ -201,60 +249,46 @@
           }
           for (var i = 0; i < event.clipboardData.items.length; i++) {
             if (event.clipboardData.items[i].type.indexOf('image') !== -1) {
-              images.push(event.clipboardData.items[i].getAsFile())
+              var image = event.clipboardData.items[i].getAsFile()
+              if (image) {
+                images.push(image)
+              }
             }
           }
-          // if (blob !== null) {
-          //   var reader = new FileReader()
-          //   reader.onload = function (event) {
-          //     // event.target.result 即为图片的Base64编码字符串
-          //     var base64 = event.target.result
-          //     console.log(base64)
-          //   }
-          //   reader.readAsDataURL(blob)
-          // }
           return images
         }
       },
 
       uploadImages (files) {
         var me = this
-        HexoClient.dbGet('sysConfig').then(sysConfig => {
-          var accessKey = sysConfig.qiniuAccessKey
-          var secretKey = sysConfig.qiniuSecretKey
-          var bucket = sysConfig.qiniuBucket
-          var host = sysConfig.qiniuHost
+        HexoClient.prepareUpload().then(
+          config => {
+            me.uploading = true
+            me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
 
-          if (!accessKey || !secretKey || !bucket || !host) {
+            var promises = []
+            for (var i = 0; i < files.length; i++) {
+              promises.push(HexoClient.upload(files[i], config.uploadToken))
+            }
+
+            When.all(promises).then(results => {
+              results.forEach(result => {
+                var imageUrl = config.host + '/' + result.key
+                me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
+              })
+              me.uploading = false
+            }, errs => {
+              me.$notify.error({
+                message: '图片上传失败：' + errs
+              })
+              me.uploading = false
+            })
+          },
+          msg => {
             me.$notify.error({
-              message: '请先完成七牛配置！'
+              message: msg
             })
-            return
-          }
-
-          me.uploading = true
-          me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
-
-          var uploadToken = HexoClient.uploadToken(accessKey, secretKey, bucket)
-
-          var promises = []
-          for (var i = 0; i < files.length; i++) {
-            promises.push(HexoClient.upload(files[i], uploadToken))
-          }
-
-          When.all(promises).then(results => {
-            results.forEach(result => {
-              var imageUrl = host + '/' + result.key
-              me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
-            })
-            me.uploading = false
-          }, errs => {
-            me.$notify.error({
-              message: '图片上传失败：' + errs
-            })
-            me.uploading = false
           })
-        })
       },
 
       handleResize () {
