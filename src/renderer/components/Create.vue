@@ -70,9 +70,6 @@
   import MainMenu from './MainMenu'
   import HexoClient from '@/HexoClient'
   import When from 'when'
-  import * as qiniu from 'qiniu-js'
-
-  var md5 = require('md5')
 
   export default {
     components: {MainMenu},
@@ -182,65 +179,19 @@
           this.$notify.error({
             message: '只能上传图片文件'
           })
-          return
+        } else {
+          this.upload(files)
         }
-
-        this.uploadImages(files)
       },
 
       onPaste (event) {
-        var images = getPasteImages(event)
-        if (!images || images.length <= 0) {
+        var files = getPasteImages(event)
+        if (!files || files.length <= 0) {
           return
         }
         event.preventDefault()
-        console.log('找到图片：' + images.length)
 
-        for (var i = 0; i < images.length; i++) {
-          upload(images[i])
-        }
-
-        var me = this
-
-        function upload (image) {
-          var reader = new FileReader()
-          reader.onload = function (event) {
-            var key = md5(event.target.result)
-            HexoClient.prepareUpload(key).then(
-              uploadConfig => {
-                var putExtra = {
-                  fname: '',
-                  params: {},
-                  mimeType: [] || null
-                }
-                var config = {
-                  useCdnDomain: true,
-                  disableStatisticsReport: false,
-                  retryCount: 6
-                }
-                var observable = qiniu.upload(image, key, uploadConfig.uploadToken, putExtra, config)
-                var observer = {
-                  next (res) {
-                  },
-                  error (err) {
-                    console.log(err)
-                  },
-                  complete (res) {
-                    var imageUrl = uploadConfig.host + '/' + res.key
-                    me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
-                  }
-                }
-                observable.subscribe(observer)
-              },
-              msg => {
-                me.$notify.error({
-                  message: msg
-                })
-              }
-            )
-          }
-          reader.readAsDataURL(image)
-        }
+        this.upload(files)
 
         function getPasteImages (event) {
           var images = []
@@ -259,36 +210,25 @@
         }
       },
 
-      uploadImages (files) {
+      upload (files) {
         var me = this
-        HexoClient.prepareUpload().then(
-          config => {
-            me.uploading = true
-            me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
-
-            var promises = []
-            for (var i = 0; i < files.length; i++) {
-              promises.push(HexoClient.upload(files[i], config.uploadToken))
+        me.uploading = true
+        me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+        var promises = []
+        for (var i = 0; i < files.length; i++) {
+          promises.push(HexoClient.upload(files[i]))
+        }
+        When.settle(promises).then(function (results) {
+          // [{'state': 'rejected', 'reason': 'A'}, {'state': 'fulfilled', 'value': 'B'}]
+          results.forEach(result => {
+            if (result.state === 'fulfilled') {
+              me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + result.value + ')\n')
+            } else if (result.state === 'rejected') {
+              console.log(result)
             }
-
-            When.all(promises).then(results => {
-              results.forEach(result => {
-                var imageUrl = config.host + '/' + result.key
-                me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
-              })
-              me.uploading = false
-            }, errs => {
-              me.$notify.error({
-                message: '图片上传失败：' + errs
-              })
-              me.uploading = false
-            })
-          },
-          msg => {
-            me.$notify.error({
-              message: msg
-            })
           })
+          me.uploading = false
+        })
       },
 
       handleResize () {
