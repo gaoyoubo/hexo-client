@@ -2,9 +2,9 @@
 
 > Hexo桌面客户端
 
-联系我：[http://www.mspring.org](http://www.mspring.org)
-
-项目主页：[https://github.com/gaoyoubo/hexo-client](https://github.com/gaoyoubo/hexo-client)
+- Hexo: [Hexo home page, https://hexo.io](https://hexo.io)
+- About: [http://www.mspring.org](http://www.mspring.org)
+- HomePage: [https://github.com/gaoyoubo/hexo-client](https://github.com/gaoyoubo/hexo-client)
 
 ### 功能简介
 - 文章添加
@@ -29,7 +29,7 @@
 # install dependencies
 npm install
 
-# serve with hot reload at localhost:9080
+# dev
 npm run dev
 
 # build electron application for production
