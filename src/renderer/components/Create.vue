@@ -21,7 +21,8 @@
                         @input="formChanged = true"
                         @drop.prevent="onDrop"
                         @dragover.prevent="dragover = true"
-                        @dragleave.prevent="dragover = false"></textarea>
+                        @dragleave.prevent="dragover = false"
+                        @paste="onPaste"></textarea>
             </el-tab-pane>
             <el-tab-pane label="预览" name="preview">
               <div class="preview article-entry" v-html="previewContent" :style="{height: contentHeight}"></div>
@@ -160,6 +161,7 @@
           }
         })
       },
+
       onDrop (e) {
         this.dragover = false
         var files = e.dataTransfer.files
@@ -177,47 +179,58 @@
           this.$notify.error({
             message: '只能上传图片文件'
           })
+        } else {
+          this.upload(files)
+        }
+      },
+
+      onPaste (event) {
+        var files = getPasteImages(event)
+        if (!files || files.length <= 0) {
           return
         }
+        event.preventDefault()
 
+        this.upload(files)
+
+        function getPasteImages (event) {
+          var images = []
+          if (!event.clipboardData || !event.clipboardData.items) {
+            return images
+          }
+          for (var i = 0; i < event.clipboardData.items.length; i++) {
+            if (event.clipboardData.items[i].type.indexOf('image') !== -1) {
+              var image = event.clipboardData.items[i].getAsFile()
+              if (image) {
+                images.push(image)
+              }
+            }
+          }
+          return images
+        }
+      },
+
+      upload (files) {
         var me = this
-        HexoClient.dbGet('sysConfig').then(sysConfig => {
-          var accessKey = sysConfig.qiniuAccessKey
-          var secretKey = sysConfig.qiniuSecretKey
-          var bucket = sysConfig.qiniuBucket
-          var host = sysConfig.qiniuHost
-
-          if (!accessKey || !secretKey || !bucket || !host) {
-            me.$notify.error({
-              message: '请先完成七牛配置！'
-            })
-            return
-          }
-
-          me.uploading = true
-          me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
-
-          var uploadToken = HexoClient.uploadToken(accessKey, secretKey, bucket)
-
-          var promises = []
-          for (var i = 0; i < files.length; i++) {
-            promises.push(HexoClient.upload(files[i], uploadToken))
-          }
-
-          When.all(promises).then(results => {
-            results.forEach(result => {
-              var imageUrl = host + '/' + result.key
-              me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
-            })
-            me.uploading = false
-          }, errs => {
-            me.$notify.error({
-              message: '图片上传失败：' + errs
-            })
-            me.uploading = false
+        me.uploading = true
+        me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+        var promises = []
+        for (var i = 0; i < files.length; i++) {
+          promises.push(HexoClient.upload(files[i]))
+        }
+        When.settle(promises).then(function (results) {
+          // [{'state': 'rejected', 'reason': 'A'}, {'state': 'fulfilled', 'value': 'B'}]
+          results.forEach(result => {
+            if (result.state === 'fulfilled') {
+              me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + result.value + ')\n')
+            } else if (result.state === 'rejected') {
+              console.log(result)
+            }
           })
+          me.uploading = false
         })
       },
+
       handleResize () {
         this.contentHeight = (document.documentElement.clientHeight - 430) + 'px'
       }

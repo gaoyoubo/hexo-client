@@ -147,7 +147,7 @@
   }
 
   .article a,
-  .article a:visited{
+  .article a:visited {
     color: blue;
   }
 

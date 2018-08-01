@@ -1,7 +1,8 @@
-import qiniu from 'qiniu'
 import When from 'when'
 import Nedb from 'nedb'
 import path from 'path'
+import qiniu from 'qiniu'
+import * as qiniuJs from 'qiniu-js'
 
 var fs = require('fs')
 var md5 = require('md5')
@@ -14,49 +15,69 @@ var db = new Nedb({
 })
 
 class HexoClient {
-  /**
-   * 获取上传令牌
-   * @param accessKey
-   * @param secretKey
-   * @param bucket
-   * @returns {string}
-   */
-  uploadToken (accessKey, secretKey, bucket) {
-    var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
-    var putPolicy = new qiniu.rs.PutPolicy({
-      scope: bucket,
-      expires: 7200
+  upConfig (key) {
+    var deferred = When.defer()
+    this.sysConfig().then(sysConfig => {
+      var accessKey = sysConfig.qiniuAccessKey
+      var secretKey = sysConfig.qiniuSecretKey
+      var bucket = sysConfig.qiniuBucket
+      var host = sysConfig.qiniuHost
+
+      if (!accessKey || !secretKey || !bucket || !host) {
+        deferred.reject('请先完成七牛配置！')
+      } else {
+        var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
+        var putPolicy = new qiniu.rs.PutPolicy({
+          scope: bucket + ':' + key,
+          expires: 7200
+        })
+        var upToken = putPolicy.uploadToken(mac)
+        deferred.resolve({upToken: upToken, host: host, key: key})
+      }
+    }, err => {
+      deferred.reject(err)
     })
-    return putPolicy.uploadToken(mac)
+    return deferred.promise
   }
 
-  /**
-   * 上传
-   * @param file
-   * @param uploadToken
-   */
-  upload (file, uploadToken) {
-    var buf = fs.readFileSync(file.path)
-    var key = md5(buf)
+  upload (file) {
+    var key
+    if (file.path) {
+      var buf = fs.readFileSync(file.path)
+      key = md5(buf)
+    } else {
+      // TODO gaoyoubo @ 2018/7/21 这里的md5计算的并不正确
+      key = md5(file)
+    }
 
-    var config = new qiniu.conf.Config()
-    config.zone = qiniu.zone.Zone_z0
-
-    var formUploader = new qiniu.form_up.FormUploader(config)
-    var putExtra = new qiniu.form_up.PutExtra()
-
-    // 文件上传
     var deferred = When.defer()
-    formUploader.putFile(uploadToken, key, file.path, putExtra, function (respErr, respBody, respInfo) {
-      if (respErr) {
-        deferred.reject(respErr)
-      } else {
-        if (respInfo.statusCode === 200) {
-          deferred.resolve(respBody)
-        } else {
-          deferred.reject()
+    this.upConfig(key).then(upConfig => {
+      var putExtra = {
+        fname: '',
+        params: {},
+        mimeType: [] || null
+      }
+      var config = {
+        useCdnDomain: true,
+        disableStatisticsReport: false,
+        retryCount: 6
+      }
+      var observable = qiniuJs.upload(file, upConfig.key, upConfig.upToken, putExtra, config)
+      var observer = {
+        next (res) {
+          deferred.notify(res)
+        },
+        error (err) {
+          deferred.reject(err)
+        },
+        complete (res) {
+          var url = upConfig.host + '/' + res.key
+          deferred.resolve(url)
         }
       }
+      observable.subscribe(observer)
+    }, err => {
+      deferred.reject(err)
     })
     return deferred.promise
   }
@@ -136,6 +157,10 @@ class HexoClient {
       deferred.resolve(doc)
     })
     return deferred.promise
+  }
+
+  sysConfig () {
+    return this.dbGet('sysConfig')
   }
 }
 
