@@ -1,6 +1,5 @@
 <template>
   <el-menu
-      :default-active="active"
       :router="true"
       mode="horizontal"
       background-color="#545c64"
@@ -27,12 +26,6 @@
 
 <script>
   export default {
-    props: {
-      active: {
-        type: String,
-        default: 'posts'
-      }
-    },
     data () {
       return {}
     }

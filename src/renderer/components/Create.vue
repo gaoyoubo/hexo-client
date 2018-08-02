@@ -1,8 +1,4 @@
 <template>
-  <el-container>
-    <el-header>
-      <main-menu active="/create"></main-menu>
-    </el-header>
     <el-main>
 
       <el-form :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
@@ -63,7 +59,6 @@
       </el-form>
 
     </el-main>
-  </el-container>
 </template>
 
 <script>

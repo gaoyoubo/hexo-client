@@ -1,6 +1,13 @@
 <template>
   <div id="app" :style="{'height': windowHeight}">
-    <router-view v-if="inited"></router-view>
+    <el-container v-if="inited">
+      <el-header>
+        <main-menu></main-menu>
+      </el-header>
+      <el-container>
+        <router-view></router-view>
+      </el-container>
+    </el-container>
 
     <el-dialog title="请先填写正确的Hexo地址：" :visible.sync="dialogFormVisible" :modal="true"
                :close-on-click-modal="false"
@@ -20,11 +27,13 @@
 </template>
 
 <script>
+  import MainMenu from './components/MainMenu'
   import HexoClient from '@/HexoClient'
 
   var Hexo = require('hexo')
   export default {
     name: 'hexo-client',
+    components: {MainMenu},
     data () {
       return {
         base: '',

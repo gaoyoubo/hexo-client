@@ -1,17 +1,12 @@
 <template>
   <el-container>
-    <el-header>
-      <main-menu active="/posts"></main-menu>
-    </el-header>
-    <el-container>
-      <el-aside style="min-width: 300px;" id="articleListContainer" @scroll.native="articleListScroll">
-        <article-list v-on:selectedArticle="selectedArticle" v-on:loaded="articleLoaded"></article-list>
-      </el-aside>
+    <el-aside style="min-width: 300px;" id="articleListContainer" @scroll.native="articleListScroll">
+      <article-list v-on:selectedArticle="selectedArticle" v-on:loaded="articleLoaded"></article-list>
+    </el-aside>
 
-      <el-main>
-        <article-view :id="selectedId"></article-view>
-      </el-main>
-    </el-container>
+    <el-main>
+      <article-view :id="selectedId"></article-view>
+    </el-main>
   </el-container>
 </template>
 
