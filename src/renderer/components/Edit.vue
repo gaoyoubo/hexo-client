@@ -61,8 +61,9 @@
 
 <script>
   import MainMenu from './MainMenu'
-  import HexoClient from '@/HexoClient'
-  import When from 'when'
+  import hexoClient from '@/service/HexoClient'
+  import qiniuManager from '@/service/QiniuManager'
+  import when from 'when'
 
   export default {
     components: {MainMenu},
@@ -189,6 +190,7 @@
           }
         })
       },
+
       onDrop (e) {
         this.dragover = false
         var files = e.dataTransfer.files
@@ -206,47 +208,33 @@
           this.$notify.error({
             message: '只能上传图片文件'
           })
-          return
+        } else {
+          this.upload(files)
         }
+      },
 
+      upload (files) {
         var me = this
-        HexoClient.dbGet('sysConfig').then(sysConfig => {
-          var accessKey = sysConfig.qiniuAccessKey
-          var secretKey = sysConfig.qiniuSecretKey
-          var bucket = sysConfig.qiniuBucket
-          var host = sysConfig.qiniuHost
+        me.uploading = true
+        me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
 
-          if (!accessKey || !secretKey || !bucket || !host) {
-            me.$notify.error({
-              message: '请先完成七牛配置！'
-            })
-            return
-          }
-
-          me.uploading = true
-          me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
-
-          var uploadToken = HexoClient.uploadToken(accessKey, secretKey, bucket)
-
-          var promises = []
-          for (var i = 0; i < files.length; i++) {
-            promises.push(HexoClient.upload(files[i], uploadToken))
-          }
-
-          When.all(promises).then(results => {
-            results.forEach(result => {
-              var imageUrl = host + '/' + result.key
-              me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
-            })
-            me.uploading = false
-          }, errs => {
-            me.$notify.error({
-              message: '图片上传失败：' + errs
-            })
-            me.uploading = false
+        var promises = []
+        for (var i = 0; i < files.length; i++) {
+          promises.push(qiniuManager.upload(files[i]))
+        }
+        when.all(promises).then(results => {
+          results.forEach(imageUrl => {
+            me.postForm.content = hexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
           })
+          me.uploading = false
+        }, errs => {
+          me.$notify.error({
+            message: '图片上传失败：' + errs
+          })
+          me.uploading = false
         })
       },
+
       handleResize () {
         this.contentHeight = (document.documentElement.clientHeight - 430) + 'px'
       }

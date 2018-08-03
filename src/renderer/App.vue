@@ -16,11 +16,11 @@
                :before-close="beforeCloseDialog">
       <el-form>
         <el-form-item>
-          <el-input v-model="base" auto-complete="off"></el-input>
+          <el-input v-model="path" auto-complete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="setBase">确 定</el-button>
+        <el-button type="primary" @click="setSysConfig">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -28,23 +28,19 @@
 
 <script>
   import MainMenu from './components/MainMenu'
-  import HexoClient from '@/HexoClient'
+  import configManager from '@/service/ConfigManager'
+  import hexoManager from '@/service/HexoManager'
 
-  var Hexo = require('hexo')
   export default {
     name: 'hexo-client',
     components: {MainMenu},
     data () {
       return {
-        base: '',
+        path: '',
         dialogFormVisible: false,
         inited: false,
         windowHeight: '300px' // 窗口高度
       }
-    },
-
-    beforeCreate () {
-
     },
 
     mounted () {
@@ -55,50 +51,35 @@
 
     beforeDestroy () {
       window.removeEventListener('resize', this.handleResize)
-      window.hexo.unwatch()
+      hexoManager.unwatch()
     },
 
     methods: {
-      handleResize () {
-        this.windowHeight = document.documentElement.clientHeight + 'px'
-      },
       init () {
-        var me = this
-        HexoClient.dbGet('sysConfig').then(sysConfig => {
-          if (sysConfig && sysConfig.base) {
-            me.initHexo(sysConfig.base)
-          } else {
-            me.dialogFormVisible = true
-          }
-        })
-      },
-      initHexo (path) {
         var me = this
         var loading = this.$loading({
           lock: true,
           text: 'Loading...',
           spinner: 'el-icon-loading'
         })
-
-        window.hexo = new Hexo(path, {
-          debug: false
-        })
-        console.log('1. hexo init...')
-        window.hexo.init().then(function () {
-          console.log('2. hexo init...finished')
-          console.log('3. hexo loading...')
-          window.hexo.watch().then(function () {
-            console.log('4. hexo loading...finished')
-            me.inited = true
-            loading.close()
-          })
+        hexoManager.init().then(function () {
+          me.inited = true
+          loading.close()
+        }, function (err) {
+          console.log(err)
+          me.dialogFormVisible = true
+          loading.close()
         })
       },
-      setBase () {
-        this.dialogFormVisible = false
+
+      handleResize () {
+        this.windowHeight = document.documentElement.clientHeight + 'px'
+      },
+
+      setSysConfig () {
         var me = this
-        var base = me.base
-        HexoClient.dbSetProperty('sysConfig', 'base', base).then(doc => {
+        configManager.setSysConfig({path: me.path}).then(function () {
+          me.dialogFormVisible = false
           me.init()
         })
       },

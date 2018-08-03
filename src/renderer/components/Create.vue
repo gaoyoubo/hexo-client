@@ -1,15 +1,15 @@
 <template>
-    <el-main>
+  <el-main>
 
-      <el-form :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="postForm.title" @input="formChanged = true"></el-input>
-        </el-form-item>
+    <el-form :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
+      <el-form-item label="标题" prop="title">
+        <el-input v-model="postForm.title" @input="formChanged = true"></el-input>
+      </el-form-item>
 
-        <el-form-item label="内容" prop="content">
-          <el-tabs value="edit" @tab-click="preview"
-                   v-loading="uploading" :element-loading-text="uploadingText">
-            <el-tab-pane label="编辑" name="edit">
+      <el-form-item label="内容" prop="content">
+        <el-tabs value="edit" @tab-click="preview"
+                 v-loading="uploading" :element-loading-text="uploadingText">
+          <el-tab-pane label="编辑" name="edit">
               <textarea v-model="postForm.content" class="content" placeholder="请输入内容"
                         ref="txt"
                         :class="{'is-dragover': dragover}"
@@ -17,54 +17,54 @@
                         @input="formChanged = true"
                         @drop.prevent="onDrop"
                         @dragover.prevent="dragover = true"
-                        @dragleave.prevent="dragover = false"
-                        @paste="onPaste"></textarea>
-            </el-tab-pane>
-            <el-tab-pane label="预览" name="preview">
-              <div class="preview article-entry" v-html="previewContent" :style="{height: contentHeight}"></div>
-            </el-tab-pane>
-          </el-tabs>
-        </el-form-item>
+                        @dragleave.prevent="dragover = false"></textarea>
+          </el-tab-pane>
+          <el-tab-pane label="预览" name="preview">
+            <div class="preview article-entry" v-html="previewContent" :style="{height: contentHeight}"></div>
+          </el-tab-pane>
+        </el-tabs>
+      </el-form-item>
 
-        <el-form-item label="标签" prop="tags">
-          <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
-                     style="width:100%;" placeholder="请选择标签" @input="formChanged = true">
-            <el-option v-for="tag in tags"
-                       :key="tag"
-                       :label="tag"
-                       :value="tag">
-            </el-option>
-          </el-select>
-        </el-form-item>
+      <el-form-item label="标签" prop="tags">
+        <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
+                   style="width:100%;" placeholder="请选择标签" @input="formChanged = true">
+          <el-option v-for="tag in tags"
+                     :key="tag"
+                     :label="tag"
+                     :value="tag">
+          </el-option>
+        </el-select>
+      </el-form-item>
 
-        <el-form-item label="分类" prop="categories">
-          <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
-                     style="width:100%;" placeholder="请选择分类" @input="formChanged = true">
-            <el-option v-for="category in categories"
-                       :key="category"
-                       :label="category"
-                       :value="category">
-            </el-option>
-          </el-select>
-        </el-form-item>
+      <el-form-item label="分类" prop="categories">
+        <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
+                   style="width:100%;" placeholder="请选择分类" @input="formChanged = true">
+          <el-option v-for="category in categories"
+                     :key="category"
+                     :label="category"
+                     :value="category">
+          </el-option>
+        </el-select>
+      </el-form-item>
 
-        <el-form-item>
-          <el-form-item style="display:inline-block;">
-            <el-button type="primary" @click="submitForm()">保存</el-button>
-          </el-form-item>
-          <el-form-item label="开启文章目录" style="display:inline-block;">
-            <el-switch v-model="postForm.toc" @input="formChanged = true"></el-switch>
-          </el-form-item>
+      <el-form-item>
+        <el-form-item style="display:inline-block;">
+          <el-button type="primary" @click="submitForm()">保存</el-button>
         </el-form-item>
-      </el-form>
+        <el-form-item label="开启文章目录" style="display:inline-block;">
+          <el-switch v-model="postForm.toc" @input="formChanged = true"></el-switch>
+        </el-form-item>
+      </el-form-item>
+    </el-form>
 
-    </el-main>
+  </el-main>
 </template>
 
 <script>
   import MainMenu from './MainMenu'
-  import HexoClient from '@/HexoClient'
-  import When from 'when'
+  import hexoClient from '@/service/HexoClient'
+  import qiniuManager from '@/service/QiniuManager'
+  import when from 'when'
 
   export default {
     components: {MainMenu},
@@ -179,48 +179,23 @@
         }
       },
 
-      onPaste (event) {
-        var files = getPasteImages(event)
-        if (!files || files.length <= 0) {
-          return
-        }
-        event.preventDefault()
-
-        this.upload(files)
-
-        function getPasteImages (event) {
-          var images = []
-          if (!event.clipboardData || !event.clipboardData.items) {
-            return images
-          }
-          for (var i = 0; i < event.clipboardData.items.length; i++) {
-            if (event.clipboardData.items[i].type.indexOf('image') !== -1) {
-              var image = event.clipboardData.items[i].getAsFile()
-              if (image) {
-                images.push(image)
-              }
-            }
-          }
-          return images
-        }
-      },
-
       upload (files) {
         var me = this
         me.uploading = true
         me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+
         var promises = []
         for (var i = 0; i < files.length; i++) {
-          promises.push(HexoClient.upload(files[i]))
+          promises.push(qiniuManager.upload(files[i]))
         }
-        When.settle(promises).then(function (results) {
-          // [{'state': 'rejected', 'reason': 'A'}, {'state': 'fulfilled', 'value': 'B'}]
-          results.forEach(result => {
-            if (result.state === 'fulfilled') {
-              me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + result.value + ')\n')
-            } else if (result.state === 'rejected') {
-              console.log(result)
-            }
+        when.all(promises).then(results => {
+          results.forEach(imageUrl => {
+            me.postForm.content = hexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
+          })
+          me.uploading = false
+        }, errs => {
+          me.$notify.error({
+            message: '图片上传失败：' + errs
           })
           me.uploading = false
         })
