@@ -1,6 +1,7 @@
 <template>
   <el-menu
       :router="true"
+      default-active="/posts"
       mode="horizontal"
       background-color="#545c64"
       text-color="#fff"
