@@ -44,13 +44,13 @@
     },
 
     mounted () {
-      window.addEventListener('resize', this.handleResize)
-      this.handleResize()
+      window.addEventListener('resize', this.resize)
+      this.resize()
       this.init()
     },
 
     beforeDestroy () {
-      window.removeEventListener('resize', this.handleResize)
+      window.removeEventListener('resize', this.resize)
       hexoManager.unwatch()
     },
 
@@ -72,7 +72,7 @@
         })
       },
 
-      handleResize () {
+      resize () {
         this.windowHeight = document.documentElement.clientHeight + 'px'
       },
 

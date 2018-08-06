@@ -6,9 +6,9 @@
         <el-input v-model="postForm.title" @input="formChanged = true"></el-input>
       </el-form-item>
 
-      <el-form-item label="内容" prop="content" v-loading="uploading">
+      <el-form-item label="内容" prop="content" v-loading="uploading" :element-loading-text="uploadingText">
         <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars"
-                      @imgAdd="imgAdd" @imgDel="imgDel" @fullScreen="fullScreen"
+                      @imgsAdd="imgsAdd" @fullScreen="fullScreen"
                       @change="formChanged = true"
                       :style="{height: contentHeight}" :boxShadow="false"/>
       </el-form-item>
@@ -51,6 +51,7 @@
 <script>
   import MainMenu from './MainMenu'
   import qiniuManager from '@/service/QiniuManager'
+  import when from 'when'
 
   export default {
     components: {MainMenu},
@@ -74,13 +75,10 @@
         },
         tags: [],
         categories: [],
-        previewContent: '',
         uploading: false,
         uploadingText: 'loading...',
         contentHeight: '',
         formChanged: false,
-        dragover: false,
-        imgFile: {},
         fullScreenFlag: false,
         toolbars: {
           bold: true, // 粗体
@@ -140,19 +138,6 @@
       }
     },
     methods: {
-      preview (tabPanel) {
-        if (tabPanel.name === 'preview') {
-          var me = this
-          if (me.postForm.content) {
-            window.hexo.post.render(new Date().getTime() + '.md', {content: this.postForm.content})
-              .then(function (previewData) {
-                me.previewContent = previewData.content
-              })
-          } else {
-            me.previewContent = ''
-          }
-        }
-      },
       submitForm () {
         var me = this
         this.$refs.postForm.validate((valid) => {
@@ -180,41 +165,33 @@
         })
       },
 
-      onDrop (e) {
-        this.dragover = false
-        var files = e.dataTransfer.files
-
-        // 检查文件合法性
-        var checkSuccess = true
-        for (var j = 0; j < files.length; j++) {
-          if (!files[j].type.match(/image*/)) {
-            console.log('仅支持上传图片...', files[j])
-            checkSuccess = false
-            break
-          }
-        }
-        if (!checkSuccess) {
-          this.$notify.error({
-            message: '只能上传图片文件'
-          })
-        } else {
-          debugger
-        }
-      },
-
-      imgAdd (pos, file, fuck) {
-        this.imgFile[pos] = file
+      imgsAdd (files) {
         var me = this
         me.uploading = true
-        me.uploadingText = '正在上传第 ' + pos + ' 张图片...'
-        qiniuManager.upload(file).then(function (imageUrl) {
-          me.$refs.editor.$img2Url(pos, imageUrl)
+        me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+
+        var promises = []
+        for (var i = 0; i < files.length; i++) {
+          promises.push(qiniuManager.upload(files[i]))
+        }
+
+        when.all(promises).then(results => {
+          results.forEach(imageUrl => {
+            var editor = me.$refs.editor
+            editor.insertText(editor.getTextareaDom(), {
+              prefix: '![](' + imageUrl + ')\n',
+              subfix: '',
+              str: ''
+            })
+            me.uploading = false
+          })
+          me.uploading = false
+        }, errs => {
+          me.$notify.error({
+            message: '图片上传失败：' + errs
+          })
           me.uploading = false
         })
-      },
-
-      imgDel (pos) {
-        delete this.imgFile[pos]
       },
 
       fullScreen (status) {
@@ -236,52 +213,3 @@
     }
   }
 </script>
-
-<style scoped>
-  .content {
-    width: 100%;
-    min-height: 300px;
-    display: block;
-    resize: vertical;
-    padding: 5px 15px;
-    line-height: 1.5;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: inherit;
-    color: #606266;
-    background: #fff none;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    font-family: 'Monaco', courier, monospace;
-  }
-
-  .content.is-dragover {
-    background-color: rgba(32, 159, 255, .06);
-    border: 2px dashed #409eff;
-  }
-
-  .preview {
-    width: 100%;
-    min-height: 300px;
-    overflow: auto;
-    border: 1px solid #ccc;
-    width: 100%;
-    min-height: 300px;
-    display: block;
-    resize: vertical;
-    padding: 0px 5px;
-    line-height: 1.5;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: inherit;
-    color: #606266;
-    background: #fff none;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    font-family: 'Monaco', courier, monospace;
-  }
-</style>

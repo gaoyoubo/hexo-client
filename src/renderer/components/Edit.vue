@@ -6,22 +6,11 @@
         <el-input v-model="postForm.title" :readonly="true" :disabled="true"></el-input>
       </el-form-item>
 
-      <el-form-item label="内容" prop="content">
-        <el-tabs value="edit" @tab-click="preview">
-          <el-tab-pane label="编辑" name="edit">
-              <textarea v-model="postForm.content" class="content" placeholder="请输入内容"
-                        ref="txt"
-                        :class="{'is-dragover': dragover}"
-                        :style="{height: contentHeight}"
-                        @input="formChanged = true"
-                        @drop.prevent="onDrop"
-                        @dragover.prevent="dragover = true"
-                        @dragleave.prevent="dragover = false"></textarea>
-          </el-tab-pane>
-          <el-tab-pane label="预览" name="preview">
-            <div class="preview article-entry" v-html="previewContent" :style="{height: contentHeight}"></div>
-          </el-tab-pane>
-        </el-tabs>
+      <el-form-item label="内容" prop="content" v-loading="uploading" :element-loading-text="uploadingText">
+        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars"
+                      @imgsAdd="imgsAdd" @fullScreen="fullScreen"
+                      @change="formChanged = true"
+                      :style="{height: contentHeight}" :boxShadow="false"/>
       </el-form-item>
 
       <el-form-item label="标签" prop="tags">
@@ -61,7 +50,6 @@
 
 <script>
   import MainMenu from './MainMenu'
-  import hexoClient from '@/service/HexoClient'
   import qiniuManager from '@/service/QiniuManager'
   import when from 'when'
 
@@ -88,17 +76,51 @@
         },
         tags: [],
         categories: [],
-        previewContent: '',
-        dragover: false,
         uploading: false,
         uploadingText: 'loading...',
         contentHeight: '',
-        formChanged: false
+        formChanged: false,
+        fullScreenFlag: false,
+        toolbars: {
+          bold: true, // 粗体
+          italic: true, // 斜体
+          header: true, // 标题
+          underline: true, // 下划线
+          strikethrough: true, // 中划线
+          mark: true, // 标记
+          superscript: true, // 上角标
+          subscript: true, // 下角标
+          quote: true, // 引用
+          ol: true, // 有序列表
+          ul: true, // 无序列表
+          link: true, // 链接
+          imagelink: true, // 图片链接
+          code: true, // code
+          table: true, // 表格
+          fullscreen: true, // 全屏编辑
+          // readmodel: true, // 沉浸式阅读
+          // htmlcode: true, // 展示html源码
+          help: true, // 帮助
+          /* 1.3.5 */
+          undo: true, // 上一步
+          redo: true, // 下一步
+          // trash: true, // 清空
+          // save: true, // 保存（触发events中的save事件）
+          /* 1.4.2 */
+          navigation: true, // 导航目录
+          /* 2.1.8 */
+          alignleft: true, // 左对齐
+          aligncenter: true, // 居中
+          alignright: true, // 右对齐
+          /* 2.2.1 */
+          subfield: true, // 单双栏模式
+          preview: true // 预览
+        }
       }
     },
     mounted () {
-      this.handleResize()
-      window.addEventListener('resize', this.handleResize)
+      this.resize()
+      window.addEventListener('resize', this.resize)
       window.hexo.locals.get('tags').forEach(tag => this.tags.push(tag.name))
       window.hexo.locals.get('categories').forEach(category => this.categories.push(category.name))
 
@@ -137,7 +159,7 @@
       })
     },
     beforeDestroy () {
-      window.removeEventListener('resize', this.handleResize)
+      window.removeEventListener('resize', this.resize)
     },
     beforeRouteLeave (to, from, next) {
       if (this.formChanged) {
@@ -151,19 +173,6 @@
       }
     },
     methods: {
-      preview (tabPanel) {
-        if (tabPanel.name === 'preview') {
-          var me = this
-          if (me.postForm.content) {
-            window.hexo.post.render(new Date().getTime() + '.md', {content: this.postForm.content})
-              .then(function (previewData) {
-                me.previewContent = previewData.content
-              })
-          } else {
-            me.previewContent = ''
-          }
-        }
-      },
       submitForm () {
         var me = this
         this.$refs.postForm.validate((valid) => {
@@ -191,29 +200,7 @@
         })
       },
 
-      onDrop (e) {
-        this.dragover = false
-        var files = e.dataTransfer.files
-
-        // 检查文件合法性
-        var checkSuccess = true
-        for (var j = 0; j < files.length; j++) {
-          if (!files[j].type.match(/image*/)) {
-            console.log('仅支持上传图片...', files[j])
-            checkSuccess = false
-            break
-          }
-        }
-        if (!checkSuccess) {
-          this.$notify.error({
-            message: '只能上传图片文件'
-          })
-        } else {
-          this.upload(files)
-        }
-      },
-
-      upload (files) {
+      imgsAdd (files) {
         var me = this
         me.uploading = true
         me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
@@ -222,9 +209,16 @@
         for (var i = 0; i < files.length; i++) {
           promises.push(qiniuManager.upload(files[i]))
         }
+
         when.all(promises).then(results => {
           results.forEach(imageUrl => {
-            me.postForm.content = hexoClient.insertText(me.$refs.txt, '![](' + imageUrl + ')\n')
+            var editor = me.$refs.editor
+            editor.insertText(editor.getTextareaDom(), {
+              prefix: '![](' + imageUrl + ')\n',
+              subfix: '',
+              str: ''
+            })
+            me.uploading = false
           })
           me.uploading = false
         }, errs => {
@@ -235,8 +229,21 @@
         })
       },
 
-      handleResize () {
-        this.contentHeight = (document.documentElement.clientHeight - 430) + 'px'
+      fullScreen (status) {
+        this.fullScreenFlag = status
+      },
+
+      resize () {
+        if (this.fullScreenFlag) {
+          this.contentHeight = (document.documentElement.clientHeight) + 'px'
+        } else {
+          this.contentHeight = (document.documentElement.clientHeight - 370) + 'px'
+        }
+      }
+    },
+    watch: {
+      fullScreenFlag: function () {
+        this.resize()
       }
     }
   }
