@@ -1,7 +1,7 @@
 <template>
   <div id="app" :style="{'height': windowHeight}">
     <el-container v-if="inited">
-      <el-header>
+      <el-header style="padding: 0px;color: #333; line-height: 60px;">
         <main-menu></main-menu>
       </el-header>
       <el-container>
@@ -113,12 +113,6 @@
     flex: 1;
     box-sizing: border-box;
     min-width: 0;
-  }
-
-  .el-header {
-    color: #333;
-    line-height: 60px;
-    padding: 0px;
   }
 
   .el-aside {

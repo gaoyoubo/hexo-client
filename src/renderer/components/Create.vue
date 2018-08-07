@@ -7,8 +7,8 @@
       </el-form-item>
 
       <el-form-item label="内容" prop="content" v-loading="uploading" :element-loading-text="uploadingText">
-        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars"
-                      @imgsAdd="imgsAdd" @fullScreen="fullScreen"
+        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs = "true"
+                      @imgsAdd="imgsAdd" @fullScreen="fullScreen" @save="submitForm"
                       @change="formChanged = true"
                       :style="{height: contentHeight}" :boxShadow="false"/>
       </el-form-item>
@@ -104,7 +104,7 @@
           undo: true, // 上一步
           redo: true, // 下一步
           // trash: true, // 清空
-          // save: true, // 保存（触发events中的save事件）
+          save: true, // 保存（触发events中的save事件）
           /* 1.4.2 */
           navigation: true, // 导航目录
           /* 2.1.8 */
@@ -152,7 +152,7 @@
             }, function () {
               me.$notify.error({
                 title: '错误',
-                message: '发布失败'
+                message: '保存失败'
               })
             })
           } else {
