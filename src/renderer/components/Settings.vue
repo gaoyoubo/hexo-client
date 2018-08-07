@@ -5,7 +5,7 @@
         <el-tab-pane name="system">
           <span slot="label"><i class="el-icon-setting"></i> 系统配置</span>
           <el-form-item label="Hexo目录" label-width="120px">
-            <el-input v-model="sysConfig.base"/>
+            <el-input v-model="sysConfig.path"/>
           </el-form-item>
           <el-form-item label="七牛AccessKey" label-width="120px">
             <el-input v-model="sysConfig.qiniuAccessKey"/>
@@ -33,7 +33,7 @@
 
 <script>
   import MainMenu from './MainMenu'
-  import HexoClient from '@/HexoClient'
+  import configManager from '@/service/ConfigManager'
 
   export default {
     components: {MainMenu},
@@ -50,14 +50,14 @@
     },
     created () {
       var me = this
-      HexoClient.dbGet('sysConfig').then(doc => {
-        me.sysConfig = doc
+      configManager.getSysConfig().then(sysConfig => {
+        me.sysConfig = sysConfig
       })
     },
     methods: {
       saveConfig () {
         var me = this
-        HexoClient.dbSet('sysConfig', this.sysConfig).then(() => {
+        configManager.setSysConfig(this.sysConfig).then(() => {
           me.$notify({
             title: '成功',
             message: '保存成功',

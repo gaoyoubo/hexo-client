@@ -1,70 +1,57 @@
 <template>
-    <el-main>
+  <el-main>
 
-      <el-form :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
-        <el-form-item label="标题" prop="title">
-          <el-input v-model="postForm.title" @input="formChanged = true"></el-input>
+    <el-form :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
+      <el-form-item label="标题" prop="title">
+        <el-input v-model="postForm.title" @input="formChanged = true"></el-input>
+      </el-form-item>
+
+      <el-form-item label="内容" prop="content" v-loading="uploading" :element-loading-text="uploadingText">
+        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs = "true"
+                      @imgsAdd="imgsAdd" @fullScreen="fullScreen" @save="submitForm"
+                      @change="formChanged = true"
+                      :style="{height: contentHeight}" :boxShadow="false"/>
+      </el-form-item>
+
+      <el-form-item label="标签" prop="tags">
+        <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
+                   style="width:100%;" placeholder="请选择标签" @input="formChanged = true">
+          <el-option v-for="tag in tags"
+                     :key="tag"
+                     :label="tag"
+                     :value="tag">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="分类" prop="categories">
+        <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
+                   style="width:100%;" placeholder="请选择分类" @input="formChanged = true">
+          <el-option v-for="category in categories"
+                     :key="category"
+                     :label="category"
+                     :value="category">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item>
+        <el-form-item style="display:inline-block;">
+          <el-button type="primary" @click="submitForm()">保存</el-button>
         </el-form-item>
-
-        <el-form-item label="内容" prop="content">
-          <el-tabs value="edit" @tab-click="preview"
-                   v-loading="uploading" :element-loading-text="uploadingText">
-            <el-tab-pane label="编辑" name="edit">
-              <textarea v-model="postForm.content" class="content" placeholder="请输入内容"
-                        ref="txt"
-                        :class="{'is-dragover': dragover}"
-                        :style="{height: contentHeight}"
-                        @input="formChanged = true"
-                        @drop.prevent="onDrop"
-                        @dragover.prevent="dragover = true"
-                        @dragleave.prevent="dragover = false"
-                        @paste="onPaste"></textarea>
-            </el-tab-pane>
-            <el-tab-pane label="预览" name="preview">
-              <div class="preview article-entry" v-html="previewContent" :style="{height: contentHeight}"></div>
-            </el-tab-pane>
-          </el-tabs>
+        <el-form-item label="开启文章目录" style="display:inline-block;">
+          <el-switch v-model="postForm.toc" @input="formChanged = true"></el-switch>
         </el-form-item>
+      </el-form-item>
+    </el-form>
 
-        <el-form-item label="标签" prop="tags">
-          <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
-                     style="width:100%;" placeholder="请选择标签" @input="formChanged = true">
-            <el-option v-for="tag in tags"
-                       :key="tag"
-                       :label="tag"
-                       :value="tag">
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item label="分类" prop="categories">
-          <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
-                     style="width:100%;" placeholder="请选择分类" @input="formChanged = true">
-            <el-option v-for="category in categories"
-                       :key="category"
-                       :label="category"
-                       :value="category">
-            </el-option>
-          </el-select>
-        </el-form-item>
-
-        <el-form-item>
-          <el-form-item style="display:inline-block;">
-            <el-button type="primary" @click="submitForm()">保存</el-button>
-          </el-form-item>
-          <el-form-item label="开启文章目录" style="display:inline-block;">
-            <el-switch v-model="postForm.toc" @input="formChanged = true"></el-switch>
-          </el-form-item>
-        </el-form-item>
-      </el-form>
-
-    </el-main>
+  </el-main>
 </template>
 
 <script>
   import MainMenu from './MainMenu'
-  import HexoClient from '@/HexoClient'
-  import When from 'when'
+  import qiniuManager from '@/service/QiniuManager'
+  import when from 'when'
 
   export default {
     components: {MainMenu},
@@ -88,22 +75,56 @@
         },
         tags: [],
         categories: [],
-        previewContent: '',
-        dragover: false,
         uploading: false,
         uploadingText: 'loading...',
         contentHeight: '',
-        formChanged: false
+        formChanged: false,
+        fullScreenFlag: false,
+        toolbars: {
+          bold: true, // 粗体
+          italic: true, // 斜体
+          header: true, // 标题
+          underline: true, // 下划线
+          strikethrough: true, // 中划线
+          mark: true, // 标记
+          superscript: true, // 上角标
+          subscript: true, // 下角标
+          quote: true, // 引用
+          ol: true, // 有序列表
+          ul: true, // 无序列表
+          link: true, // 链接
+          imagelink: true, // 图片链接
+          code: true, // code
+          table: true, // 表格
+          fullscreen: true, // 全屏编辑
+          // readmodel: true, // 沉浸式阅读
+          // htmlcode: true, // 展示html源码
+          help: true, // 帮助
+          /* 1.3.5 */
+          undo: true, // 上一步
+          redo: true, // 下一步
+          // trash: true, // 清空
+          save: true, // 保存（触发events中的save事件）
+          /* 1.4.2 */
+          navigation: true, // 导航目录
+          /* 2.1.8 */
+          alignleft: true, // 左对齐
+          aligncenter: true, // 居中
+          alignright: true, // 右对齐
+          /* 2.2.1 */
+          subfield: true, // 单双栏模式
+          preview: true // 预览
+        }
       }
     },
     mounted () {
-      this.handleResize()
-      window.addEventListener('resize', this.handleResize)
+      this.resize()
+      window.addEventListener('resize', this.resize)
       window.hexo.locals.get('tags').forEach(tag => this.tags.push(tag.name))
       window.hexo.locals.get('categories').forEach(category => this.categories.push(category.name))
     },
     beforeDestroy () {
-      window.removeEventListener('resize', this.handleResize)
+      window.removeEventListener('resize', this.resize)
     },
     beforeRouteLeave (to, from, next) {
       if (this.formChanged) {
@@ -117,19 +138,6 @@
       }
     },
     methods: {
-      preview (tabPanel) {
-        if (tabPanel.name === 'preview') {
-          var me = this
-          if (me.postForm.content) {
-            window.hexo.post.render(new Date().getTime() + '.md', {content: this.postForm.content})
-              .then(function (previewData) {
-                me.previewContent = previewData.content
-              })
-          } else {
-            me.previewContent = ''
-          }
-        }
-      },
       submitForm () {
         var me = this
         this.$refs.postForm.validate((valid) => {
@@ -144,7 +152,7 @@
             }, function () {
               me.$notify.error({
                 title: '错误',
-                message: '发布失败'
+                message: '保存失败'
               })
             })
           } else {
@@ -157,127 +165,51 @@
         })
       },
 
-      onDrop (e) {
-        this.dragover = false
-        var files = e.dataTransfer.files
-
-        // 检查文件合法性
-        var checkSuccess = true
-        for (var j = 0; j < files.length; j++) {
-          if (!files[j].type.match(/image*/)) {
-            console.log('仅支持上传图片...', files[j])
-            checkSuccess = false
-            break
-          }
-        }
-        if (!checkSuccess) {
-          this.$notify.error({
-            message: '只能上传图片文件'
-          })
-        } else {
-          this.upload(files)
-        }
-      },
-
-      onPaste (event) {
-        var files = getPasteImages(event)
-        if (!files || files.length <= 0) {
-          return
-        }
-        event.preventDefault()
-
-        this.upload(files)
-
-        function getPasteImages (event) {
-          var images = []
-          if (!event.clipboardData || !event.clipboardData.items) {
-            return images
-          }
-          for (var i = 0; i < event.clipboardData.items.length; i++) {
-            if (event.clipboardData.items[i].type.indexOf('image') !== -1) {
-              var image = event.clipboardData.items[i].getAsFile()
-              if (image) {
-                images.push(image)
-              }
-            }
-          }
-          return images
-        }
-      },
-
-      upload (files) {
+      imgsAdd (files) {
         var me = this
         me.uploading = true
         me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+
         var promises = []
         for (var i = 0; i < files.length; i++) {
-          promises.push(HexoClient.upload(files[i]))
+          promises.push(qiniuManager.upload(files[i]))
         }
-        When.settle(promises).then(function (results) {
-          // [{'state': 'rejected', 'reason': 'A'}, {'state': 'fulfilled', 'value': 'B'}]
-          results.forEach(result => {
-            if (result.state === 'fulfilled') {
-              me.postForm.content = HexoClient.insertText(me.$refs.txt, '![](' + result.value + ')\n')
-            } else if (result.state === 'rejected') {
-              console.log(result)
-            }
+
+        when.all(promises).then(results => {
+          results.forEach(imageUrl => {
+            var editor = me.$refs.editor
+            editor.insertText(editor.getTextareaDom(), {
+              prefix: '![](' + imageUrl + ')\n',
+              subfix: '',
+              str: ''
+            })
+            me.uploading = false
+          })
+          me.uploading = false
+        }, errs => {
+          me.$notify.error({
+            message: '图片上传失败：' + errs
           })
           me.uploading = false
         })
       },
 
-      handleResize () {
-        this.contentHeight = (document.documentElement.clientHeight - 430) + 'px'
+      fullScreen (status) {
+        this.fullScreenFlag = status
+      },
+
+      resize () {
+        if (this.fullScreenFlag) {
+          this.contentHeight = (document.documentElement.clientHeight) + 'px'
+        } else {
+          this.contentHeight = (document.documentElement.clientHeight - 370) + 'px'
+        }
+      }
+    },
+    watch: {
+      fullScreenFlag: function () {
+        this.resize()
       }
     }
   }
 </script>
-
-<style scoped>
-  .content {
-    width: 100%;
-    min-height: 300px;
-    display: block;
-    resize: vertical;
-    padding: 5px 15px;
-    line-height: 1.5;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: inherit;
-    color: #606266;
-    background: #fff none;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    font-family: 'Monaco', courier, monospace;
-  }
-
-  .content.is-dragover {
-    background-color: rgba(32, 159, 255, .06);
-    border: 2px dashed #409eff;
-  }
-
-  .preview {
-    width: 100%;
-    min-height: 300px;
-    overflow: auto;
-    border: 1px solid #ccc;
-    width: 100%;
-    min-height: 300px;
-    display: block;
-    resize: vertical;
-    padding: 0px 5px;
-    line-height: 1.5;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: inherit;
-    color: #606266;
-    background: #fff none;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    font-family: 'Monaco', courier, monospace;
-  }
-</style>

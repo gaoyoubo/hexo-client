@@ -4,7 +4,7 @@
       <article-list v-on:selectedArticle="selectedArticle" v-on:loaded="articleLoaded"></article-list>
     </el-aside>
 
-    <el-main>
+    <el-main style="padding-top: 0px;">
       <article-view :id="selectedId"></article-view>
     </el-main>
   </el-container>
