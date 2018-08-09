@@ -7,7 +7,7 @@
       </el-form-item>
 
       <el-form-item label="内容" prop="content" v-loading="uploading" :element-loading-text="uploadingText">
-        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs = "true"
+        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs = "true" codeStyle="atom-one-dark"
                       @imgsAdd="imgsAdd" @fullScreen="fullScreen" @save="submitForm"
                       @change="formChanged = true"
                       :style="{height: contentHeight}" :boxShadow="false"/>
