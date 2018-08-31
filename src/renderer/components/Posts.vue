@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside style="min-width: 300px;" id="articleListContainer" @scroll.native="scroll">
-      <article-list v-on:loaded="loaded"></article-list>
+      <article-list></article-list>
     </el-aside>
 
     <el-main style="padding-top: 0px;">
@@ -21,14 +21,19 @@
     data () {
       return {}
     },
+    mounted () {
+      this.setscroll()
+    },
     methods: {
+      // 存储滚动位置
       scroll (e) {
         this.$store.dispatch('UiStatus/onscroll', {
           scrollTop: e.srcElement.scrollTop,
           scrollLeft: e.srcElement.scrollLeft
         })
       },
-      loaded () {
+      // 设置滚动位置
+      setscroll () {
         let ele = document.getElementById('articleListContainer')
         let scrollTop = this.$store.state.UiStatus.postListScrollTop || 0
         let scrollLeft = this.$store.state.UiStatus.postListScrollLeft || 0
