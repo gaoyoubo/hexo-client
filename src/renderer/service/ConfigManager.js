@@ -1,14 +1,15 @@
 import when from 'when'
 
 const storage = require('electron-json-storage')
+const CONFIG_KEY = 'sysConfig'
 
 class ConfigManager {
   getSysConfig () {
-    return this.get('sysConfig')
+    return this.get(CONFIG_KEY)
   }
 
   setSysConfig (options) {
-    return this.set('sysConfig', options)
+    return this.set(CONFIG_KEY, options)
   }
 
   set (key, options) {

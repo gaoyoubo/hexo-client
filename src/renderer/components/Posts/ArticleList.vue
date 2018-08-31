@@ -27,14 +27,13 @@
   const fs = require('fs')
   export default {
     data () {
-      return {
-        posts: []
-      }
+      return {}
     },
 
     methods: {
       selected: function (selectedId) {
-        this.$emit('selectedArticle', selectedId)
+        this.$store.dispatch('Hexo/selectPost', selectedId)
+
         this.$refs.post.forEach(item => {
           item.classList.remove('active')
           if (item.attributes['data-id'].nodeValue === selectedId) {
@@ -82,28 +81,6 @@
       }
     },
 
-    mounted () {
-      var me = this
-      var posts = window.hexo.locals.get('posts').sort('date', -1)
-      if (posts && posts.length > 0) {
-        window.lastPostId = posts.data[0]._id // 最后一篇文章
-        me.posts.splice(0, me.posts.length) // 清空列表中所有数据
-        posts.forEach(post => {
-          if (!window.selectedPostId) {
-            window.selectedPostId = post._id
-          }
-          me.posts.push({
-            id: post._id,
-            title: post.title,
-            date: post.date.format('YYYY-MM-DD hh:mm:ss'),
-            author: post.author,
-            tags: post.tags.data,
-            categories: post.categories.data
-          })
-        })
-      }
-    },
-
     updated () {
       var selectedPost = window.hexo.locals.get('posts').findOne({_id: window.selectedPostId})
       if (selectedPost) { // 如果上次选中的文章还存在，那么优先展示上次选中的
@@ -113,6 +90,12 @@
       }
 
       this.$emit('loaded')
+    },
+
+    computed: {
+      posts () {
+        return this.$store.getters['Hexo/posts']
+      }
     }
   }
 </script>
