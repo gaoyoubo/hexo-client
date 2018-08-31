@@ -60,7 +60,7 @@
       return {
         postForm: {
           title: '',
-          _content: '',
+          originContent: '',
           content: '',
           tags: [],
           categories: [],
@@ -150,7 +150,7 @@
               me.postForm.title = post.title.trim()
               break
             case '_content':
-              me.postForm._content = post._content.trim()
+              me.postForm.originContent = post._content.trim()
               me.postForm.content = post._content.trim()
               break
             case 'tags':
@@ -176,7 +176,7 @@
       },
 
       isFormChanged () {
-        return this.formChanged || this.postForm._content.trim() !== this.postForm.content.trim()
+        return this.formChanged || this.postForm.originContent.trim() !== this.postForm.content.trim()
       },
 
       async submitForm () {
@@ -185,7 +185,7 @@
           try {
             await this.$store.dispatch('Hexo/createPost', this.postForm)
             this.formChanged = false
-            this.postForm._content = this.postForm.content
+            this.postForm.originContent = this.postForm.content
             this.$notify({title: '成功', message: '修改成功', type: 'success'})
           } catch (err) {
             this.$notify.error({title: '错误', message: '修改失败'})
