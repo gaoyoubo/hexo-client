@@ -1,11 +1,11 @@
 <template>
   <el-container>
-    <el-aside style="min-width: 300px;" id="articleListContainer" @scroll.native="articleListScroll">
-      <article-list v-on:selectedArticle="selectedArticle" v-on:loaded="articleLoaded"></article-list>
+    <el-aside style="min-width: 300px;" id="articleListContainer" @scroll.native="scroll">
+      <article-list></article-list>
     </el-aside>
 
     <el-main style="padding-top: 0px;">
-      <article-view :id="selectedId"></article-view>
+      <article-view></article-view>
     </el-main>
   </el-container>
 </template>
@@ -19,26 +19,27 @@
     name: 'main-page',
     components: {MainMenu, ArticleList, ArticleView},
     data () {
-      return {
-        selectedId: '' // 已经选中的文章编号
-      }
+      return {}
+    },
+    mounted () {
+      this.setscroll()
     },
     methods: {
-      selectedArticle (id) {
-        this.selectedId = id
+      // 存储滚动位置
+      scroll (e) {
+        this.$store.dispatch('UiStatus/onscroll', {
+          scrollTop: e.srcElement.scrollTop,
+          scrollLeft: e.srcElement.scrollLeft
+        })
       },
-      articleListScroll (e) {
-        var ele = e.srcElement
-        window.articleListScroll = {
-          scrollTop: ele.scrollTop,
-          scrollLeft: ele.scrollLeft
-        }
-      },
-      articleLoaded () {
-        var ele = document.getElementById('articleListContainer')
-        if (window.articleListScroll) {
-          ele.scrollTop = window.articleListScroll.scrollTop
-          ele.scrollLeft = window.articleListScroll.scrollLeft
+      // 设置滚动位置
+      setscroll () {
+        let ele = document.getElementById('articleListContainer')
+        let scrollTop = this.$store.state.UiStatus.postListScrollTop || 0
+        let scrollLeft = this.$store.state.UiStatus.postListScrollLeft || 0
+        if (scrollTop > 0 || scrollLeft > 0) {
+          ele.scrollTop = scrollTop
+          ele.scrollLeft = scrollLeft
         }
       }
     }

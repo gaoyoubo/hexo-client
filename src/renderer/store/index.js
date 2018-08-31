@@ -7,5 +7,8 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules,
-  strict: process.env.NODE_ENV !== 'production'
+  namespaced: true,
+  // 如果启用严格默认，hexo.watch()的时候文件发生变更会抛出异常，所以这里默认关闭
+  strict: false
+  // strict: process.env.NODE_ENV !== 'production'
 })

@@ -7,9 +7,9 @@
       </el-form-item>
 
       <el-form-item label="内容" prop="content" v-loading="uploading" :element-loading-text="uploadingText">
-        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs = "true" codeStyle="atom-one-dark"
+        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs="true"
+                      codeStyle="atom-one-dark"
                       @imgsAdd="imgsAdd" @fullScreen="fullScreen" @save="submitForm"
-                      @change="formChanged = true"
                       :style="{height: contentHeight}" :boxShadow="false"/>
       </el-form-item>
 
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import MainMenu from './MainMenu'
   import qiniuManager from '@/service/QiniuManager'
   import when from 'when'
@@ -59,6 +60,7 @@
       return {
         postForm: {
           title: '',
+          originContent: '',
           content: '',
           tags: [],
           categories: [],
@@ -73,8 +75,6 @@
             {required: true, message: '请输入内容', trigger: 'blur'}
           ]
         },
-        tags: [],
-        categories: [],
         uploading: false,
         uploadingText: 'loading...',
         contentHeight: '',
@@ -120,8 +120,6 @@
     mounted () {
       this.resize()
       window.addEventListener('resize', this.resize)
-      window.hexo.locals.get('tags').forEach(tag => this.tags.push(tag.name))
-      window.hexo.locals.get('categories').forEach(category => this.categories.push(category.name))
     },
     beforeDestroy () {
       window.removeEventListener('resize', this.resize)
@@ -138,31 +136,24 @@
       }
     },
     methods: {
-      submitForm () {
-        var me = this
-        this.$refs.postForm.validate((valid) => {
-          if (valid) {
-            window.hexo.post.create(me.postForm, true).then(function () {
-              me.formChanged = false
-              me.$notify({
-                title: '成功',
-                message: '保存成功',
-                type: 'success'
-              })
-            }, function () {
-              me.$notify.error({
-                title: '错误',
-                message: '保存失败'
-              })
-            })
-          } else {
-            me.$notify.error({
-              title: '错误',
-              message: '表单验证失败'
-            })
-            return false
+      isFormChanged () {
+        return this.formChanged || this.postForm.originContent.trim() !== this.postForm.content.trim()
+      },
+
+      async submitForm () {
+        let valid = await this.$store.dispatch('Hexo/validatePostForm', this.$refs.postForm)
+        if (valid) {
+          try {
+            await this.$store.dispatch('Hexo/createPost', this.postForm)
+            this.formChanged = false
+            this.postForm.originContent = this.postForm.content
+            this.$notify({title: '成功', message: '保存成功', type: 'success'})
+          } catch (err) {
+            this.$notify.error({title: '错误', message: '保存失败'})
           }
-        })
+        } else {
+          this.$notify.error({title: '错误', message: '表单验证失败'})
+        }
       },
 
       imgsAdd (files) {
@@ -210,6 +201,12 @@
       fullScreenFlag: function () {
         this.resize()
       }
+    },
+    computed: {
+      ...mapGetters({
+        tags: 'Hexo/tags',
+        categories: 'Hexo/categories'
+      })
     }
   }
 </script>

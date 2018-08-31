@@ -29,7 +29,6 @@
 <script>
   import MainMenu from './components/MainMenu'
   import configManager from '@/service/ConfigManager'
-  import hexoManager from '@/service/HexoManager'
 
   export default {
     name: 'hexo-client',
@@ -37,8 +36,6 @@
     data () {
       return {
         path: '',
-        dialogFormVisible: false,
-        inited: false,
         windowHeight: '300px' // 窗口高度
       }
     },
@@ -51,25 +48,19 @@
 
     beforeDestroy () {
       window.removeEventListener('resize', this.resize)
-      hexoManager.unwatch()
+      this.$store.dispatch('Hexo/destroy')
     },
 
     methods: {
-      init () {
-        var me = this
+      async init () {
         var loading = this.$loading({
           lock: true,
           text: 'Loading...',
           spinner: 'el-icon-loading'
         })
-        hexoManager.init().then(function () {
-          me.inited = true
-          loading.close()
-        }, function (err) {
-          console.log(err)
-          me.dialogFormVisible = true
-          loading.close()
-        })
+        await this.$store.dispatch('Config/initConfig')
+        await this.$store.dispatch('Hexo/init')
+        loading.close()
       },
 
       resize () {
@@ -86,6 +77,15 @@
       beforeCloseDialog () {
         alert('请先填写正确的Hexo地址')
         return false
+      }
+    },
+
+    computed: {
+      inited () {
+        return this.$store.state.Hexo.inited
+      },
+      dialogFormVisible () {
+        return this.$store.state.Hexo.dialogFormVisible
       }
     }
   }

@@ -7,9 +7,9 @@
       </el-form-item>
 
       <el-form-item label="内容" prop="content" v-loading="uploading" :element-loading-text="uploadingText">
-        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs = "true" codeStyle="atom-one-dark"
-                      @imgsAdd="imgsAdd" @fullScreen="fullScreen"  @save="submitForm"
-                      @change="formChanged = true"
+        <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs="true"
+                      codeStyle="atom-one-dark"
+                      @imgsAdd="imgsAdd" @fullScreen="fullScreen" @save="submitForm"
                       :style="{height: contentHeight}" :boxShadow="false"/>
       </el-form-item>
 
@@ -49,6 +49,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   import MainMenu from './MainMenu'
   import qiniuManager from '@/service/QiniuManager'
   import when from 'when'
@@ -59,6 +60,7 @@
       return {
         postForm: {
           title: '',
+          originContent: '',
           content: '',
           tags: [],
           categories: [],
@@ -74,8 +76,6 @@
             {required: true, message: '请输入内容', trigger: 'blur'}
           ]
         },
-        tags: [],
-        categories: [],
         uploading: false,
         uploadingText: 'loading...',
         contentHeight: '',
@@ -121,48 +121,13 @@
     mounted () {
       this.resize()
       window.addEventListener('resize', this.resize)
-      window.hexo.locals.get('tags').forEach(tag => this.tags.push(tag.name))
-      window.hexo.locals.get('categories').forEach(category => this.categories.push(category.name))
-
-      var postId = this.$route.params.postId
-      var post = window.hexo.locals.get('posts').findOne({_id: postId})
-
-      var me = this
-      var keys = Object.keys(post)
-      keys.forEach(key => {
-        switch (key) {
-          case 'title':
-            me.postForm.title = post.title.trim()
-            break
-          case '_content':
-            me.postForm.content = post._content.trim()
-            break
-          case 'tags':
-            post.tags.forEach(tag => {
-              me.postForm.tags.push(tag.name)
-            })
-            break
-          case 'categories':
-            post.categories.forEach(cat => {
-              me.postForm.categories.push(cat.name)
-            })
-            break
-          case 'date':
-            me.postForm.date = post.date.format('YYYY-MM-DD HH:mm:ss')
-            break
-          case 'toc':
-            me.postForm.toc = post.toc
-            break
-          default:
-            break
-        }
-      })
+      this.init()
     },
     beforeDestroy () {
       window.removeEventListener('resize', this.resize)
     },
     beforeRouteLeave (to, from, next) {
-      if (this.formChanged) {
+      if (this.isFormChanged()) {
         if (window.confirm('有未保存的更改，确认离开吗？')) {
           next()
         } else {
@@ -173,31 +138,61 @@
       }
     },
     methods: {
-      submitForm () {
-        var me = this
-        this.$refs.postForm.validate((valid) => {
-          if (valid) {
-            window.hexo.post.create(me.postForm, true).then(function () {
-              me.formChanged = false
-              me.$notify({
-                title: '成功',
-                message: '修改成功',
-                type: 'success'
+      async init () {
+        let postId = this.$route.params.postId
+        let post = await this.$store.dispatch('Hexo/getPost', postId)
+
+        let me = this
+        let keys = Object.keys(post)
+        for (let i = 0; i < keys.length; i++) {
+          switch (keys[i]) {
+            case 'title':
+              me.postForm.title = post.title.trim()
+              break
+            case '_content':
+              me.postForm.originContent = post._content.trim()
+              me.postForm.content = post._content.trim()
+              break
+            case 'tags':
+              post.tags.forEach(tag => {
+                me.postForm.tags.push(tag.name)
               })
-            }, function () {
-              me.$notify.error({
-                title: '错误',
-                message: '修改成功'
+              break
+            case 'categories':
+              post.categories.forEach(cat => {
+                me.postForm.categories.push(cat.name)
               })
-            })
-          } else {
-            me.$notify.error({
-              title: '错误',
-              message: '表单验证失败'
-            })
-            return false
+              break
+            case 'date':
+              me.postForm.date = post.date.format('YYYY-MM-DD HH:mm:ss')
+              break
+            case 'toc':
+              me.postForm.toc = post.toc
+              break
+            default:
+              break
           }
-        })
+        }
+      },
+
+      isFormChanged () {
+        return this.formChanged || this.postForm.originContent.trim() !== this.postForm.content.trim()
+      },
+
+      async submitForm () {
+        let valid = await this.$store.dispatch('Hexo/validatePostForm', this.$refs.postForm)
+        if (valid) {
+          try {
+            await this.$store.dispatch('Hexo/createPost', this.postForm)
+            this.formChanged = false
+            this.postForm.originContent = this.postForm.content
+            this.$notify({title: '成功', message: '修改成功', type: 'success'})
+          } catch (err) {
+            this.$notify.error({title: '错误', message: '修改失败'})
+          }
+        } else {
+          this.$notify.error({title: '错误', message: '表单验证失败'})
+        }
       },
 
       imgsAdd (files) {
@@ -245,55 +240,12 @@
       fullScreenFlag: function () {
         this.resize()
       }
+    },
+    computed: {
+      ...mapGetters({
+        tags: 'Hexo/tags',
+        categories: 'Hexo/categories'
+      })
     }
   }
 </script>
-
-<style scoped>
-  .content {
-    width: 100%;
-    min-height: 300px;
-    display: block;
-    resize: vertical;
-    padding: 5px 15px;
-    line-height: 1.5;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: inherit;
-    color: #606266;
-    background: #fff none;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    font-family: 'Monaco', courier, monospace;
-  }
-
-  .content.is-dragover {
-    background-color: rgba(32, 159, 255, .06);
-    border: 2px dashed #409eff;
-  }
-
-  .preview {
-    width: 100%;
-    min-height: 300px;
-    overflow: auto;
-    border: 1px solid #ccc;
-    width: 100%;
-    min-height: 300px;
-    display: block;
-    resize: vertical;
-    padding: 0px 5px;
-    line-height: 1.5;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    font-size: inherit;
-    color: #606266;
-    background: #fff none;
-    border: 1px solid #dcdfe6;
-    border-radius: 4px;
-    -webkit-transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
-    font-family: 'Monaco', courier, monospace;
-  }
-</style>

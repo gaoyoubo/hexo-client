@@ -19,18 +19,10 @@
 </template>
 
 <script>
-  var electron = require('electron')
+  const electron = require('electron')
   export default {
-    props: {
-      id: {
-        type: String,
-        required: true
-      }
-    },
     data () {
-      return {
-        post: null
-      }
+      return {}
     },
     updated () {
       var articleDom = document.getElementsByClassName('article')
@@ -47,10 +39,9 @@
         }
       }
     },
-    watch: {
-      id: function () {
-        var posts = window.hexo.locals.get('posts')
-        this.post = posts.findOne({_id: this.id}).toObject()
+    computed: {
+      post () {
+        return this.$store.getters['Hexo/selectedPost']
       }
     }
   }
