@@ -24,7 +24,6 @@
 </template>
 
 <script>
-  const fs = require('fs')
   export default {
     data () {
       return {}
@@ -40,44 +39,46 @@
             item.classList.add('active')
           }
         })
-        window.selectedPostId = selectedId
       },
 
       editPost: function (id) {
         this.$router.push({name: 'edit', params: {postId: id}})
       },
 
-      deletePost: function (id) {
+      async deletePost (id) {
         if (confirm('是否确认删除该文章？')) {
-          var me = this
-          var post = window.hexo.locals.get('posts').findOne({_id: id})
-          if (!post) {
-            me.$message.error('文章不存在')
-          } else {
-            fs.unlink(post.full_source, (err) => {
-              if (err) {
-                console.error('删除文件失败:' + post.full_source)
-                me.$notify.error({title: '删除失败', message: err.message})
-              } else {
-                // 清理缓存
-                window.hexo.locals.invalidate()
-                // 从数组中删除
-                var index = -1
-                for (var i = 0; i < me.posts.length; i++) {
-                  if (me.posts[i].id === id) {
-                    index = i
-                    break
-                  }
-                }
-                if (index !== -1) {
-                  me.posts.splice(index, 1)
-                }
-
-                me.$notify({title: '成功', message: '删除成功', type: 'success'})
-              }
-            })
-          }
+          await this.$store.dispatch('Hexo/deletePost', id)
         }
+        // if (confirm('是否确认删除该文章？')) {
+        //   var me = this
+        //   var post = window.hexo.locals.get('posts').findOne({_id: id})
+        //   if (!post) {
+        //     me.$message.error('文章不存在')
+        //   } else {
+        //     fs.unlink(post.full_source, (err) => {
+        //       if (err) {
+        //         console.error('删除文件失败:' + post.full_source)
+        //         me.$notify.error({title: '删除失败', message: err.message})
+        //       } else {
+        //         // 清理缓存
+        //         window.hexo.locals.invalidate()
+        //         // 从数组中删除
+        //         var index = -1
+        //         for (var i = 0; i < me.posts.length; i++) {
+        //           if (me.posts[i].id === id) {
+        //             index = i
+        //             break
+        //           }
+        //         }
+        //         if (index !== -1) {
+        //           me.posts.splice(index, 1)
+        //         }
+        //
+        //         me.$notify({title: '成功', message: '删除成功', type: 'success'})
+        //       }
+        //     })
+        //   }
+        // }
       }
     },
 

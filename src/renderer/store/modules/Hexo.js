@@ -1,6 +1,7 @@
 import when from 'when'
 
 const Hexo = require('hexo')
+const fs = require('fs')
 
 const state = {
   instance: null,
@@ -77,8 +78,17 @@ const actions = {
   },
 
   // 删除文章
-  deletePost (context, postId) {
-    // let post = context.state.instance.locals.get('posts').findOne({_id: id})
+  async deletePost (context, postId) {
+    let post = await context.dispatch('getPost', postId)
+    let deferred = when.defer()
+    fs.unlink(post.full_source, (err) => {
+      if (err) {
+        deferred.reject(err)
+      } else {
+        deferred.resolve(post)
+      }
+    })
+    return deferred.promise
   }
 }
 const getters = {
