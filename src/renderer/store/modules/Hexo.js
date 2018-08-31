@@ -85,6 +85,7 @@ const actions = {
       if (err) {
         deferred.reject(err)
       } else {
+        context.commit('setSelectedPostId', undefined) // 重置一下当前选中的文章
         deferred.resolve(post)
       }
     })

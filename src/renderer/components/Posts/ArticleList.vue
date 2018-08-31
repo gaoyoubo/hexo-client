@@ -2,7 +2,7 @@
 
   <div class="article-list">
     <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)"
-         :data-id="post.id">
+         :data-id="post.id" v-bind:class="{active: post.id === selectedPostId}">
       <div class="article-list-item">
         <h4 class="article-title">{{ post.title }}</h4>
         <p class="article-desc"></p>
@@ -32,13 +32,6 @@
     methods: {
       selected: function (selectedId) {
         this.$store.dispatch('Hexo/selectPost', selectedId)
-
-        this.$refs.post.forEach(item => {
-          item.classList.remove('active')
-          if (item.attributes['data-id'].nodeValue === selectedId) {
-            item.classList.add('active')
-          }
-        })
       },
 
       editPost: function (id) {
@@ -48,54 +41,19 @@
       async deletePost (id) {
         if (confirm('是否确认删除该文章？')) {
           await this.$store.dispatch('Hexo/deletePost', id)
+          this.$notify({title: '成功', message: '删除成功', type: 'success'})
         }
-        // if (confirm('是否确认删除该文章？')) {
-        //   var me = this
-        //   var post = window.hexo.locals.get('posts').findOne({_id: id})
-        //   if (!post) {
-        //     me.$message.error('文章不存在')
-        //   } else {
-        //     fs.unlink(post.full_source, (err) => {
-        //       if (err) {
-        //         console.error('删除文件失败:' + post.full_source)
-        //         me.$notify.error({title: '删除失败', message: err.message})
-        //       } else {
-        //         // 清理缓存
-        //         window.hexo.locals.invalidate()
-        //         // 从数组中删除
-        //         var index = -1
-        //         for (var i = 0; i < me.posts.length; i++) {
-        //           if (me.posts[i].id === id) {
-        //             index = i
-        //             break
-        //           }
-        //         }
-        //         if (index !== -1) {
-        //           me.posts.splice(index, 1)
-        //         }
-        //
-        //         me.$notify({title: '成功', message: '删除成功', type: 'success'})
-        //       }
-        //     })
-        //   }
-        // }
       }
-    },
-
-    updated () {
-      var selectedPost = window.hexo.locals.get('posts').findOne({_id: window.selectedPostId})
-      if (selectedPost) { // 如果上次选中的文章还存在，那么优先展示上次选中的
-        this.selected(window.selectedPostId)
-      } else { // 否则展示最新的那篇文章
-        this.selected(window.lastPostId)
-      }
-
-      this.$emit('loaded')
     },
 
     computed: {
       posts () {
         return this.$store.getters['Hexo/posts']
+      },
+      selectedPostId () {
+        let selectedPost = this.$store.getters['Hexo/selectedPost']
+        // return this.$store.state.Hexo.selectedPostId
+        return selectedPost ? selectedPost._id : null
       }
     }
   }
