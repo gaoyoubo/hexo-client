@@ -26,6 +26,8 @@ function createWindow () {
     height: 563
   })
 
+  mainWindow.maximize()
+
   mainWindow.loadURL(winURL)
 
   mainWindow.on('closed', () => {
