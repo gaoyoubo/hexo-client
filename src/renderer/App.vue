@@ -1,7 +1,7 @@
 <template>
   <div id="app" :style="{'height': windowHeight}">
     <el-container v-if="inited">
-      <el-header style="padding: 0px;color: #333; line-height: 60px;">
+      <el-header class="header">
         <main-menu></main-menu>
       </el-header>
       <el-container>
@@ -97,6 +97,7 @@
     margin: 0px;
     padding: 0px;
     font-family: "Segoe UI", "Lucida Grande", Helvetica, Arial, "Microsoft YaHei", FreeSans, Arimo, "Droid Sans", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", FontAwesome, sans-serif;
+    background-color: #ffffff;
   }
 
   #app {
@@ -112,6 +113,14 @@
     flex: 1;
     box-sizing: border-box;
     min-width: 0;
+  }
+
+  #app .header {
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    padding: 0px;
+    color: #333;
+    line-height: 60px;
   }
 
   .el-aside {

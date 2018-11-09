@@ -4,11 +4,11 @@
       <article-list></article-list>
     </el-aside>
 
-    <el-scrollbar>
-      <el-main style="padding-top: 0px;">
-        <article-view></article-view>
-      </el-main>
-    </el-scrollbar>
+    <!--<el-scrollbar>-->
+    <el-main style="padding-top: 0px;">
+      <article-view></article-view>
+    </el-main>
+    <!--</el-scrollbar>-->
   </el-container>
 </template>
 

@@ -20,6 +20,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
+    titleBarStyle: 'hidden',
     useContentSize: true,
     width: 1000,
     height: 563
