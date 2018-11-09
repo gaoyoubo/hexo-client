@@ -25,12 +25,12 @@
       return {}
     },
     updated () {
-      var articleDom = document.getElementsByClassName('article')
+      let articleDom = document.getElementsByClassName('article')
       if (articleDom && articleDom.length > 0) {
-        var links = articleDom[0].getElementsByTagName('a')
-        for (var i = 0; i < links.length; i++) {
+        let links = articleDom[0].getElementsByTagName('a')
+        for (let i = 0; i < links.length; i++) {
           links[i].onclick = function (event) {
-            var href = event.target.getAttribute('href')
+            let href = event.target.getAttribute('href')
             if (href) {
               electron.shell.openExternal(href)
             }

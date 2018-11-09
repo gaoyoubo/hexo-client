@@ -53,14 +53,13 @@
 
     methods: {
       async init () {
-        var loading = this.$loading({
-          lock: true,
-          text: 'Loading...',
-          spinner: 'el-icon-loading'
-        })
-        await this.$store.dispatch('Config/initConfig')
-        await this.$store.dispatch('Hexo/init')
-        loading.close()
+        let loading = this.$loading({lock: true, text: 'Loading...', spinner: 'el-icon-loading'})
+        try {
+          await this.$store.dispatch('Config/initConfig')
+          await this.$store.dispatch('Hexo/init')
+        } finally {
+          loading.close()
+        }
       },
 
       resize () {

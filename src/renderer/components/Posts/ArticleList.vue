@@ -5,11 +5,10 @@
          :data-id="post.id" v-bind:class="{active: post.id === selectedPostId}">
       <div class="article-list-item">
         <h4 class="article-title">{{ post.title }}</h4>
-        <p class="article-desc"></p>
-        <ul class="article-info">
-          <li class="meta">{{ post.date }}</li>
-          <!--<li class="meta">{{ post.author }}</li>-->
-        </ul>
+        <div class="article-tags">
+          <span class="tag" v-for="(tag, index) in post.tags">#{{ tag.name }}</span>
+        </div>
+        <span class="article-date">{{ post.date }}</span>
 
         <a class="article-edit-btn" @click="editPost(post.id)">
           <i class="el-icon-edit-outline"></i>
@@ -52,7 +51,6 @@
       },
       selectedPostId () {
         let selectedPost = this.$store.getters['Hexo/selectedPost']
-        // return this.$store.state.Hexo.selectedPostId
         return selectedPost ? selectedPost._id : null
       }
     }
@@ -61,25 +59,25 @@
 
 <style>
   .article-list {
-    background-color: #F7FAFF;
+    background-color: rgba(247, 250, 255, 0.1);
   }
 
   .article-list-panel.active {
-    background-color: #DFEBFF;
+    background-color: rgba(245, 247, 250, 0.5);
   }
 
   .article-list-panel.active:hover {
-    background-color: #DFEBFF;
+    background-color: rgba(245, 247, 250, 0.5);
   }
 
   .article-list-panel:hover {
-    background-color: #ECF3FF;
+    background-color: rgba(236, 245, 255, 0.1);
   }
 
   .article-list-item {
     padding: 8px;
     position: relative;
-    border-bottom: 1px solid #ebeef5;
+    border-bottom: 1px solid rgba(235, 238, 245, 0.8);
     cursor: pointer;
   }
 
@@ -96,31 +94,28 @@
     word-break: break-all;
   }
 
-  .article-list-item .article-desc {
+  .article-list-item .article-tags {
     margin: 0px 0px 5px;
-    color: #999999;
-    font-size: 13px;
-    line-height: 1.2;
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 1;
   }
 
-  .article-list-item .article-info {
-    margin: 0px;
-    padding: 0px;
+  .article-list-item .article-tags .tag {
+    color: #999999;
     font-size: 13px;
-    color: #909399;
-    line-height: 1em;
-    list-style: none;
-    overflow: hidden;
   }
 
-  .article-list-item .article-info .meta {
-    float: left;
-    padding-right: 1em;
+  .article-list-item .article-tags .tag:after {
+    content: " ";
+  }
+
+  .article-list-item .article-date {
+    margin: 0px 0px 5px;
+    color: #999999;
+    font-size: 13px;
   }
 
   .article-edit-btn {
