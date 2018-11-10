@@ -12,8 +12,7 @@
     <el-dialog title="请先填写正确的Hexo安装目录：" :visible.sync="dialogFormVisible" :modal="true"
                :close-on-click-modal="false"
                :close-on-press-escape="false"
-               :show-close="true"
-               :before-close="beforeCloseDialog">
+               :show-close="false">
       <el-form>
         <el-form-item>
           <el-button type="primary" @click="showFileDialog">选择目录</el-button>
@@ -72,14 +71,8 @@
       setSysConfig () {
         var me = this
         configManager.setSysConfig({path: me.path}).then(function () {
-          me.dialogFormVisible = false
           me.init()
         })
-      },
-
-      beforeCloseDialog () {
-        alert('请先填写正确的Hexo地址')
-        return false
       },
 
       showFileDialog () {
@@ -98,7 +91,7 @@
         return this.$store.state.Hexo.inited
       },
       dialogFormVisible () {
-        return this.$store.state.Hexo.dialogFormVisible
+        return this.$store.state.UiStatus.dialogFormVisible
       }
     }
   }

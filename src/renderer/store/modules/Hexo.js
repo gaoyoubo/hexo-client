@@ -6,7 +6,6 @@ const fs = require('fs')
 const state = {
   instance: null,
   inited: false,
-  dialogFormVisible: false,
   selectedPostId: null
 }
 const mutations = {
@@ -15,9 +14,6 @@ const mutations = {
   },
   setInited (state) {
     state.inited = true
-  },
-  setDialogFormVisible (state) {
-    state.dialogFormVisible = true
   },
   setSelectedPostId (state, postId) {
     state.selectedPostId = postId
@@ -28,7 +24,7 @@ const actions = {
   async init (context) {
     let config = context.rootState.Config.config
     if (!config || !config.path) {
-      context.commit('setDialogFormVisible')
+      context.dispatch('UiStatus/setDialogFormVisible', true, {root: true})
     } else {
       let hexo = new Hexo(config.path, {
         debug: false
@@ -36,6 +32,7 @@ const actions = {
       await hexo.init()
       await hexo.watch()
 
+      context.dispatch('UiStatus/setDialogFormVisible', false, {root: true})
       context.commit('setInstance', hexo)
       context.commit('setInited')
     }
