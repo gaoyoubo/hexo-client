@@ -2,6 +2,9 @@ import when from 'when'
 
 const storage = require('electron-json-storage')
 const CONFIG_KEY = 'sysConfig'
+const os = require('os')
+
+storage.setDataPath(os.homedir() + '/.hexo-client')
 
 class ConfigManager {
   getSysConfig () {
