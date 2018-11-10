@@ -9,14 +9,17 @@
       </el-main>
     </el-container>
 
-    <el-dialog title="请先填写正确的Hexo地址：" :visible.sync="dialogFormVisible" :modal="true"
+    <el-dialog title="请先填写正确的Hexo安装目录：" :visible.sync="dialogFormVisible" :modal="true"
                :close-on-click-modal="false"
                :close-on-press-escape="false"
                :show-close="true"
                :before-close="beforeCloseDialog">
       <el-form>
         <el-form-item>
-          <el-input v-model="path" auto-complete="off"></el-input>
+          <el-button type="primary" @click="showFileDialog">选择目录</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-input v-model="path" :disabled="true" auto-complete="off" placeholder="请选择正确的Hexo安装目录"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -73,9 +76,20 @@
           me.init()
         })
       },
+
       beforeCloseDialog () {
         alert('请先填写正确的Hexo地址')
         return false
+      },
+
+      showFileDialog () {
+        var me = this
+        const dialog = require('electron').remote.dialog
+        dialog.showOpenDialog({properties: ['openDirectory']}, (filename) => {
+          if (filename.length === 1) {
+            me.path = filename[0]
+          }
+        })
       }
     },
 
