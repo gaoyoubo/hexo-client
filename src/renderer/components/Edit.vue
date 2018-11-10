@@ -1,7 +1,9 @@
 <template>
-  <el-main>
+  <el-main style="padding: 0px;">
 
-    <el-form :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
+    <dragable-area :height="35"/>
+
+    <el-form style="margin-top: 38px" :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
       <el-form-item label="标题" prop="title">
         <el-input v-model="postForm.title" :readonly="true" :disabled="true"></el-input>
       </el-form-item>
@@ -50,12 +52,12 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import MainMenu from './MainMenu'
+  import DragableArea from './DragableArea'
   import qiniuManager from '@/service/QiniuManager'
   import when from 'when'
 
   export default {
-    components: {MainMenu},
+    components: {DragableArea},
     data () {
       return {
         postForm: {

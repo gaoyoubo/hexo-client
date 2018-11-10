@@ -5,18 +5,7 @@
       <main-menu></main-menu>
 
       <el-main style="width: 100%; height: 100%; padding: 0px;">
-
         <router-view></router-view>
-
-        <!--
-        <el-header class="header">
-          <main-menu></main-menu>
-        </el-header>
-        <el-main style="width: 100%; height: 100%;">
-          <router-view></router-view>
-        </el-main>
-        -->
-
       </el-main>
     </el-container>
 

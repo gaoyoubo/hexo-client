@@ -1,6 +1,7 @@
 <template>
-  <el-main>
-    <el-form label-width="80px" :model="sysConfig">
+  <el-main style="padding: 0px;">
+    <dragable-area :height="45"/>
+    <el-form style="margin-top: 50px;" label-width="80px" :model="sysConfig">
       <el-form-item label="Hexo目录" label-width="120px">
         <el-input v-model="sysConfig.path"/>
       </el-form-item>
@@ -25,11 +26,11 @@
 </template>
 
 <script>
-  import MainMenu from './MainMenu'
+  import DragableArea from './DragableArea'
   import configManager from '@/service/ConfigManager'
 
   export default {
-    components: {MainMenu},
+    components: {DragableArea},
     data () {
       return {
         sysConfig: {

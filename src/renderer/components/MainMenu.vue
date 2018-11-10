@@ -1,12 +1,13 @@
 <template>
-  <el-aside class="sidebar" style="width: 64px;">
+  <el-aside class="sidebar dragable" style="width: 64px;">
     <div class="icon"></div>
     <el-menu :router="true"
              :collapse="true"
              default-active="/main"
              background-color="#333"
              text-color="#fff"
-             active-text-color="#ffd04b">
+             active-text-color="#ffd04b"
+             class="el-menu-vertical-demo">
       <el-menu-item index="/main">
         <i class="el-icon-document"></i>
         <span slot="title">文章</span>
@@ -41,6 +42,11 @@
     overflow: hidden;
     margin: 0px;
     padding: 0px;
+  }
+
+  .el-menu-vertical-demo:not(.el-menu--collapse) {
+    width: 200px;
+    min-height: 400px;
   }
 </style>
 

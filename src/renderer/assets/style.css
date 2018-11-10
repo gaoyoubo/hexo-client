@@ -22,17 +22,17 @@ html, body {
     min-width: 0;
 }
 
-#app .header {
+/*可拖拽窗口区域*/
+#app .dragable {
     -webkit-user-select: none;
     -webkit-app-region: drag;
-    padding: 0px;
-    color: #333;
-    line-height: 60px;
+    /*background-color: rgba(255, 0, 0, 0.50);*/
 }
 
 #app .sidebar {
     width: 64px;
     background-color: #333;
+    overflow: hidden;
 }
 
 #app .sidebar .icon {

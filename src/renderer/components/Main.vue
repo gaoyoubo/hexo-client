@@ -11,13 +11,12 @@
 </template>
 
 <script>
-  import MainMenu from './MainMenu'
   import ArticleList from './Posts/ArticleList'
   import ArticleView from './Posts/ArticleView'
 
   export default {
     name: 'main-page',
-    components: {MainMenu, ArticleList, ArticleView},
+    components: {ArticleList, ArticleView},
     data () {
       return {}
     },
