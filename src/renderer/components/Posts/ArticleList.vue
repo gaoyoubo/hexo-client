@@ -1,31 +1,41 @@
 <template>
 
-  <div class="article-list">
-    <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)"
-         :data-id="post.id" v-bind:class="{active: post.id === selectedPostId}">
-      <div class="article-list-item">
-        <h4 class="article-title">{{ post.title }}</h4>
-        <div class="article-tags">
-          <span class="tag" v-for="(tag, index) in post.tags">#{{ tag.name }}</span>
-        </div>
-        <span class="article-date">{{ post.date }}</span>
+  <el-scrollbar ref="scrollbar" class="el-scrollbar">
+    <div class="article-list">
+      <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)"
+           :data-id="post.id" v-bind:class="{active: post.id === selectedPostId}">
+        <div class="article-list-item">
+          <h4 class="article-title">{{ post.title }}</h4>
+          <div class="article-tags">
+            <span class="tag" v-for="(tag, index) in post.tags">#{{ tag.name }}</span>
+          </div>
+          <span class="article-date">{{ post.date }}</span>
 
-        <a class="article-edit-btn" @click="editPost(post.id)">
-          <i class="el-icon-edit-outline"></i>
-        </a>
-        <a class="article-delete-btn" @click="deletePost(post.id)">
-          <i class="el-icon-delete"></i>
-        </a>
+          <a class="article-edit-btn" @click="editPost(post.id)">
+            <i class="el-icon-edit-outline"></i>
+          </a>
+          <a class="article-delete-btn" @click="deletePost(post.id)">
+            <i class="el-icon-delete"></i>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
+  </el-scrollbar>
 
 </template>
 
 <script>
   export default {
     data () {
-      return {}
+      return {
+        scrollWrap: null // 滚动条容器
+      }
+    },
+
+    mounted () {
+      this.scrollWrap = this.$refs.scrollbar.$refs.wrap // 滚动条容器，详见：el-scrollbar组件源码
+      this.onscroll()
+      this.setScrollLocation()
     },
 
     methods: {
@@ -41,6 +51,27 @@
         if (confirm('是否确认删除该文章？')) {
           await this.$store.dispatch('Hexo/deletePost', id)
           this.$notify({title: '成功', message: '删除成功', type: 'success'})
+        }
+      },
+
+      // 监听滚动状态，并存储滚动位置
+      onscroll (e) {
+        var me = this
+        me.scrollWrap.addEventListener('scroll', function (e) {
+          me.$store.dispatch('UiStatus/onscroll', {
+            scrollTop: e.srcElement.scrollTop,
+            scrollLeft: e.srcElement.scrollLeft
+          })
+        })
+      },
+
+      // 设置滚动位置
+      setScrollLocation () {
+        let scrollTop = this.$store.state.UiStatus.postListScrollTop || 0
+        let scrollLeft = this.$store.state.UiStatus.postListScrollLeft || 0
+        if (scrollTop > 0 || scrollLeft > 0) {
+          this.scrollWrap.scrollTop = scrollTop
+          this.scrollWrap.scrollLeft = scrollLeft
         }
       }
     },
@@ -58,6 +89,11 @@
 </script>
 
 <style>
+  .el-scrollbar {
+    width: 380px;
+    border-right: 1px solid #F6F7F9;
+  }
+
   .article-list {
     background-color: rgba(247, 250, 255, 0.1);
   }
