@@ -2,7 +2,7 @@
   <el-main>
     <div class="about-content">
       <div>
-        <h3>说明：本人非专业前端，开发这个目的完全是为了自用，<span style="color: red;font-weight: bold;">欢迎各路大神添砖加瓦</span>。</h3>
+        <h3>项目地址</h3>
         <ul>
           <li>Github：<a @click="openUrl('https://github.com/gaoyoubo/hexo-client')" href="#">https://github.com/gaoyoubo/hexo-client</a>
           </li>
@@ -10,13 +10,28 @@
         </ul>
       </div>
       <div>
-        <h3>使用框架</h3>
+        <h3>站在巨人肩上</h3>
         <ul>
-          <li><a @click="openUrl('https://cn.vuejs.org')" href="#">Vue.js</a></li>
           <li><a @click="openUrl('https://github.com/electron/electron')" href="#">electron</a></li>
+          <li><a @click="openUrl('https://cn.vuejs.org')" href="#">Vue.js</a></li>
           <li><a @click="openUrl('https://github.com/SimulatedGREG/electron-vue')" href="#">electron-vue</a></li>
           <li><a @click="openUrl('http://element-cn.eleme.io')" href="#">element-ui</a></li>
         </ul>
+      </div>
+      <div>
+        <h3>捐赠</h3>
+        <div class="juanzeng">
+          <img src="../assets/alipay.png">
+          <div class="txt">
+            <span>支付宝</span>
+          </div>
+        </div>
+        <div class="juanzeng">
+          <img src="../assets/weixin.png">
+          <div class="txt">
+            <span>微信</span>
+          </div>
+        </div>
       </div>
     </div>
   </el-main>
@@ -49,5 +64,21 @@
 
   .about-content ul li {
     padding: 3px;
+  }
+
+  .juanzeng {
+    display: inline-table;
+    width: 210px;
+    padding: 20px;
+  }
+
+  .juanzeng img {
+    width: 210px;
+    height: 210px;
+  }
+
+  .juanzeng .txt {
+    font-size: 18px;
+    text-align: center;
   }
 </style>
