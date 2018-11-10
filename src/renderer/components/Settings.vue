@@ -1,26 +1,21 @@
 <template>
   <el-main>
     <el-form label-width="80px" :model="sysConfig">
-      <el-tabs value="system" tab-position="left">
-        <el-tab-pane name="system">
-          <span slot="label"><i class="el-icon-setting"></i> 系统配置</span>
-          <el-form-item label="Hexo目录" label-width="120px">
-            <el-input v-model="sysConfig.path"/>
-          </el-form-item>
-          <el-form-item label="七牛AccessKey" label-width="120px">
-            <el-input v-model="sysConfig.qiniuAccessKey"/>
-          </el-form-item>
-          <el-form-item label="七牛SecretKey" label-width="120px">
-            <el-input v-model="sysConfig.qiniuSecretKey"/>
-          </el-form-item>
-          <el-form-item label="七牛Bucket" label-width="120px">
-            <el-input v-model="sysConfig.qiniuBucket"/>
-          </el-form-item>
-          <el-form-item label="七牛域名" label-width="120px">
-            <el-input v-model="sysConfig.qiniuHost"/>
-          </el-form-item>
-        </el-tab-pane>
-      </el-tabs>
+      <el-form-item label="Hexo目录" label-width="120px">
+        <el-input v-model="sysConfig.path"/>
+      </el-form-item>
+      <el-form-item label="七牛AK" label-width="120px">
+        <el-input v-model="sysConfig.qiniuAccessKey"/>
+      </el-form-item>
+      <el-form-item label="七牛SK" label-width="120px">
+        <el-input v-model="sysConfig.qiniuSecretKey"/>
+      </el-form-item>
+      <el-form-item label="七牛Bucket" label-width="120px">
+        <el-input v-model="sysConfig.qiniuBucket"/>
+      </el-form-item>
+      <el-form-item label="七牛域名" label-width="120px">
+        <el-input v-model="sysConfig.qiniuHost"/>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveConfig">保存</el-button>
         <el-button type="primary" icon="el-icon-upload" @click="generateAndDeploy">生成发布</el-button>
