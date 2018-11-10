@@ -30,6 +30,23 @@ html, body {
     line-height: 60px;
 }
 
+#app .sidebar {
+    width: 64px;
+    background-color: #333;
+}
+
+#app .sidebar .icon {
+    width: 64px;
+    height: 64px;
+    margin-top: 30px;
+    background: url("icon.png") no-repeat center center;
+    background-size: 80%;
+}
+
+#app .sidebar .el-menu-item [class^=el-icon-] {
+    font-size: 24px;
+}
+
 .el-aside {
     color: #333;
 }

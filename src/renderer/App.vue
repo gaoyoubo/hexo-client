@@ -1,12 +1,23 @@
 <template>
   <div id="app" :style="{'height': windowHeight}">
     <el-container v-if="inited">
-      <el-header class="header">
-        <main-menu></main-menu>
-      </el-header>
-      <el-container>
+
+      <main-menu></main-menu>
+
+      <el-main style="width: 100%; height: 100%; padding: 0px;">
+
         <router-view></router-view>
-      </el-container>
+
+        <!--
+        <el-header class="header">
+          <main-menu></main-menu>
+        </el-header>
+        <el-main style="width: 100%; height: 100%;">
+          <router-view></router-view>
+        </el-main>
+        -->
+
+      </el-main>
     </el-container>
 
     <el-dialog title="请先填写正确的Hexo地址：" :visible.sync="dialogFormVisible" :modal="true"

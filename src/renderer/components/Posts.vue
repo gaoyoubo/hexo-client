@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container style="height: 100%;">
     <el-aside style="min-width: 300px;" id="articleListContainer" @scroll.native="scroll">
       <article-list></article-list>
     </el-aside>
