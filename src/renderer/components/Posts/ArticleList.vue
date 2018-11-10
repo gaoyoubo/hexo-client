@@ -91,33 +91,29 @@
 <style>
   .el-scrollbar {
     width: 380px;
-    border-right: 1px solid #F6F7F9;
+    border-right: 1px solid #E9E9E9;
   }
 
   .article-list {
-    background-color: rgba(247, 250, 255, 0.1);
+    background-color: #FAFAFA;
   }
 
   .article-list-panel.active {
-    background-color: rgba(245, 247, 250, 0.5);
-  }
-
-  .article-list-panel.active:hover {
-    background-color: rgba(245, 247, 250, 0.5);
-  }
-
-  .article-list-panel:hover {
-    background-color: rgba(236, 245, 255, 0.1);
+    background-color: #EEEEEE;
   }
 
   .article-list-item {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    color: #727272;
+    font-size: 13px;
     padding: 8px;
     position: relative;
-    border-bottom: 1px solid rgba(235, 238, 245, 0.8);
     cursor: pointer;
+    /*border-bottom: 1px solid rgba(235, 238, 245, 0.8);*/
   }
 
   .article-list-item .article-title {
+    color: #323232;
     margin: 0px 0px 5px;
     font-weight: 400;
     font-size: 17px;
@@ -140,8 +136,6 @@
   }
 
   .article-list-item .article-tags .tag {
-    color: #999999;
-    font-size: 13px;
   }
 
   .article-list-item .article-tags .tag:after {
@@ -150,13 +144,11 @@
 
   .article-list-item .article-date {
     margin: 0px 0px 5px;
-    color: #999999;
-    font-size: 13px;
   }
 
   .article-edit-btn {
     top: 5px;
-    right: 0px;
+    right: 6px;
     opacity: 0;
     position: absolute;
     padding: 5px 6px;
@@ -170,7 +162,7 @@
 
   .article-delete-btn {
     top: 5px;
-    right: 30px;
+    right: 36px;
     opacity: 0;
     position: absolute;
     padding: 5px 6px;
@@ -183,7 +175,7 @@
   }
 
   .article-edit-btn:hover, .article-delete-btn:hover {
-    background-color: #ffffed;
+    background-color: #c0c0c0;
   }
 
   .article-list-panel:hover .article-edit-btn,
