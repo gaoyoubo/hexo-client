@@ -1,15 +1,14 @@
 <template>
   <el-aside class="sidebar" style="width: 64px;">
-    <!--<img class="icon" src="../assets/icon.png"/>-->
     <div class="icon"></div>
     <el-menu :router="true"
              :collapse="true"
-             default-active="/posts"
+             default-active="/main"
              background-color="#333"
              text-color="#fff"
              active-text-color="#ffd04b"
              class="el-menu-vertical-demo">
-      <el-menu-item index="/posts">
+      <el-menu-item index="/main">
         <i class="el-icon-document"></i>
         <span slot="title">文章</span>
       </el-menu-item>

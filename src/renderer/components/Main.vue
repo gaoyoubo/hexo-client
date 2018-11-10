@@ -1,10 +1,6 @@
 <template>
   <el-container style="height: 100%;">
-    <!--<el-aside style="min-width: 300px;" id="articleListContainer" @scroll.native="scroll">-->
-    <!--<el-scrollbar style="width: 300px">-->
     <article-list></article-list>
-    <!--</el-scrollbar>-->
-    <!--</el-aside>-->
 
     <el-scrollbar style="width: 100%">
       <el-main style="padding-top: 0px;">
