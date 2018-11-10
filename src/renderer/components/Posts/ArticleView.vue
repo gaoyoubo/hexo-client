@@ -2,7 +2,7 @@
   <div v-if="post">
     <article class="article">
       <div class="article-inner">
-        <header class="article-header">
+        <header class="article-header dragable">
           <h1 class="article-title">{{ post.title }}</h1>
           <label class="article-time">{{ post.date.format('YYYY-MM-DD HH:mm:ss') }}</label>
           <label class="article-cat" v-for="(category, index) in post.categories.data">
@@ -25,12 +25,12 @@
       return {}
     },
     updated () {
-      var articleDom = document.getElementsByClassName('article')
+      let articleDom = document.getElementsByClassName('article')
       if (articleDom && articleDom.length > 0) {
-        var links = articleDom[0].getElementsByTagName('a')
-        for (var i = 0; i < links.length; i++) {
+        let links = articleDom[0].getElementsByTagName('a')
+        for (let i = 0; i < links.length; i++) {
           links[i].onclick = function (event) {
-            var href = event.target.getAttribute('href')
+            let href = event.target.getAttribute('href')
             if (href) {
               electron.shell.openExternal(href)
             }

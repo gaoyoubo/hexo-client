@@ -20,10 +20,13 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
+    titleBarStyle: 'hidden',
     useContentSize: true,
     width: 1000,
     height: 563
   })
+
+  mainWindow.maximize()
 
   mainWindow.loadURL(winURL)
 
@@ -240,6 +243,21 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+/**
+ * 防止应用多开
+ * 当进程是第一个实例时，返回false
+ * 如果是第二个实例时，返回true，并且执行第一个实例的回调函数
+ */
+const shouldQuit = app.makeSingleInstance((commandLine, workingDir) => {
+  if (mainWindow) {
+    mainWindow.isMinimized() && mainWindow.restore()
+    mainWindow.focus()
+  }
+})
+if (shouldQuit) {
+  app.quit()
+}
 
 /**
  * Auto Updater
