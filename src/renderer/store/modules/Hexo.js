@@ -28,7 +28,6 @@ const actions = {
     } else {
       let hexo = new Hexo(config.path, {
         debug: false,
-        safe: true, // 开启安全模式。不加载任何插件。
         silent: true // 开启安静模式。不在终端中显示任何信息。
       })
       await hexo.init()
