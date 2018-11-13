@@ -15,13 +15,13 @@
 - 支持hexo deploy
 
 ### 截屏预览
-![](http://file.mspring.org/2a610b3b3e6a4dfc1132039145832472!detail)
-![](http://file.mspring.org/0021d74d369085c91e861d483659fa32!detail)
+![](http://file.mspring.org/2a610b3b3e6a4dfc1132039145832472)
+![](http://file.mspring.org/0021d74d369085c91e861d483659fa32)
 
 ### 下载地址
-Mac版：https://pan.baidu.com/s/1E-5KrusoBuFGRTunTBqPJQ   提取码：2v2q
-Windows版本：请自行源码编译。
-Linux版本：请自行源码编译。
+- Mac版：https://pan.baidu.com/s/1E-5KrusoBuFGRTunTBqPJQ   提取码：2v2q
+- Windows版本：请自行源码编译。
+- Linux版本：请自行源码编译。
 
 ### TODO
 - 自动初始化hexo
