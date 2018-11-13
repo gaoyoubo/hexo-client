@@ -21,9 +21,7 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     titleBarStyle: 'hidden',
-    useContentSize: true,
-    width: 1000,
-    height: 563
+    useContentSize: true
   })
 
   mainWindow.maximize()

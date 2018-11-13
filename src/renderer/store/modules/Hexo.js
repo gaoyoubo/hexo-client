@@ -27,7 +27,9 @@ const actions = {
       context.dispatch('UiStatus/setDialogFormVisible', true, {root: true})
     } else {
       let hexo = new Hexo(config.path, {
-        debug: false
+        debug: false,
+        safe: true, // 开启安全模式。不加载任何插件。
+        silent: true // 开启安静模式。不在终端中显示任何信息。
       })
       await hexo.init()
       await hexo.watch()
@@ -126,10 +128,14 @@ const getters = {
   selectedPost: state => {
     let posts = state.instance.locals.get('posts').sort('date', -1)
     let selectedPostId = state.selectedPostId
-    if (!selectedPostId) { // 如果没选中，那么默认显示第一篇
+    if (!selectedPostId && posts.length > 0) { // 如果没选中，那么默认显示第一篇
       selectedPostId = posts.toArray()[0].toObject()._id
     }
-    return posts.findOne({_id: selectedPostId}).toObject()
+    if (!selectedPostId) {
+      return
+    }
+    var post = posts.findOne({_id: selectedPostId}).toObject()
+    return post
   }
 }
 export default {

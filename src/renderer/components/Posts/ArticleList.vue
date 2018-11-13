@@ -1,7 +1,7 @@
 <template>
 
   <el-scrollbar ref="scrollbar" class="el-scrollbar">
-    <div class="article-list">
+    <div class="article-list" v-if="posts.length > 0">
       <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)"
            :data-id="post.id" v-bind:class="{active: post.id === selectedPostId}">
         <div class="article-list-item">
@@ -19,6 +19,9 @@
           </a>
         </div>
       </div>
+    </div>
+    <div class="article-none-panel" v-if="posts.length === 0">
+      无文章
     </div>
   </el-scrollbar>
 
@@ -96,6 +99,14 @@
 
   .article-list {
     background-color: #FAFAFA;
+  }
+
+  .article-none-panel {
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    color: #727272;
+    text-align: center;
+    margin-top: 20px;
+    size: 24px;
   }
 
   .article-list-panel.active {
