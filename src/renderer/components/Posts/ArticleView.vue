@@ -3,7 +3,7 @@
     <el-main v-if="post" style="padding-top: 0px;">
       <article class="article">
         <div class="article-inner">
-          <header class="article-header dragable">
+          <header class="article-header">
             <h1 class="article-title">{{ post.title }}</h1>
             <label class="article-time">{{ post.date.format('YYYY-MM-DD HH:mm:ss') }}</label>
             <label class="article-cat" v-for="(category, index) in post.categories.data">

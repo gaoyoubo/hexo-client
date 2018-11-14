@@ -1,7 +1,7 @@
 <template>
   <el-container style="height: 100%;">
-    <article-list></article-list>
-    <article-view></article-view>
+      <article-list></article-list>
+      <article-view></article-view>
   </el-container>
 </template>
 

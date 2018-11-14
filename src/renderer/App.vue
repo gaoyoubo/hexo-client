@@ -1,11 +1,19 @@
 <template>
   <div id="app" :style="{'height': windowHeight}">
     <el-container v-if="inited">
+      <el-aside class="sidebar dragable" style="width: 64px;">
+        <main-menu></main-menu>
+      </el-aside>
 
-      <main-menu></main-menu>
-
-      <el-main style="width: 100%; height: 100%; padding: 0px;">
-        <router-view></router-view>
+      <el-main class="app-main">
+        <el-container class="app-container">
+          <el-header class="header dragable" style="height: 22px;">
+            HexoClient
+          </el-header>
+          <el-main class="main">
+            <router-view></router-view>
+          </el-main>
+        </el-container>
       </el-main>
     </el-container>
 
@@ -96,3 +104,32 @@
     }
   }
 </script>
+
+<style scoped>
+  .app-main {
+    height: 100%;
+    padding: 0px;
+  }
+
+  .app-container {
+    width: 100%;
+    height: 100%;
+    padding: 0px;
+  }
+
+  .app-container .header {
+    line-height: 22px;
+    background-color: rgb(221, 221, 221);
+    color: rgb(51, 51, 51);
+    text-align: center;
+    vertical-align: middle;
+    font-size: 14px;
+    user-select: none;
+    font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
+  }
+
+  .app-container .main {
+    height: 100%;
+    padding: 0px;
+  }
+</style>

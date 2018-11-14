@@ -1,5 +1,5 @@
 <template>
-  <el-aside class="sidebar dragable" style="width: 64px;">
+  <div>
     <div class="icon"></div>
     <el-menu :router="true"
              :collapse="true"
@@ -29,7 +29,7 @@
         <span slot="title">关于</span>
       </el-menu-item>
     </el-menu>
-  </el-aside>
+  </div>
 </template>
 
 <script>

@@ -1,8 +1,5 @@
 <template>
   <el-main style="padding: 0px;">
-
-    <dragable-area :height="35"/>
-
     <el-form style="margin-top: 38px" :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
       <el-form-item label="标题" prop="title">
         <el-input v-model="postForm.title" @input="formChanged = true"></el-input>
@@ -52,12 +49,10 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import DragableArea from './DragableArea'
   import qiniuManager from '@/service/QiniuManager'
   import when from 'when'
 
   export default {
-    components: {DragableArea},
     data () {
       return {
         postForm: {

@@ -1,6 +1,5 @@
 <template>
   <el-main style="padding: 0px;">
-    <dragable-area :height="45"/>
     <div class="about-content">
       <div>
         <h3>项目地址</h3>
@@ -39,10 +38,7 @@
 </template>
 
 <script>
-  import DragableArea from './DragableArea'
-
   export default {
-    components: {DragableArea},
     data () {
       return {}
     },
