@@ -1,12 +1,7 @@
 <template>
   <el-container style="height: 100%;">
     <article-list></article-list>
-
-    <el-scrollbar style="width: 100%">
-      <el-main style="padding-top: 0px;">
-        <article-view></article-view>
-      </el-main>
-    </el-scrollbar>
+    <article-view></article-view>
   </el-container>
 </template>
 
@@ -22,8 +17,7 @@
     },
     mounted () {
     },
-    methods: {
-    }
+    methods: {}
   }
 </script>
 

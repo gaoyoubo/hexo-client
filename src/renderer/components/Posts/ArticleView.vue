@@ -1,21 +1,23 @@
 <template>
-  <div v-if="post">
-    <article class="article">
-      <div class="article-inner">
-        <header class="article-header dragable">
-          <h1 class="article-title">{{ post.title }}</h1>
-          <label class="article-time">{{ post.date.format('YYYY-MM-DD HH:mm:ss') }}</label>
-          <label class="article-cat" v-for="(category, index) in post.categories.data">
-            <el-tag size="small">{{ category.name }}</el-tag>
-          </label>
-          <label class="article-tag" v-for="(tag, index) in post.tags.data">
-            <el-tag type="info" size="small">{{ tag.name }}</el-tag>
-          </label>
-        </header>
-        <div class="article-entry" v-html="post.content"></div>
-      </div>
-    </article>
-  </div>
+  <el-scrollbar style="width: 100%">
+    <el-main v-if="post" style="padding-top: 0px;">
+      <article class="article">
+        <div class="article-inner">
+          <header class="article-header dragable">
+            <h1 class="article-title">{{ post.title }}</h1>
+            <label class="article-time">{{ post.date.format('YYYY-MM-DD HH:mm:ss') }}</label>
+            <label class="article-cat" v-for="(category, index) in post.categories.data">
+              <el-tag size="small">{{ category.name }}</el-tag>
+            </label>
+            <label class="article-tag" v-for="(tag, index) in post.tags.data">
+              <el-tag type="info" size="small">{{ tag.name }}</el-tag>
+            </label>
+          </header>
+          <div class="article-entry" v-html="post.content"></div>
+        </div>
+      </article>
+    </el-main>
+  </el-scrollbar>
 </template>
 
 <script>

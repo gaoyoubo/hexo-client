@@ -16,6 +16,10 @@
         <i class="el-icon-edit"></i>
         <span slot="title">发表</span>
       </el-menu-item>
+      <el-menu-item index="/search">
+        <i class="el-icon-search"></i>
+        <span slot="title">搜索</span>
+      </el-menu-item>
       <el-menu-item index="/settings">
         <i class="el-icon-setting"></i>
         <span slot="title">配置</span>
