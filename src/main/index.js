@@ -159,18 +159,6 @@ function createMenu () {
           }
         }
       ]
-    },
-    {
-      label: '帮助',
-      role: 'help',
-      submenu: [
-        {
-          label: '关于',
-          click: function () {
-            require('electron').shell.openExternal('http://www.mspring.org')
-          }
-        }
-      ]
     }
   ]
   if (process.platform === 'darwin') {
@@ -178,6 +166,16 @@ function createMenu () {
       label: app.getName(),
       submenu: [
         {role: 'about'},
+        {
+          label: '配置',
+          accelerator: 'Cmd+,',
+          enabled: true,
+          click: function () {
+            if (mainWindow) {
+              mainWindow.webContents.send('settings')
+            }
+          }
+        },
         {type: 'separator'},
         {role: 'services', submenu: []},
         {type: 'separator'},

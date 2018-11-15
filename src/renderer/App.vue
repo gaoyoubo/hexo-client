@@ -53,10 +53,12 @@
     },
 
     created () {
-      // 蒋婷darkMode的切换
       var me = this
       ipcRenderer.on('darkMode', function (eventEmitter, darkMode) {
         me.isDark = darkMode
+      })
+      ipcRenderer.on('settings', function (eventEmitter) {
+        me.$router.push({name: 'settings'})
       })
     },
 
@@ -130,10 +132,12 @@
   .app-container .header {
     line-height: 22px;
     background-color: rgb(221, 221, 221);
+    border-bottom: 1px solid rgb(221, 221, 221);
     color: rgb(51, 51, 51);
     text-align: center;
     vertical-align: middle;
     font-size: 14px;
+    font-weight: bold;
     user-select: none;
   }
 

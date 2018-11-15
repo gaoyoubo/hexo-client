@@ -1,5 +1,4 @@
 * {
-    -webkit-user-select: none;
     background: transparent;
     font-family: -apple-system, "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
 }
@@ -62,7 +61,6 @@ html, body {
     position: relative;
     background: #fff;
     -webkit-transition: all 0.2s ease-in;
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 
 .article img {
