@@ -7,7 +7,7 @@
 
       <el-main class="app-main">
         <el-container class="app-container">
-          <el-header class="header dragable" style="height: 22px;">
+          <el-header class="header dragable" :class="{dark: isDark}" style="height: 22px;">
             HexoClient
           </el-header>
           <el-main class="main">
@@ -39,6 +39,7 @@
 <script>
   import MainMenu from './components/MainMenu'
   import configManager from '@/service/ConfigManager'
+  import { ipcRenderer } from 'electron'
 
   export default {
     name: 'hexo-client',
@@ -46,8 +47,17 @@
     data () {
       return {
         path: '',
+        isDark: true,
         windowHeight: '300px' // 窗口高度
       }
+    },
+
+    created () {
+      // 蒋婷darkMode的切换
+      var me = this
+      ipcRenderer.on('darkMode', function (eventEmitter, darkMode) {
+        me.isDark = darkMode
+      })
     },
 
     mounted () {
@@ -125,7 +135,11 @@
     vertical-align: middle;
     font-size: 14px;
     user-select: none;
-    font-family: system, -apple-system, ".SFNSDisplay-Regular", "Helvetica Neue", Helvetica, "Segoe UI", sans-serif;
+  }
+
+  .app-container .header.dark {
+    background-color: #333;
+    color: #e4e4e4;
   }
 
   .app-container .main {

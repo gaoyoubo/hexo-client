@@ -1,3 +1,9 @@
+* {
+    -webkit-user-select: none;
+    background: transparent;
+    font-family: -apple-system, "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+}
+
 html, body {
     height: 100%;
     overflow: hidden;

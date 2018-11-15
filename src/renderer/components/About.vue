@@ -56,7 +56,6 @@
   .about-content {
     margin: 50px;
     font-size: 15px;
-    font-family: Georgia, "Times New Roman", Times, Kai, "Kaiti SC", KaiTi, BiauKai, "FontAwesome", serif;
   }
 
   .about-content ul li {

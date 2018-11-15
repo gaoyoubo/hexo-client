@@ -102,7 +102,6 @@
   }
 
   .article-none-panel {
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     color: #727272;
     text-align: center;
     margin-top: 20px;
@@ -114,7 +113,6 @@
   }
 
   .article-list-item {
-    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
     color: #727272;
     font-size: 13px;
     padding: 8px;

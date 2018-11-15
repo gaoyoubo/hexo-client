@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow, Menu, systemPreferences } from 'electron'
 
 /**
  * Set `__static` path to static files in production
@@ -20,6 +20,7 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
+    show: false,
     titleBarStyle: 'hidden',
     useContentSize: true
   })
@@ -30,6 +31,12 @@ function createWindow () {
 
   mainWindow.on('closed', () => {
     mainWindow = null
+  })
+
+  // 窗口加载完之后显示
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
+    sendDarkMode()
   })
 }
 
@@ -122,24 +129,6 @@ function createMenu () {
               focusedWindow.toggleDevTools()
             }
           }
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: '应用程序菜单演示',
-          click: function (item, focusedWindow) {
-            if (focusedWindow) {
-              const options = {
-                type: 'info',
-                title: '应用程序菜单演示',
-                buttons: ['好的'],
-                message: '此演示用于 "菜单" 部分, 展示如何在应用程序菜单中创建可点击的菜单项.'
-              }
-              require('electron').dialog.showMessageBox(focusedWindow, options, function () {
-              })
-            }
-          }
         }
       ]
     },
@@ -199,30 +188,15 @@ function createMenu () {
         {role: 'quit'}
       ]
     })
-
-    // Edit menu
-    template[1].submenu.push(
-      {type: 'separator'},
-      {
-        label: 'Speech',
-        submenu: [
-          {role: 'startspeaking'},
-          {role: 'stopspeaking'}
-        ]
-      }
-    )
-
-    // Window menu
-    template[3].submenu = [
-      {role: 'close'},
-      {role: 'minimize'},
-      {role: 'zoom'},
-      {type: 'separator'},
-      {role: 'front'}
-    ]
   }
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+}
+
+function sendDarkMode () {
+  if (mainWindow) {
+    mainWindow.webContents.send('darkMode', systemPreferences.isDarkMode())
+  }
 }
 
 app.on('ready', function () {
@@ -231,15 +205,22 @@ app.on('ready', function () {
 })
 
 app.on('window-all-closed', () => {
-  // if (process.platform !== 'darwin') {
-  app.quit()
-  // }
+  if (process.platform !== 'darwin') {
+    app.quit()
+  }
 })
 
 app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+/**
+ * MacOS Mojave监控darkMode切换
+ */
+systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', function () {
+  sendDarkMode()
 })
 
 /**
