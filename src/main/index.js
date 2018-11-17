@@ -33,7 +33,9 @@ function createWindow () {
     mainWindow = null
   })
 
-  // 窗口加载完之后显示
+  /**
+   * 窗口加载完之后显示
+   */
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
     sendDarkMode()
