@@ -7,9 +7,6 @@
 
       <el-main class="app-main">
         <el-container class="app-container">
-          <el-header class="header dragable" :class="{dark: isDark}" style="height: 22px;">
-            HexoClient
-          </el-header>
           <el-main class="main">
             <router-view></router-view>
           </el-main>
@@ -47,16 +44,12 @@
     data () {
       return {
         path: '',
-        isDark: true,
         windowHeight: '300px' // 窗口高度
       }
     },
 
     created () {
       var me = this
-      ipcRenderer.on('darkMode', function (eventEmitter, darkMode) {
-        me.isDark = darkMode
-      })
       ipcRenderer.on('settings', function (eventEmitter) {
         me.$router.push({name: 'settings'})
       })
@@ -127,23 +120,6 @@
     width: 100%;
     height: 100%;
     padding: 0px;
-  }
-
-  .app-container .header {
-    line-height: 22px;
-    background-color: rgb(221, 221, 221);
-    border-bottom: 1px solid rgb(221, 221, 221);
-    color: rgb(51, 51, 51);
-    text-align: center;
-    vertical-align: middle;
-    font-size: 14px;
-    font-weight: bold;
-    user-select: none;
-  }
-
-  .app-container .header.dark {
-    background-color: #333;
-    color: #e4e4e4;
   }
 
   .app-container .main {

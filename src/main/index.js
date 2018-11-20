@@ -21,7 +21,6 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     show: false,
-    titleBarStyle: 'hidden',
     useContentSize: true
   })
 
@@ -38,7 +37,6 @@ function createWindow () {
    */
   mainWindow.once('ready-to-show', () => {
     mainWindow.show()
-    sendDarkMode()
   })
 }
 
@@ -191,12 +189,6 @@ function createMenu () {
   }
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
-}
-
-function sendDarkMode () {
-  if (mainWindow) {
-    mainWindow.webContents.send('darkMode', systemPreferences.isDarkMode())
-  }
 }
 
 app.on('ready', function () {

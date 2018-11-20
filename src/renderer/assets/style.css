@@ -43,7 +43,7 @@ html, body {
 #app .sidebar .icon {
     width: 64px;
     height: 64px;
-    margin-top: 20px;
+    margin-top: 4px;
     background: url("icon.png") no-repeat center center;
     background-size: 80%;
 }
