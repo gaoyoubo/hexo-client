@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import ArticleList from './Posts/ArticleList'
-  import ArticleView from './Posts/ArticleView'
+  import ArticleList from './ArticleList'
+  import ArticleView from './ArticleView'
 
   export default {
     name: 'main-page',
