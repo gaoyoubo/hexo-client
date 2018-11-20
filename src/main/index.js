@@ -209,13 +209,6 @@ app.on('activate', () => {
 })
 
 /**
- * MacOS Mojave监控darkMode切换
- */
-systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', function () {
-  sendDarkMode()
-})
-
-/**
  * 防止应用多开
  * 当进程是第一个实例时，返回false
  * 如果是第二个实例时，返回true，并且执行第一个实例的回调函数
