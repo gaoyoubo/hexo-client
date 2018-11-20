@@ -1,7 +1,7 @@
 <template>
   <div id="app" :style="{'height': windowHeight}">
     <el-container v-if="inited">
-      <el-aside class="sidebar dragable" style="width: 64px;">
+      <el-aside class="sidebar" style="width: 64px;">
         <main-menu></main-menu>
       </el-aside>
 
