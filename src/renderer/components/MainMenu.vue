@@ -6,8 +6,7 @@
              default-active="/main"
              background-color="#333"
              text-color="#fff"
-             active-text-color="#ffd04b"
-             class="el-menu-vertical-demo">
+             active-text-color="#ffd04b">
       <el-menu-item index="/main">
         <i class="el-icon-document"></i>
         <span slot="title">文章</span>
@@ -39,18 +38,3 @@
     }
   }
 </script>
-
-<style>
-  html, body {
-    height: 100%;
-    overflow: hidden;
-    margin: 0px;
-    padding: 0px;
-  }
-
-  .el-menu-vertical-demo:not(.el-menu--collapse) {
-    width: 200px;
-    min-height: 400px;
-  }
-</style>
-
