@@ -1,6 +1,6 @@
 {
   "name": "HexoClient",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "高尤波 <gaoyoubo@foxmail.com>",
   "description": "Hexo 桌面客户端",
   "license": "Apache License, Version 2.0",
@@ -59,7 +59,7 @@
   "dependencies": {
     "electron-json-storage": "^4.1.1",
     "element-ui": "^2.4.5",
-    "hexo": "^3.7.1",
+    "hexo": "^3.8.0",
     "mavon-editor-hexo-client": "^2.6.19",
     "md5": "^2.2.1",
     "qiniu": "^7.1.2",
@@ -85,7 +85,7 @@
     "css-loader": "^0.28.4",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^3.0.9",
+    "electron": "^3.0.10",
     "electron-builder": "^20.26.1",
     "electron-debug": "^2.0.0",
     "electron-devtools-installer": "^2.2.4",
