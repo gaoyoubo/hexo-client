@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Menu, systemPreferences } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 
 /**
  * Set `__static` path to static files in production
