@@ -17,7 +17,7 @@
         <el-input v-model="sysConfig.qiniuHost"/>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="saveConfig">保存</el-button>
+        <el-button type="primary" @click="saveConfig">保存配置</el-button>
         <el-button type="primary" icon="el-icon-upload" @click="generateAndDeploy">生成发布</el-button>
       </el-form-item>
     </el-form>

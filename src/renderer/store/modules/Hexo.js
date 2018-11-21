@@ -1,4 +1,5 @@
 import when from 'when'
+import utils from '@/service/Utils'
 
 const Hexo = require('hexo')
 const fs = require('fs')
@@ -118,7 +119,8 @@ const getters = {
           date: post.date.format('YYYY-MM-DD hh:mm:ss'),
           author: post.author,
           tags: post.tags.data,
-          categories: post.categories.data
+          categories: post.categories.data,
+          summary: utils.getPostSummary(post.content)
         })
       })
     }
