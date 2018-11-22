@@ -131,7 +131,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1050;
+    z-index: 2000;
     background: rgba(0, 0, 0, 0.5);
   }
 
@@ -206,7 +206,7 @@
   .ins-search-container {
     left: 50%;
     top: 100px;
-    z-index: 1051;
+    z-index: 2001;
     bottom: 100px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
