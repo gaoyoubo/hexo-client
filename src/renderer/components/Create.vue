@@ -1,18 +1,19 @@
 <template>
-  <el-main style="padding: 0px;">
-    <el-form style="margin-top: 38px" :model="postForm" :rules="postFormRules" ref="postForm" label-width="100px">
-      <el-form-item label="标题" prop="title">
-        <el-input v-model="postForm.title" @input="formChanged = true"></el-input>
+  <el-main>
+
+    <el-form :model="postForm" :rules="postFormRules" ref="postForm">
+      <el-form-item prop="title">
+        <el-input v-model="postForm.title" @input="formChanged = true" placeholder="文章标题"></el-input>
       </el-form-item>
 
-      <el-form-item label="内容" prop="content" v-loading="uploading" :element-loading-text="uploadingText">
+      <el-form-item prop="content" v-loading="uploading" :element-loading-text="uploadingText">
         <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs="true"
                       codeStyle="atom-one-dark"
                       @imgsAdd="imgsAdd" @fullScreen="fullScreen" @save="submitForm"
                       :style="{height: contentHeight}" :boxShadow="false"/>
       </el-form-item>
 
-      <el-form-item label="标签" prop="tags">
+      <el-form-item prop="tags">
         <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
                    style="width:100%;" placeholder="请选择标签" @input="formChanged = true">
           <el-option v-for="tag in tags"
@@ -23,7 +24,7 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="分类" prop="categories">
+      <el-form-item prop="categories">
         <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
                    style="width:100%;" placeholder="请选择分类" @input="formChanged = true">
           <el-option v-for="category in categories"
@@ -35,12 +36,8 @@
       </el-form-item>
 
       <el-form-item>
-        <el-form-item style="display:inline-block;">
-          <el-button type="primary" @click="submitForm()">保存</el-button>
-        </el-form-item>
-        <el-form-item label="开启文章目录" style="display:inline-block;">
-          <el-switch v-model="postForm.toc" @input="formChanged = true"></el-switch>
-        </el-form-item>
+        <el-button type="success" icon="el-icon-success" @click="submitForm()">保存</el-button>
+        <el-switch v-model="postForm.toc" @input="formChanged = true" active-text="开启目录"></el-switch>
       </el-form-item>
     </el-form>
 
@@ -190,7 +187,7 @@
         if (this.fullScreenFlag) {
           this.contentHeight = (document.documentElement.clientHeight) + 'px'
         } else {
-          this.contentHeight = (document.documentElement.clientHeight - 350) + 'px'
+          this.contentHeight = (document.documentElement.clientHeight - 320) + 'px'
         }
       }
     },
