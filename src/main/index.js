@@ -84,6 +84,15 @@ function createMenu () {
       label: '查看',
       submenu: [
         {
+          label: '搜索',
+          accelerator: 'Shift+CmdOrCtrl+F',
+          click: function (item, focusedWindow) {
+            if (mainWindow) {
+              mainWindow.webContents.send('showSearch')
+            }
+          }
+        },
+        {
           label: '重载',
           accelerator: 'CmdOrCtrl+R',
           click: function (item, focusedWindow) {

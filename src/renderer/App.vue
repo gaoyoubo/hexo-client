@@ -53,9 +53,9 @@
     },
 
     created () {
-      var me = this
-      ipcRenderer.on('settings', function (eventEmitter) {
-        me.$router.push({name: 'settings'})
+      let me = this
+      ipcRenderer.on('showSearch', function (eventEmitter) {
+        me.$store.dispatch('Search/show')
       })
     },
 
