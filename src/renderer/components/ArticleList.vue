@@ -3,7 +3,7 @@
   <el-scrollbar style="height: 100%; width: 380px;" ref="scrollbar" class="el-scrollbar">
     <div class="tool-box">
       <div class="tool-box-content">
-        <el-button style="margin: 0px;" size="mini" icon="el-icon-edit" type="primary"
+        <el-button style="margin: 0px;" size="mini" icon="el-icon-edit" type="info"
                    @click="createPost">新建
         </el-button>
         <el-button style="margin: 0px;" size="mini" icon="el-icon-search" type="primary"
