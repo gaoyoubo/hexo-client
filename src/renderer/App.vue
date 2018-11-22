@@ -14,6 +14,9 @@
       </el-main>
     </el-container>
 
+    <!-- 搜索组件 -->
+    <search/>
+
     <el-dialog title="请先填写正确的Hexo安装目录：" :visible.sync="dialogFormVisible" :modal="true"
                :close-on-click-modal="false"
                :close-on-press-escape="false"
@@ -35,12 +38,13 @@
 
 <script>
   import MainMenu from './components/MainMenu'
+  import Search from './components/Search'
   import configManager from '@/service/ConfigManager'
   import { ipcRenderer } from 'electron'
 
   export default {
     name: 'hexo-client',
-    components: {MainMenu},
+    components: {MainMenu, Search},
     data () {
       return {
         path: '',

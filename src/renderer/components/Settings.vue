@@ -18,7 +18,6 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="saveConfig">保存配置</el-button>
-        <el-button type="primary" icon="el-icon-upload" @click="generateAndDeploy">生成发布</el-button>
       </el-form-item>
     </el-form>
   </el-main>
@@ -55,33 +54,6 @@
             type: 'success'
           })
         })
-      },
-      async generateAndDeploy () {
-        let loading = this.$loading({
-          lock: true,
-          text: '生成中...',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
-
-        let hexo = this.$store.state.Hexo.instance
-        try {
-          await hexo.call('generate', {})
-          loading.text = '发布中...'
-          try {
-            await hexo.call('deploy', {})
-            this.$notify.success('发布成功')
-          } catch (e) {
-            console.error(e)
-            this.$notify.error('发布失败')
-          } finally {
-            loading.close()
-          }
-        } catch (err) {
-          loading.close()
-          console.error(err)
-          this.$notify.error('生成失败')
-        }
       }
     }
   }

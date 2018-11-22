@@ -15,10 +15,6 @@
         <i class="el-icon-edit"></i>
         <span slot="title">发表</span>
       </el-menu-item>
-      <el-menu-item index="search">
-        <i class="el-icon-search"></i>
-        <span slot="title">搜索</span>
-      </el-menu-item>
       <el-menu-item index="settings">
         <i class="el-icon-setting"></i>
         <span slot="title">配置</span>
@@ -28,16 +24,11 @@
         <span slot="title">关于</span>
       </el-menu-item>
     </el-menu>
-
-    <search/>
   </div>
 </template>
 
 <script>
-  import Search from './Search'
-
   export default {
-    components: {Search},
     data () {
       return {}
     },
@@ -50,9 +41,6 @@
           case 'settings':
           case 'about':
             this.$router.push({name: index})
-            break
-          case 'search':
-            this.$store.dispatch('Search/show')
             break
           default:
             console.log('dispatch: index=' + index + ', path=' + path)
