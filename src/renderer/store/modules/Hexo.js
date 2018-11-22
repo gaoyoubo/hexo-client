@@ -89,6 +89,36 @@ const actions = {
       }
     })
     return deferred.promise
+  },
+
+  // 发布
+  async deploy (context) {
+    let vm = this._vm
+    let loading = vm.$loading({
+      lock: true,
+      text: '生成中...',
+      spinner: 'el-icon-loading',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
+
+    let hexo = context.state.instance
+    try {
+      await hexo.call('generate', {})
+      loading.text += '生成成功! 发布中...'
+      try {
+        await hexo.call('deploy', {})
+        vm.$notify.success('发布成功')
+      } catch (e) {
+        console.error(e)
+        vm.$notify.error('发布失败')
+      } finally {
+        loading.close()
+      }
+    } catch (err) {
+      loading.close()
+      console.error(err)
+      vm.$notify.error('生成失败')
+    }
   }
 }
 const getters = {

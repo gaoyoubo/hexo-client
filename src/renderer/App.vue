@@ -57,6 +57,12 @@
       ipcRenderer.on('showSearch', function (eventEmitter) {
         me.$store.dispatch('Search/show')
       })
+      ipcRenderer.on('doDeploy', function (eventEmitter) {
+        me.$store.dispatch('Hexo/deploy')
+      })
+      ipcRenderer.on('createPost', function (eventEmitter) {
+        me.$router.push({name: 'create'})
+      })
     },
 
     mounted () {

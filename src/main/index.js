@@ -46,6 +46,36 @@ function createMenu () {
       label: '编辑',
       submenu: [
         {
+          label: '搜索',
+          accelerator: 'Shift+CmdOrCtrl+N',
+          click: function (item, focusedWindow) {
+            if (mainWindow) {
+              mainWindow.webContents.send('createPost')
+            }
+          }
+        },
+        {
+          label: '搜索',
+          accelerator: 'Shift+CmdOrCtrl+F',
+          click: function (item, focusedWindow) {
+            if (mainWindow) {
+              mainWindow.webContents.send('showSearch')
+            }
+          }
+        },
+        {
+          label: '发布',
+          accelerator: 'Shift+CmdOrCtrl+D',
+          click: function (item, focusedWindow) {
+            if (mainWindow) {
+              mainWindow.webContents.send('doDeploy')
+            }
+          }
+        },
+        {
+          type: 'separator'
+        },
+        {
           label: '撤销',
           accelerator: 'CmdOrCtrl+Z',
           role: 'undo'
@@ -54,9 +84,6 @@ function createMenu () {
           label: '重做',
           accelerator: 'Shift+CmdOrCtrl+Z',
           role: 'redo'
-        },
-        {
-          type: 'separator'
         },
         {
           label: '剪切',
@@ -83,15 +110,6 @@ function createMenu () {
     {
       label: '查看',
       submenu: [
-        {
-          label: '搜索',
-          accelerator: 'Shift+CmdOrCtrl+F',
-          click: function (item, focusedWindow) {
-            if (mainWindow) {
-              mainWindow.webContents.send('showSearch')
-            }
-          }
-        },
         {
           label: '重载',
           accelerator: 'CmdOrCtrl+R',

@@ -3,6 +3,9 @@
   <el-scrollbar style="height: 100%; width: 380px;" ref="scrollbar" class="el-scrollbar">
     <div class="tool-box">
       <div class="tool-box-content">
+        <el-button style="margin: 0px;" size="mini" icon="el-icon-edit" type="primary"
+                   @click="createPost">新建
+        </el-button>
         <el-button style="margin: 0px;" size="mini" icon="el-icon-search" type="primary"
                    @click="search">搜索
         </el-button>
@@ -88,38 +91,19 @@
         }
       },
 
+      // 新建文章
+      createPost () {
+        this.$router.push({name: 'create'})
+      },
+
       // 搜索
       search () {
         this.$store.dispatch('Search/show')
       },
 
       // generate
-      async generate () {
-        let loading = this.$loading({
-          lock: true,
-          text: '生成中...',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
-
-        let hexo = this.$store.state.Hexo.instance
-        try {
-          await hexo.call('generate', {})
-          loading.text = '发布中...'
-          try {
-            await hexo.call('deploy', {})
-            this.$notify.success('发布成功')
-          } catch (e) {
-            console.error(e)
-            this.$notify.error('发布失败')
-          } finally {
-            loading.close()
-          }
-        } catch (err) {
-          loading.close()
-          console.error(err)
-          this.$notify.error('生成失败')
-        }
+      generate () {
+        this.$store.dispatch('Hexo/deploy')
       }
     },
 
@@ -155,6 +139,7 @@
   .tool-box-content {
     line-height: 40px;
     margin-left: 10px;
+    text-align: center;
     vertical-align: middle;
   }
 
