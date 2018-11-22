@@ -61,8 +61,11 @@
       },
 
       selectEnter () {
-        this.$store.dispatch('Search/selectEnter', false)
-        this.hide()
+        let curIndex = this.$store.state.Search.selectIndex
+        if (curIndex >= 0) {
+          this.$store.dispatch('Search/selectEnter', false)
+          this.hide()
+        }
       },
 
       clickItem (selectId) {
