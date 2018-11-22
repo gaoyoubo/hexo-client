@@ -126,7 +126,7 @@
   }
 
   .el-scrollbar__wrap {
-    scroll-behavior: smooth;
+    /*scroll-behavior: smooth;*/
   }
 
   .tool-box {
