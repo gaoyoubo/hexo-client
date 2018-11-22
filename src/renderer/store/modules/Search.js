@@ -66,6 +66,10 @@ const actions = {
     }
     if (selectId) {
       context.dispatch('Hexo/selectPost', selectId, {root: true})
+      let item = document.getElementById(selectId)
+      if (item) {
+        item.scrollIntoViewIfNeeded(true) // 将文章列表滚动到所选的那篇文章处
+      }
     }
   }
 }

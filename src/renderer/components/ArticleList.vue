@@ -16,7 +16,7 @@
     </div>
     <div class="article-list" v-if="posts.length > 0">
       <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)"
-           :data-id="post.id" v-bind:class="{active: post.id === selectedPostId}">
+           :data-id="post.id" v-bind:class="{active: post.id === selectedPostId}" :id="post.id">
         <div class="article-list-item">
           <h4 class="article-title">{{ post.title }}</h4>
           <div class="article-tags">
@@ -123,6 +123,10 @@
   .el-scrollbar {
     width: 380px;
     border-right: 1px solid #E9E9E9;
+  }
+
+  .el-scrollbar__wrap {
+    scroll-behavior: smooth;
   }
 
   .tool-box {
