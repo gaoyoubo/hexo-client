@@ -138,7 +138,7 @@
 
   .tool-box-content {
     line-height: 40px;
-    margin-left: 10px;
+    /*margin-left: 10px;*/
     text-align: center;
     vertical-align: middle;
   }
