@@ -5,6 +5,7 @@
 - My blog: [http://www.mspring.org](http://www.mspring.org)
 - Hexo: [Hexo home page, https://hexo.io](https://hexo.io)
 - HomePage: [https://github.com/gaoyoubo/hexo-client](https://github.com/gaoyoubo/hexo-client)
+- Electron AppCenter: [https://electronjs.org/apps/hexo-client](https://electronjs.org/apps/hexo-client)
 
 ### 功能简介
 - 文章添加
@@ -13,20 +14,17 @@
 - 文章支持七牛图片上传
 - 支持hexo generate
 - 支持hexo deploy
+- 文章搜索
 
-### 截屏预览
-![](http://file.mspring.org/2a610b3b3e6a4dfc1132039145832472)
-![](http://file.mspring.org/0021d74d369085c91e861d483659fa32)
+### 功能预览
+![](http://file.mspring.org/8a3e66058442f2dd9821e7a54090bee7!detail)
+![](http://file.mspring.org/f2daf058f76496f56277abc6ff6fbef1!detail)
+![](http://file.mspring.org/92be1e0368bf5e9b07cdc48c19c85954!detail)
+![](http://file.mspring.org/e86c878c2c7dc5e7234d6690864c52d3!detail)
 
 ### 下载地址
-- Mac版：https://pan.baidu.com/s/1E-5KrusoBuFGRTunTBqPJQ   提取码：2v2q
-- Windows版本：请自行源码编译。
-- Linux版本：请自行源码编译。
 
-### TODO
-- 自动初始化hexo
-- 文章筛选、搜索
-
+https://github.com/gaoyoubo/hexo-client/releases
 
 ### Build Setup
 
