@@ -4,6 +4,11 @@
   "author": "高尤波 <gaoyoubo@foxmail.com>",
   "description": "Hexo 桌面客户端",
   "license": "Apache License, Version 2.0",
+  "homepage": "https://github.com/gaoyoubo/hexo-client",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaoyoubo/hexo-client.git"
+  },
   "main": "./dist/electron/main.js",
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
@@ -56,7 +61,9 @@
     "linux": {
       "category": "Utility",
       "target": [
-        "deb", "AppImage", "rpm"
+        "deb",
+        "AppImage",
+        "rpm"
       ],
       "icon": "build/icons"
     }
