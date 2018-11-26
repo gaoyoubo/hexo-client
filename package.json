@@ -39,7 +39,8 @@
     "publish": {
       "provider": "github",
       "owner": "gaoyoubo",
-      "repo": "hexo-client"
+      "repo": "hexo-client",
+      "always": true
     },
     "dmg": {
       "contents": [
