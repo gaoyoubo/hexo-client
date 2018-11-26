@@ -11,7 +11,7 @@
   },
   "main": "./dist/electron/main.js",
   "scripts": {
-    "build": "node .electron-vue/build.js && electron-builder",
+    "build": "node .electron-vue/build.js && electron-builder --publish onTagOrDraft",
     "build:win": "node .electron-vue/build.js && electron-builder --win",
     "build:linux": "node .electron-vue/build.js && electron-builder --linux",
     "build:mac": "node .electron-vue/build.js && electron-builder --mac",
@@ -39,8 +39,7 @@
     "publish": {
       "provider": "github",
       "owner": "gaoyoubo",
-      "repo": "hexo-client",
-      "always": true
+      "repo": "hexo-client"
     },
     "dmg": {
       "contents": [
