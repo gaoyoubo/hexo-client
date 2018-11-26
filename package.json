@@ -50,9 +50,14 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
+      "target": "nsis",
       "icon": "build/icons/icon.ico"
     },
     "linux": {
+      "category": "Utility",
+      "target": [
+        "deb", "AppImage", "rpm"
+      ],
       "icon": "build/icons"
     }
   },
