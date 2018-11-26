@@ -27,8 +27,8 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "HexoClient",
     "appId": "org.mspring.hexo.client",
+    "productName": "HexoClient",
     "directories": {
       "output": "build"
     },
@@ -36,6 +36,11 @@
       "dist/electron/**/*",
       "build/icons/*"
     ],
+    "publish": {
+      "provider": "github",
+      "owner": "gaoyoubo",
+      "repo": "hexo-client"
+    },
     "dmg": {
       "contents": [
         {
@@ -61,9 +66,27 @@
     "linux": {
       "category": "Utility",
       "target": [
-        "deb",
-        "AppImage",
-        "rpm"
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "rpm",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
       ],
       "icon": "build/icons"
     }

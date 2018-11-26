@@ -1,23 +1,29 @@
-osx_image: xcode8.3
-sudo: required
 dist: trusty
+sudo: required
+
 language: node_js
-node_js: "8"
-env:
-  global:
-  - ELECTRON_CACHE=$HOME/.cache/electron
-  - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
-os:
-  - linux
-  - osx
+node_js:
+- "node"
+
+matrix:
+  include:
+  - os: linux
+    before_install:
+    - sudo apt-get -qq update
+    - sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
+    - sudo apt-get install --no-install-recommends -y rpm
+  - os: osx
+
 cache:
   directories:
   - node_modules
-  - "$HOME/.electron"
-  - "$HOME/.cache/electron-builder"
-  - "$HOME/.cache"
+
+install:
+- npm install
+
 script:
 - npm run build
+
 branches:
   only:
   - master
