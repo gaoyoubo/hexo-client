@@ -9,9 +9,12 @@
         <el-button style="margin: 0px;" size="mini" icon="el-icon-search" type="primary"
                    @click="search">搜索
         </el-button>
+        <!--
         <el-button style="margin: 0px;" size="mini" icon="el-icon-upload" type="success"
                    @click.sync="generate">发布
         </el-button>
+        -->
+        <deploy/>
       </div>
     </div>
     <div class="article-list" v-if="posts.length > 0">
@@ -41,7 +44,10 @@
 </template>
 
 <script>
+  import Deploy from './Deploy'
+
   export default {
+    components: {Deploy},
     data () {
       return {
         scrollWrap: null // 滚动条容器

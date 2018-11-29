@@ -156,8 +156,9 @@
         me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
 
         var promises = []
+        var sysConfig = this.$store.state.Config.config
         for (var i = 0; i < files.length; i++) {
-          promises.push(qiniuManager.upload(files[i]))
+          promises.push(qiniuManager.upload(files[i], sysConfig))
         }
 
         when.all(promises).then(results => {

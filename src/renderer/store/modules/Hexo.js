@@ -21,6 +21,15 @@ const mutations = {
   }
 }
 const actions = {
+  async start (context) {
+    let loading = this._vm.$loading({lock: true, text: 'Loading...', spinner: 'el-icon-loading'})
+    try {
+      await context.dispatch('Config/initConfig', null, {root: true})
+      await context.dispatch('init')
+    } finally {
+      loading.close()
+    }
+  },
   // 初始化
   async init (context) {
     let config = context.rootState.Config.config

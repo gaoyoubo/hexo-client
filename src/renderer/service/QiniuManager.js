@@ -1,6 +1,5 @@
 import qiniu from 'qiniu'
 import When from 'when'
-import configManager from './ConfigManager'
 
 var fs = require('fs')
 var md5 = require('md5')
@@ -9,10 +8,9 @@ class QiniuManager {
   /**
    * 上传
    * @param file
-   * @param upConfig
-   * @param progressCallback
+   * @param sysConfig
    */
-  upload (file) {
+  upload (file, sysConfig) {
     var deferred = When.defer()
 
     var config = new qiniu.conf.Config()
@@ -23,7 +21,7 @@ class QiniuManager {
     putExtra.progressCallback = (uploadBytes, totalBytes) => {
       deferred.notify(parseInt((uploadBytes / totalBytes * 10000)) / 100)
     }
-    this.upConfig(file).then(upConfig => {
+    this.upConfig(file, sysConfig).then(upConfig => {
       resumeUploader.putFile(upConfig.upToken, upConfig.key, file.path, putExtra, function (respErr, respBody, respInfo) {
         if (respErr) {
           deferred.reject(respErr)
@@ -40,29 +38,25 @@ class QiniuManager {
     return deferred.promise
   }
 
-  upConfig (file) {
-    var deferred = When.defer()
-    var key = this.getKey(file.path)
-    configManager.getSysConfig().then(sysConfig => {
-      var accessKey = sysConfig.qiniuAccessKey
-      var secretKey = sysConfig.qiniuSecretKey
-      var bucket = sysConfig.qiniuBucket
-      var host = sysConfig.qiniuHost
+  upConfig (file, sysConfig) {
+    let deferred = When.defer()
+    let key = this.getKey(file.path)
+    let accessKey = sysConfig.qiniuAccessKey
+    let secretKey = sysConfig.qiniuSecretKey
+    let bucket = sysConfig.qiniuBucket
+    let host = sysConfig.qiniuHost
 
-      if (!accessKey || !secretKey || !bucket || !host) {
-        deferred.reject('请先完成七牛配置！')
-      } else {
-        var mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
-        var putPolicy = new qiniu.rs.PutPolicy({
-          scope: bucket + ':' + key,
-          expires: 7200
-        })
-        var upToken = putPolicy.uploadToken(mac)
-        deferred.resolve({upToken: upToken, host: host, key: key})
-      }
-    }, err => {
-      deferred.reject(err)
-    })
+    if (!accessKey || !secretKey || !bucket || !host) {
+      deferred.reject('请先完成七牛配置！')
+    } else {
+      let mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
+      let putPolicy = new qiniu.rs.PutPolicy({
+        scope: bucket + ':' + key,
+        expires: 7200
+      })
+      let upToken = putPolicy.uploadToken(mac)
+      deferred.resolve({upToken: upToken, host: host, key: key})
+    }
     return deferred.promise
   }
 

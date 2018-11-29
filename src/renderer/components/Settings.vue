@@ -1,35 +1,33 @@
 <template>
   <el-main style="padding: 0px;">
-    <el-form style="margin-top: 50px;" label-width="80px" :model="sysConfig">
+    <el-form style="margin-top: 50px;" label-width="80px" :model="config">
       <el-form-item label="Hexo目录" label-width="120px">
-        <el-input v-model="sysConfig.path"/>
+        <el-input v-model="config.path"/>
       </el-form-item>
       <el-form-item label="七牛AK" label-width="120px">
-        <el-input v-model="sysConfig.qiniuAccessKey"/>
+        <el-input v-model="config.qiniuAccessKey"/>
       </el-form-item>
       <el-form-item label="七牛SK" label-width="120px">
-        <el-input v-model="sysConfig.qiniuSecretKey"/>
+        <el-input v-model="config.qiniuSecretKey"/>
       </el-form-item>
       <el-form-item label="七牛Bucket" label-width="120px">
-        <el-input v-model="sysConfig.qiniuBucket"/>
+        <el-input v-model="config.qiniuBucket"/>
       </el-form-item>
       <el-form-item label="七牛域名" label-width="120px">
-        <el-input v-model="sysConfig.qiniuHost"/>
+        <el-input v-model="config.qiniuHost"/>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="saveConfig">保存配置</el-button>
+        <el-button type="primary" @click.sync="saveConfig">保存配置</el-button>
       </el-form-item>
     </el-form>
   </el-main>
 </template>
 
 <script>
-  import configManager from '@/service/ConfigManager'
-
   export default {
     data () {
       return {
-        sysConfig: {
+        config: {
           base: '',
           qiniuAccessKey: '',
           qiniuSecretKey: '',
@@ -39,20 +37,15 @@
       }
     },
     created () {
-      var me = this
-      configManager.getSysConfig().then(sysConfig => {
-        me.sysConfig = sysConfig
-      })
+      this.config = this.$store.state.Config.config
     },
     methods: {
-      saveConfig () {
-        var me = this
-        configManager.setSysConfig(this.sysConfig).then(() => {
-          me.$notify({
-            title: '成功',
-            message: '保存成功',
-            type: 'success'
-          })
+      async saveConfig () {
+        await this.$store.dispatch('Config/setConfig', this.config)
+        this.$notify({
+          title: '成功',
+          message: '保存成功',
+          type: 'success'
         })
       }
     }
