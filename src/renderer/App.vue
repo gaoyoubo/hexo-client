@@ -48,6 +48,12 @@
       ipcRenderer.on('createPost', function (eventEmitter) {
         me.$router.push({name: 'create'})
       })
+      ipcRenderer.on('settings', function (eventEmitter) {
+        me.$router.push({name: 'settings'})
+      })
+      ipcRenderer.on('about', function (eventEmitter) {
+        me.$router.push({name: 'about'})
+      })
     },
 
     mounted () {

@@ -1,6 +1,6 @@
 <template>
 
-  <el-scrollbar style="height: 100%; width: 380px;" ref="scrollbar" class="el-scrollbar">
+  <el-scrollbar style="height: 100%; width: 280px; min-width: 280px;" ref="scrollbar" class="el-scrollbar">
     <div class="tool-box">
       <div class="tool-box-content">
         <el-button style="margin: 0px;" size="mini" icon="el-icon-edit" type="info"

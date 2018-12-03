@@ -10,6 +10,13 @@
         </ul>
       </div>
       <div>
+        <h3>使用帮助</h3>
+        <ul>
+          <li>帮助文档：<a @click="openUrl('https://www.mspring.org/2018/11/29/HexoClient%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/')" href="#">点击查看帮助文档</a></li>
+          <li>提交问题：<a @click="openUrl('https://github.com/gaoyoubo/hexo-client/issues/new')" href="#">点击提交问题</a></li>
+        </ul>
+      </div>
+      <div>
         <h3>站在巨人肩上</h3>
         <ul>
           <li><a @click="openUrl('https://github.com/electron/electron')" href="#">electron</a></li>

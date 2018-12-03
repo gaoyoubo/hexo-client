@@ -1,6 +1,9 @@
 'use strict'
 
-import { app, BrowserWindow, Menu } from 'electron'
+import { app, BrowserWindow, Menu, shell, ipcMain } from 'electron'
+import { ebtMain } from 'electron-baidu-tongji'
+
+ebtMain(ipcMain)
 
 /**
  * Set `__static` path to static files in production
@@ -186,13 +189,37 @@ function createMenu () {
           }
         }
       ]
+    },
+    {
+      label: '关于',
+      submenu: [
+        {
+          label: '关于',
+          click: function () {
+            if (mainWindow) {
+              mainWindow.webContents.send('about')
+            }
+          }
+        },
+        {
+          label: '使用帮助',
+          click: function () {
+            shell.openExternal('https://www.mspring.org/2018/11/29/HexoClient%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/')
+          }
+        },
+        {
+          label: '提交问题',
+          click: function () {
+            shell.openExternal('https://github.com/gaoyoubo/hexo-client/issues/new')
+          }
+        }
+      ]
     }
   ]
   if (process.platform === 'darwin') {
     template.unshift({
       label: app.getName(),
       submenu: [
-        {role: 'about'},
         {
           label: '配置',
           accelerator: 'Cmd+,',
