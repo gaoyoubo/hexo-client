@@ -14,7 +14,17 @@ class QiniuManager {
     var deferred = When.defer()
 
     var config = new qiniu.conf.Config()
-    config.zone = qiniu.zone.Zone_z0
+    if (sysConfig.qiniuZone === 'huadong') {
+      config.zone = qiniu.zone.Zone_z0
+    } else if (sysConfig.qiniuZone === 'huabei') {
+      config.zone = qiniu.zone.Zone_z1
+    } else if (sysConfig.qiniuZone === 'huanan') {
+      config.zone = qiniu.zone.Zone_z2
+    } else if (sysConfig.qiniuZone === 'beimei') {
+      config.zone = qiniu.zone.Zone_na0
+    } else {
+      config.zone = qiniu.zone.Zone_z0
+    }
 
     var resumeUploader = new qiniu.resume_up.ResumeUploader(config)
     var putExtra = new qiniu.resume_up.PutExtra()
