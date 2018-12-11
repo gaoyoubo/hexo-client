@@ -1,0 +1,20 @@
+{
+  "edit": "Edit",
+  "new": "New",
+  "search": "Search",
+  "publish": "Publish",
+  "undo": "Undo",
+  "redo": "Redo",
+  "cut": "Cut",
+  "copy": "Copy",
+  "paste": "Paste",
+  "selectall": "Select All",
+  "about": "About",
+  "help": "Help",
+  "feedback": "Submit Feedback",
+  "settings": "Settings",
+  "view": "View",
+  "reload": "Reload",
+  "fullScreen": "Toggle Full Screen",
+  "devTools": "Toggle DevTools"
+}

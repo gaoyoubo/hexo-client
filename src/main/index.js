@@ -1,8 +1,13 @@
 'use strict'
 
-import { app, BrowserWindow, Menu, shell, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron'
 import { ebtMain } from 'electron-baidu-tongji'
+import path from 'path'
+import i18next from 'i18next'
+import NodeFsBackend from 'i18next-node-fs-backend'
+import LanguageDetector from 'i18next-electron-language-detector'
 
+// 百度统计
 ebtMain(ipcMain)
 
 /**
@@ -46,10 +51,10 @@ function createWindow () {
 function createMenu () {
   const template = [
     {
-      label: '编辑',
+      label: i18next.t('edit'),
       submenu: [
         {
-          label: '搜索',
+          label: i18next.t('new'),
           accelerator: 'Shift+CmdOrCtrl+N',
           click: function (item, focusedWindow) {
             if (mainWindow) {
@@ -58,7 +63,7 @@ function createMenu () {
           }
         },
         {
-          label: '搜索',
+          label: i18next.t('search'),
           accelerator: 'Shift+CmdOrCtrl+F',
           click: function (item, focusedWindow) {
             if (mainWindow) {
@@ -67,7 +72,7 @@ function createMenu () {
           }
         },
         {
-          label: '发布',
+          label: i18next.t('publish'),
           accelerator: 'Shift+CmdOrCtrl+D',
           click: function (item, focusedWindow) {
             if (mainWindow) {
@@ -79,42 +84,42 @@ function createMenu () {
           type: 'separator'
         },
         {
-          label: '撤销',
+          label: i18next.t('undo'),
           accelerator: 'CmdOrCtrl+Z',
           role: 'undo'
         },
         {
-          label: '重做',
+          label: i18next.t('redo'),
           accelerator: 'Shift+CmdOrCtrl+Z',
           role: 'redo'
         },
         {
-          label: '剪切',
+          label: i18next.t('cut'),
           accelerator: 'CmdOrCtrl+X',
           role: 'cut'
         },
         {
-          label: '复制',
+          label: i18next.t('copy'),
           accelerator: 'CmdOrCtrl+C',
           role: 'copy'
         },
         {
-          label: '粘贴',
+          label: i18next.t('paste'),
           accelerator: 'CmdOrCtrl+V',
           role: 'paste'
         },
         {
-          label: '全选',
+          label: i18next.t('selectall'),
           accelerator: 'CmdOrCtrl+A',
           role: 'selectall'
         }
       ]
     },
     {
-      label: '查看',
+      label: i18next.t('view'),
       submenu: [
         {
-          label: '重载',
+          label: i18next.t('reload'),
           accelerator: 'CmdOrCtrl+R',
           click: function (item, focusedWindow) {
             if (focusedWindow) {
@@ -131,7 +136,7 @@ function createMenu () {
           }
         },
         {
-          label: '切换全屏',
+          label: i18next.t('fullScreen'),
           accelerator: (function () {
             if (process.platform === 'darwin') {
               return 'Ctrl+Command+F'
@@ -146,7 +151,7 @@ function createMenu () {
           }
         },
         {
-          label: '切换开发者工具',
+          label: i18next.t('devTools'),
           accelerator: (function () {
             if (process.platform === 'darwin') {
               return 'Alt+Command+I'
@@ -163,38 +168,10 @@ function createMenu () {
       ]
     },
     {
-      label: '窗口',
-      role: 'window',
+      label: i18next.t('about'),
       submenu: [
         {
-          label: '最小化',
-          accelerator: 'CmdOrCtrl+M',
-          role: 'minimize'
-        },
-        {
-          label: '关闭',
-          accelerator: 'CmdOrCtrl+W',
-          role: 'close'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: '重新打开窗口',
-          accelerator: 'CmdOrCtrl+Shift+T',
-          enabled: false,
-          key: 'reopenMenuItem',
-          click: function () {
-            app.emit('activate')
-          }
-        }
-      ]
-    },
-    {
-      label: '关于',
-      submenu: [
-        {
-          label: '关于',
+          label: i18next.t('about'),
           click: function () {
             if (mainWindow) {
               mainWindow.webContents.send('about')
@@ -202,13 +179,13 @@ function createMenu () {
           }
         },
         {
-          label: '使用帮助',
+          label: i18next.t('help'),
           click: function () {
             shell.openExternal('https://www.mspring.org/2018/11/29/HexoClient%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/')
           }
         },
         {
-          label: '提交问题',
+          label: i18next.t('feedback'),
           click: function () {
             shell.openExternal('https://github.com/gaoyoubo/hexo-client/issues/new')
           }
@@ -221,7 +198,7 @@ function createMenu () {
       label: app.getName(),
       submenu: [
         {
-          label: '配置',
+          label: i18next.t('settings'),
           accelerator: 'Cmd+,',
           enabled: true,
           click: function () {
@@ -245,10 +222,48 @@ function createMenu () {
   Menu.setApplicationMenu(menu)
 }
 
-app.on('ready', function () {
-  createWindow()
-  createMenu()
-})
+const gotSingleInstanceLock = app.requestSingleInstanceLock()
+if (!gotSingleInstanceLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+  })
+
+  // Create myWindow, load the rest of the app, etc...
+  app.on('ready', function () {
+    i18next
+      .use(NodeFsBackend)
+      .use(LanguageDetector)
+      .init({
+        debug: process.env.NODE_ENV === 'development',
+        whitelist: ['en', 'zh'],
+        nonExplicitWhitelist: true,
+        lowerCaseLng: true,
+        load: 'languageOnly',
+        fallbackLng: ['en'],
+        ns: ['common'],
+        fallbackNS: 'common',
+        backend: {
+          loadPath: path.resolve(__dirname, '../locales/{{lng}}/{{ns}}.json'),
+          jsonIndent: 2
+        }
+      }, function (err, t) {
+        if (err) {
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Load language error.', err)
+          }
+        } else {
+          createWindow()
+          createMenu()
+        }
+      })
+  })
+}
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -262,37 +277,4 @@ app.on('activate', () => {
   }
 })
 
-/**
- * 防止应用多开
- * 当进程是第一个实例时，返回false
- * 如果是第二个实例时，返回true，并且执行第一个实例的回调函数
- */
-const shouldQuit = app.makeSingleInstance((commandLine, workingDir) => {
-  if (mainWindow) {
-    mainWindow.isMinimized() && mainWindow.restore()
-    mainWindow.focus()
-  }
-})
-if (shouldQuit) {
-  app.quit()
-}
-
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */
+export default i18next

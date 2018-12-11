@@ -4,7 +4,7 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-import { ipcRenderer } from 'electron'
+import { ipcRenderer, remote } from 'electron'
 import { ebtRenderer } from 'electron-baidu-tongji'
 
 import ElementUI from 'element-ui'
@@ -13,8 +13,13 @@ import './assets/style.css'
 import mavonEditor from 'mavon-editor-hexo-client'
 import 'mavon-editor-hexo-client/dist/css/index.css'
 
+import VueParams from 'vue-params'
+import VueI18Next from 'vue-i18next'
+
 Vue.use(ElementUI)
 Vue.use(mavonEditor)
+Vue.use(VueParams)
+Vue.use(VueI18Next)
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = false
@@ -30,3 +35,9 @@ new Vue({
   store,
   template: '<App/>'
 }).$mount('#app')
+
+window.i18next = remote.require('i18next')
+window.i18next.on('languageChanged', () => {
+  console.log('change language', arguments)
+  Vue.params.i18nextLanguage = window.i18next.language
+})

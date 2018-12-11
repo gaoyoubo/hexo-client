@@ -1,6 +1,6 @@
 <template>
   <el-button style="margin: 0px;" size="mini" icon="el-icon-upload" type="success"
-             @click.sync="deploy">发布
+             @click.sync="deploy">{{$t('publish')}}
   </el-button>
 </template>
 
