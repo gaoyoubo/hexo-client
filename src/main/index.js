@@ -222,6 +222,24 @@ function createMenu () {
   Menu.setApplicationMenu(menu)
 }
 
+i18next
+  .use(NodeFsBackend)
+  .use(LanguageDetector)
+  .init({
+    debug: process.env.NODE_ENV === 'development',
+    whitelist: ['en', 'zh'],
+    nonExplicitWhitelist: true,
+    lowerCaseLng: true,
+    load: 'languageOnly',
+    fallbackLng: ['en'],
+    ns: ['common'],
+    fallbackNS: 'common',
+    backend: {
+      loadPath: path.resolve(__dirname, '../locales/{{lng}}/{{ns}}.json'),
+      jsonIndent: 2
+    }
+  })
+
 const gotSingleInstanceLock = app.requestSingleInstanceLock()
 if (!gotSingleInstanceLock) {
   app.quit()
@@ -236,32 +254,10 @@ if (!gotSingleInstanceLock) {
 
   // Create myWindow, load the rest of the app, etc...
   app.on('ready', function () {
-    i18next
-      .use(NodeFsBackend)
-      .use(LanguageDetector)
-      .init({
-        debug: process.env.NODE_ENV === 'development',
-        whitelist: ['en', 'zh'],
-        nonExplicitWhitelist: true,
-        lowerCaseLng: true,
-        load: 'languageOnly',
-        fallbackLng: ['en'],
-        ns: ['common'],
-        fallbackNS: 'common',
-        backend: {
-          loadPath: path.resolve(__dirname, '../locales/{{lng}}/{{ns}}.json'),
-          jsonIndent: 2
-        }
-      }, function (err, t) {
-        if (err) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Load language error.', err)
-          }
-        } else {
-          createWindow()
-          createMenu()
-        }
-      })
+    i18next.on('loaded', () => {
+      createWindow()
+      createMenu()
+    })
   })
 }
 

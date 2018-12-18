@@ -28,6 +28,14 @@ Vue.config.productionTip = false
 const BAIDU_SITE_ID = '4b0947c1973db3139b436d8583b3fc00'
 ebtRenderer(ipcRenderer, BAIDU_SITE_ID, router)
 
+// i18n
+window.i18next = remote.require('i18next')
+Vue.params.i18nextLanguage = window.i18next.language
+window.i18next.on('languageChanged', () => {
+  console.log('change language', arguments)
+  Vue.params.i18nextLanguage = window.i18next.language
+})
+
 /* eslint-disable no-new */
 new Vue({
   components: {App},
@@ -35,9 +43,3 @@ new Vue({
   store,
   template: '<App/>'
 }).$mount('#app')
-
-window.i18next = remote.require('i18next')
-window.i18next.on('languageChanged', () => {
-  console.log('change language', arguments)
-  Vue.params.i18nextLanguage = window.i18next.language
-})
