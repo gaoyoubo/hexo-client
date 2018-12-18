@@ -1,19 +1,14 @@
 <template>
 
-  <el-scrollbar style="height: 100%; width: 280px; min-width: 280px;" ref="scrollbar" class="el-scrollbar">
+  <el-scrollbar style="height: 100%; width: 300px; min-width: 300px;" ref="scrollbar" class="el-scrollbar">
     <div class="tool-box">
       <div class="tool-box-content">
         <el-button style="margin: 0px;" size="mini" icon="el-icon-edit" type="info"
-                   @click="createPost">新建
+                   @click="createPost">{{$t('new')}}
         </el-button>
         <el-button style="margin: 0px;" size="mini" icon="el-icon-search" type="primary"
-                   @click="search">搜索
+                   @click="search">{{$t('search')}}
         </el-button>
-        <!--
-        <el-button style="margin: 0px;" size="mini" icon="el-icon-upload" type="success"
-                   @click.sync="generate">发布
-        </el-button>
-        -->
         <deploy/>
       </div>
     </div>
@@ -37,7 +32,7 @@
       </div>
     </div>
     <div class="article-none-panel" v-if="posts.length === 0">
-      无文章
+      {{$t('noArticleMsg')}}
     </div>
   </el-scrollbar>
 
