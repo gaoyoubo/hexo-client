@@ -32,7 +32,7 @@
       </div>
     </div>
     <div class="article-none-panel" v-if="posts.length === 0">
-      无文章
+      {{$t('noArticleMsg')}}
     </div>
   </el-scrollbar>
 

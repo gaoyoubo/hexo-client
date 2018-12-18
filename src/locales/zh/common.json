@@ -16,5 +16,6 @@
   "view": "查看",
   "reload": "重新载入",
   "fullScreen": "切换全屏",
-  "devTools": "切换开发者工具"
+  "devTools": "切换开发者工具",
+  "noArticleMsg": "无文章"
 }

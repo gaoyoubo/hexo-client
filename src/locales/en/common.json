@@ -16,5 +16,6 @@
   "view": "View",
   "reload": "Reload",
   "fullScreen": "Toggle Full Screen",
-  "devTools": "Toggle DevTools"
+  "devTools": "Toggle DevTools",
+  "noArticleMsg": "Empty"
 }
