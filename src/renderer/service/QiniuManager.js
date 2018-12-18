@@ -1,9 +1,6 @@
 import qiniu from 'qiniu'
 import When from 'when'
 
-var fs = require('fs')
-var md5 = require('md5')
-
 class QiniuManager {
   /**
    * 上传
@@ -11,33 +8,19 @@ class QiniuManager {
    * @param sysConfig
    */
   upload (file, sysConfig) {
-    var deferred = When.defer()
-
-    var config = new qiniu.conf.Config()
-    if (sysConfig.qiniuZone === 'huadong') {
-      config.zone = qiniu.zone.Zone_z0
-    } else if (sysConfig.qiniuZone === 'huabei') {
-      config.zone = qiniu.zone.Zone_z1
-    } else if (sysConfig.qiniuZone === 'huanan') {
-      config.zone = qiniu.zone.Zone_z2
-    } else if (sysConfig.qiniuZone === 'beimei') {
-      config.zone = qiniu.zone.Zone_na0
-    } else {
-      config.zone = qiniu.zone.Zone_z0
-    }
-
-    var resumeUploader = new qiniu.resume_up.ResumeUploader(config)
-    var putExtra = new qiniu.resume_up.PutExtra()
-    putExtra.progressCallback = (uploadBytes, totalBytes) => {
-      deferred.notify(parseInt((uploadBytes / totalBytes * 10000)) / 100)
-    }
+    let deferred = When.defer()
+    let uploader = this.getFormUploader(sysConfig)
     this.upConfig(file, sysConfig).then(upConfig => {
-      resumeUploader.putFile(upConfig.upToken, upConfig.key, file.path, putExtra, function (respErr, respBody, respInfo) {
+      let putExtra = new qiniu.form_up.PutExtra()
+      putExtra.progressCallback = (uploadBytes, totalBytes) => {
+        deferred.notify(parseInt((uploadBytes / totalBytes * 10000)) / 100)
+      }
+      uploader.putFile(upConfig.upToken, null, file.path, putExtra, function (respErr, respBody, respInfo) {
         if (respErr) {
           deferred.reject(respErr)
         } else {
           if (respInfo.statusCode === 200) {
-            var url = upConfig.host + '/' + respBody.key
+            let url = upConfig.host + '/' + respBody.key
             deferred.resolve(url)
           } else {
             deferred.reject()
@@ -50,7 +33,6 @@ class QiniuManager {
 
   upConfig (file, sysConfig) {
     let deferred = When.defer()
-    let key = this.getKey(file.path)
     let accessKey = sysConfig.qiniuAccessKey
     let secretKey = sysConfig.qiniuSecretKey
     let bucket = sysConfig.qiniuBucket
@@ -61,23 +43,29 @@ class QiniuManager {
     } else {
       let mac = new qiniu.auth.digest.Mac(accessKey, secretKey)
       let putPolicy = new qiniu.rs.PutPolicy({
-        scope: bucket + ':' + key,
+        scope: bucket,
         expires: 7200
       })
       let upToken = putPolicy.uploadToken(mac)
-      deferred.resolve({upToken: upToken, host: host, key: key})
+      deferred.resolve({upToken: upToken, host: host})
     }
     return deferred.promise
   }
 
-  /**
-   * 获取文件的key
-   * @param path
-   * @returns {*}
-   */
-  getKey (path) {
-    var buf = fs.readFileSync(path)
-    return md5(buf)
+  getFormUploader (sysConfig) {
+    let config = new qiniu.conf.Config()
+    if (sysConfig.qiniuZone === 'huadong') {
+      config.zone = qiniu.zone.Zone_z0
+    } else if (sysConfig.qiniuZone === 'huabei') {
+      config.zone = qiniu.zone.Zone_z1
+    } else if (sysConfig.qiniuZone === 'huanan') {
+      config.zone = qiniu.zone.Zone_z2
+    } else if (sysConfig.qiniuZone === 'beimei') {
+      config.zone = qiniu.zone.Zone_na0
+    } else {
+      config.zone = qiniu.zone.Zone_z0
+    }
+    return new qiniu.form_up.FormUploader(config)
   }
 }
 
