@@ -9,7 +9,7 @@
       <el-form-item prop="content" v-loading="uploading" :element-loading-text="uploadingText">
         <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs="true"
                       codeStyle="atom-one-dark"
-                      @imgsAdd="imgsAdd" @fullScreen="fullScreen" @save="submitForm"
+                      @imgAdd="imgAdd" @fullScreen="fullScreen" @save="submitForm"
                       :style="{height: contentHeight}" :boxShadow="false"/>
       </el-form-item>
 
@@ -47,7 +47,6 @@
 <script>
   import { mapGetters } from 'vuex'
   import qiniuManager from '@/service/QiniuManager'
-  import when from 'when'
 
   export default {
     data () {
@@ -189,34 +188,19 @@
         }
       },
 
-      imgsAdd (files) {
-        var me = this
+      async imgAdd (pos, file) {
+        let me = this
         me.uploading = true
-        me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
-
-        var promises = []
-        var sysConfig = this.$store.state.Config.config
-        for (var i = 0; i < files.length; i++) {
-          promises.push(qiniuManager.upload(files[i], sysConfig))
+        me.uploadingText = '正在上传 ' + file.name
+        try {
+          let sysConfig = this.$store.state.Config.config
+          let url = await qiniuManager.upload(file, sysConfig)
+          me.$refs.editor.$img2Url(pos, url)
+          me.uploading = false
+        } catch (e) {
+          me.$notify.error({message: '图片上传失败：' + e})
+          me.uploading = false
         }
-
-        when.all(promises).then(results => {
-          results.forEach(imageUrl => {
-            var editor = me.$refs.editor
-            editor.insertText(editor.getTextareaDom(), {
-              prefix: '![](' + imageUrl + ')\n',
-              subfix: '',
-              str: ''
-            })
-            me.uploading = false
-          })
-          me.uploading = false
-        }, errs => {
-          me.$notify.error({
-            message: '图片上传失败：' + errs
-          })
-          me.uploading = false
-        })
       },
 
       fullScreen (status) {
