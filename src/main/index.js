@@ -272,5 +272,3 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-export default i18next

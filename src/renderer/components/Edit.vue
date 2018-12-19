@@ -9,7 +9,7 @@
       <el-form-item prop="content" v-loading="uploading" :element-loading-text="uploadingText">
         <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs="true"
                       codeStyle="atom-one-dark"
-                      @imgsAdd="imgsAdd" @fullScreen="fullScreen" @save="submitForm"
+                      @imgAdd="imgAdd" @fullScreen="fullScreen" @save="submitForm"
                       :style="{height: contentHeight}" :boxShadow="false"/>
       </el-form-item>
 
@@ -46,8 +46,8 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import qiniuManager from '@/service/QiniuManager'
-  import when from 'when'
+  import qiniuUploader from '@/service/QiniuUploader'
+  import smmsUploader from '@/service/SmmsUploader'
 
   export default {
     data () {
@@ -189,34 +189,29 @@
         }
       },
 
-      imgsAdd (files) {
-        var me = this
+      async imgAdd (pos, file) {
+        let me = this
         me.uploading = true
-        me.uploadingText = '正在上传 ' + files.length + ' 张图片...'
+        me.uploadingText = '正在上传 ' + file.name
+        let sysConfig = me.$store.state.Config.config
 
-        var promises = []
-        var sysConfig = this.$store.state.Config.config
-        for (var i = 0; i < files.length; i++) {
-          promises.push(qiniuManager.upload(files[i], sysConfig))
-        }
-
-        when.all(promises).then(results => {
-          results.forEach(imageUrl => {
-            var editor = me.$refs.editor
-            editor.insertText(editor.getTextareaDom(), {
-              prefix: '![](' + imageUrl + ')\n',
-              subfix: '',
-              str: ''
-            })
+        if (sysConfig.uploadType === 'qiniu') {
+          qiniuUploader.upload(file, sysConfig).then(url => {
+            me.$refs.editor.$img2Url(pos, url)
+            me.uploading = false
+          }, err => {
+            me.$notify.error({message: '图片上传失败：' + err})
             me.uploading = false
           })
-          me.uploading = false
-        }, errs => {
-          me.$notify.error({
-            message: '图片上传失败：' + errs
+        } else {
+          smmsUploader.upload(file).then(url => {
+            me.$refs.editor.$img2Url(pos, url)
+            me.uploading = false
+          }, err => {
+            me.$notify.error({message: '图片上传失败：' + err})
+            me.uploading = false
           })
-          me.uploading = false
-        })
+        }
       },
 
       fullScreen (status) {

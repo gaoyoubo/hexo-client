@@ -4,6 +4,12 @@
       <el-form-item label="Hexo目录" label-width="120px">
         <el-input v-model="config.path"/>
       </el-form-item>
+      <el-form-item label="图片上传服务" label-width="120px">
+        <el-select v-model="config.uploadType" default-first-option placeholder="请选择图片上传服务">
+          <el-option label="sm.ms" value="sm.ms"></el-option>
+          <el-option label="七牛" value="qiniu"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="七牛存储区域" label-width="120px">
         <el-select v-model="config.qiniuZone" default-first-option placeholder="请选择机房">
           <el-option label="华东" value="huadong"></el-option>

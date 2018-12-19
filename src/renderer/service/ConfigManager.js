@@ -16,7 +16,7 @@ class ConfigManager {
   }
 
   set (key, options) {
-    var deferred = when.defer()
+    let deferred = when.defer()
     storage.set(key, options, err => {
       if (err) {
         console.error(err)
@@ -29,7 +29,7 @@ class ConfigManager {
   }
 
   get (key) {
-    var deferred = when.defer()
+    let deferred = when.defer()
     storage.get(key, (err, data) => {
       if (err) {
         deferred.reject(err)

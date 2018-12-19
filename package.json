@@ -92,6 +92,7 @@
     }
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "electron-baidu-tongji": "^1.0.2",
     "electron-json-storage": "^4.1.1",
     "element-ui": "^2.4.5",
@@ -99,8 +100,7 @@
     "i18next": "^12.1.0",
     "i18next-electron-language-detector": "0.0.10",
     "i18next-node-fs-backend": "^2.1.0",
-    "mavon-editor-hexo-client": "^2.6.19",
-    "md5": "^2.2.1",
+    "mavon-editor": "^2.6.17",
     "qiniu": "^7.1.2",
     "simple-git": "^1.107.0",
     "vue": "^2.3.3",
