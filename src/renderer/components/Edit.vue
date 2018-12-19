@@ -46,7 +46,8 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import qiniuManager from '@/service/QiniuManager'
+  import qiniuUploader from '@/service/QiniuUploader'
+  import smmsUploader from '@/service/SmmsUploader'
 
   export default {
     data () {
@@ -192,14 +193,24 @@
         let me = this
         me.uploading = true
         me.uploadingText = '正在上传 ' + file.name
-        try {
-          let sysConfig = this.$store.state.Config.config
-          let url = await qiniuManager.upload(file, sysConfig)
-          me.$refs.editor.$img2Url(pos, url)
-          me.uploading = false
-        } catch (e) {
-          me.$notify.error({message: '图片上传失败：' + e})
-          me.uploading = false
+        let sysConfig = me.$store.state.Config.config
+
+        if (sysConfig.uploadType === 'qiniu') {
+          qiniuUploader.upload(file, sysConfig).then(url => {
+            me.$refs.editor.$img2Url(pos, url)
+            me.uploading = false
+          }, err => {
+            me.$notify.error({message: '图片上传失败：' + err})
+            me.uploading = false
+          })
+        } else {
+          smmsUploader.upload(file).then(url => {
+            me.$refs.editor.$img2Url(pos, url)
+            me.uploading = false
+          }, err => {
+            me.$notify.error({message: '图片上传失败：' + err})
+            me.uploading = false
+          })
         }
       },
 
