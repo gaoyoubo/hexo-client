@@ -2,10 +2,9 @@
 
 import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron'
 import { ebtMain } from 'electron-baidu-tongji'
-import path from 'path'
 import i18next from 'i18next'
-import NodeFsBackend from 'i18next-node-fs-backend'
 import LanguageDetector from 'i18next-electron-language-detector'
+import language from './language'
 
 // 百度统计
 ebtMain(ipcMain)
@@ -222,24 +221,6 @@ function createMenu () {
   Menu.setApplicationMenu(menu)
 }
 
-i18next
-  .use(NodeFsBackend)
-  .use(LanguageDetector)
-  .init({
-    debug: process.env.NODE_ENV === 'development',
-    whitelist: ['en', 'zh'],
-    nonExplicitWhitelist: true,
-    lowerCaseLng: true,
-    load: 'languageOnly',
-    fallbackLng: ['en'],
-    ns: ['common'],
-    fallbackNS: 'common',
-    backend: {
-      loadPath: path.resolve(__dirname, '../locales/{{lng}}/{{ns}}.json'),
-      jsonIndent: 2
-    }
-  })
-
 const gotSingleInstanceLock = app.requestSingleInstanceLock()
 if (!gotSingleInstanceLock) {
   app.quit()
@@ -254,17 +235,30 @@ if (!gotSingleInstanceLock) {
 
   // Create myWindow, load the rest of the app, etc...
   app.on('ready', function () {
-    i18next.on('loaded', () => {
-      createWindow()
-      createMenu()
-    })
+    i18next
+      .use(LanguageDetector)
+      .init({
+        debug: process.env.NODE_ENV === 'development',
+        resources: language,
+        lowerCaseLng: true,
+        load: 'languageOnly',
+        fallbackLng: ['en'],
+        ns: ['common'],
+        fallbackNS: 'common'
+      }, (err, t) => {
+        if (err) {
+          return
+        }
+        createWindow()
+        createMenu()
+      })
   })
 }
 
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+  // if (process.platform !== 'darwin') {
+  app.quit()
+  // }
 })
 
 app.on('activate', () => {
