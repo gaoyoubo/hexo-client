@@ -9,19 +9,19 @@
              active-text-color="#ffd04b">
       <el-menu-item index="main">
         <i class="el-icon-document"></i>
-        <span slot="title">文章</span>
+        <span slot="title">{{$t('menuArticle')}}</span>
       </el-menu-item>
       <el-menu-item index="create">
         <i class="el-icon-edit"></i>
-        <span slot="title">发表</span>
+        <span slot="title">{{$t('menuCreate')}}</span>
       </el-menu-item>
       <el-menu-item index="settings">
         <i class="el-icon-setting"></i>
-        <span slot="title">配置</span>
+        <span slot="title">{{$t('menuSettings')}}</span>
       </el-menu-item>
       <el-menu-item index="about">
         <i class="el-icon-info"></i>
-        <span slot="title">关于</span>
+        <span slot="title">{{$t('menuAbout')}}</span>
       </el-menu-item>
     </el-menu>
   </div>

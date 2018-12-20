@@ -1,12 +1,12 @@
 <template>
 
-  <el-scrollbar style="height: 100%; width: 300px; min-width: 300px;" ref="scrollbar" class="el-scrollbar">
+  <el-scrollbar style="height: 100%; width: 250px; min-width: 250px;" ref="scrollbar" class="el-scrollbar">
     <div class="tool-box">
       <div class="tool-box-content">
-        <el-button style="margin: 0px;" size="mini" icon="el-icon-edit" type="info"
+        <el-button style="margin: 0px; padding: 6px 8px;" size="mini" icon="el-icon-edit" type="info"
                    @click="createPost">{{$t('new')}}
         </el-button>
-        <el-button style="margin: 0px;" size="mini" icon="el-icon-search" type="primary"
+        <el-button style="margin: 0px; padding: 6px 8px;" size="mini" icon="el-icon-search" type="primary"
                    @click="search">{{$t('search')}}
         </el-button>
         <deploy/>
@@ -65,9 +65,9 @@
       },
 
       async deletePost (id) {
-        if (confirm('是否确认删除该文章？')) {
+        if (confirm(this.$t('deleteArticleConfirmMsg'))) {
           await this.$store.dispatch('Hexo/deletePost', id)
-          this.$notify({title: '成功', message: '删除成功', type: 'success'})
+          this.$notify({title: this.$t('successTitle'), message: this.$t('deleteSuccessMsg'), type: 'success'})
         }
       },
 
@@ -166,7 +166,7 @@
 
   .article-list-item {
     color: #727272;
-    font-size: 13px;
+    font-size: 12px;
     padding: 8px;
     position: relative;
     cursor: pointer;
@@ -177,7 +177,7 @@
     color: #323232;
     margin: 0px 0px 5px;
     font-weight: 400;
-    font-size: 17px;
+    font-size: 15px;
     width: auto;
     overflow: hidden;
     text-overflow: ellipsis;

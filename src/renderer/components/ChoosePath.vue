@@ -1,18 +1,18 @@
 <template>
-  <el-dialog title="请先填写正确的Hexo安装目录：" :visible.sync="dialogFormVisible" :modal="true"
+  <el-dialog :title="$t('selectHexoPathTitle')" :visible.sync="dialogFormVisible" :modal="true"
              :close-on-click-modal="false"
              :close-on-press-escape="false"
              :show-close="false">
     <el-form>
       <el-form-item>
-        <el-button type="primary" @click="showFileDialog">选择目录</el-button>
+        <el-button type="primary" @click="showFileDialog">{{$t('selectHexoPath')}}</el-button>
       </el-form-item>
       <el-form-item>
-        <el-input v-model="path" :disabled="true" auto-complete="off" placeholder="请选择正确的Hexo安装目录"></el-input>
+        <el-input v-model="path" :disabled="true" auto-complete="off" :placeholder="$t('selectHexoPathTitle')"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click.sync="setConfig">确 定</el-button>
+      <el-button type="primary" @click.sync="setConfig">{{$t('okBtn')}}</el-button>
     </div>
   </el-dialog>
 </template>
@@ -36,7 +36,6 @@
         })
       },
       async setConfig () {
-        // let config = {path: this.path}
         let config = this.$store.state.Config.config
         config.path = this.path
         await this.$store.dispatch('Config/setConfig', config)

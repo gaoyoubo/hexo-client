@@ -3,7 +3,7 @@
     <div class="ins-search-mask"></div>
     <div class="ins-search-container">
       <div class="ins-input-wrapper">
-        <input type="text" class="ins-search-input" placeholder="想要查找什么..." x-webkit-speech="" ref="searchInput"
+        <input type="text" class="ins-search-input" :placeholder="$t('searchPlaceholder')" x-webkit-speech="" ref="searchInput"
                v-model.trim.change="keyword" @keyup.38="selectUp" @keyup.40="selectDown" @keyup.13="selectEnter"/>
         <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"
                 @click="hide">
