@@ -3,7 +3,6 @@
 import { app, BrowserWindow, ipcMain, Menu, shell } from 'electron'
 import { ebtMain } from 'electron-baidu-tongji'
 import i18next from 'i18next'
-import LanguageDetector from 'i18next-electron-language-detector'
 import language from './language'
 
 // 百度统计
@@ -221,6 +220,20 @@ function createMenu () {
   Menu.setApplicationMenu(menu)
 }
 
+function getLanguage (callback) {
+  const CONFIG_KEY = 'sysConfig'
+  const storage = require('electron-json-storage')
+  const os = require('os')
+  storage.setDataPath(os.homedir() + '/.hexo-client')
+  storage.get(CONFIG_KEY, (err, data) => {
+    let lng = 'en'
+    if (!err && data && data.language) {
+      lng = data.language
+    }
+    callback(lng)
+  })
+}
+
 const gotSingleInstanceLock = app.requestSingleInstanceLock()
 if (!gotSingleInstanceLock) {
   app.quit()
@@ -234,24 +247,26 @@ if (!gotSingleInstanceLock) {
   })
 
   // Create myWindow, load the rest of the app, etc...
-  app.on('ready', function () {
-    i18next
-      .use(LanguageDetector)
-      .init({
-        debug: process.env.NODE_ENV === 'development',
-        resources: language,
-        lowerCaseLng: true,
-        load: 'languageOnly',
-        fallbackLng: ['en'],
-        ns: ['common'],
-        fallbackNS: 'common'
-      }, (err, t) => {
-        if (err) {
-          return
-        }
-        createWindow()
-        createMenu()
-      })
+  app.on('ready', async function () {
+    getLanguage(function (lng) {
+      i18next
+        .init({
+          debug: process.env.NODE_ENV === 'development',
+          resources: language,
+          lowerCaseLng: true,
+          load: 'languageOnly',
+          lng: lng,
+          fallbackLng: ['en'],
+          ns: ['common'],
+          fallbackNS: 'common'
+        }, (err, t) => {
+          if (err) {
+            return
+          }
+          createWindow()
+          createMenu()
+        })
+    })
   })
 }
 

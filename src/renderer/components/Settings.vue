@@ -4,6 +4,12 @@
       <el-form-item label="Hexo目录" label-width="120px">
         <el-input v-model="config.path"/>
       </el-form-item>
+      <el-form-item label="语言" label-width="120px">
+        <el-select v-model="config.language" default-first-option placeholder="请选择语言">
+          <el-option label="英语" value="en"></el-option>
+          <el-option label="汉语" value="zh"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="图片上传服务" label-width="120px">
         <el-select v-model="config.uploadType" default-first-option placeholder="请选择图片上传服务">
           <el-option label="sm.ms" value="sm.ms"></el-option>
@@ -43,6 +49,9 @@
       return {
         config: {
           base: '',
+          language: '',
+          uploadType: '',
+          qiniuZone: '',
           qiniuAccessKey: '',
           qiniuSecretKey: '',
           qiniuBucket: '',
@@ -55,11 +64,15 @@
     },
     methods: {
       async saveConfig () {
+        let config = this.$store.state.Config.config
+        let message = '保存成功'
+        if (config.language !== this.config.language) {
+          message = '保存成功，变更语言需要重启后生效。'
+        }
         await this.$store.dispatch('Config/setConfig', this.config)
-        this.$notify({
+        this.$notify.success({
           title: '成功',
-          message: '保存成功',
-          type: 'success'
+          message: message
         })
       }
     }

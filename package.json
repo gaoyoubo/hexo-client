@@ -98,7 +98,6 @@
     "element-ui": "^2.4.5",
     "hexo": "^3.8.0",
     "i18next": "^12.1.0",
-    "i18next-electron-language-detector": "0.0.10",
     "mavon-editor": "^2.6.17",
     "qiniu": "^7.1.2",
     "simple-git": "^1.107.0",
