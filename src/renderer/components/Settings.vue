@@ -1,17 +1,17 @@
 <template>
   <el-main class="setting-main">
     <el-form label-width="120px" label-position="left" :model="config">
-      <el-form-item label="Hexo目录">
+      <el-form-item :label="$t('settingTitlePath')">
         <el-input v-model="config.path" style="width:100%"/>
       </el-form-item>
-      <el-form-item label="语言">
-        <el-select v-model="config.language" default-first-option placeholder="请选择语言" style="width:100%">
-          <el-option label="英语" value="en"></el-option>
-          <el-option label="汉语" value="zh"></el-option>
+      <el-form-item :label="$t('settingTitleLanguage')">
+        <el-select v-model="config.language" default-first-option :placeholder="$t('settingLanguagePlaceholder')" style="width:100%">
+          <el-option :label="$t('chinese')" value="zh"></el-option>
+          <el-option :label="$t('english')" value="en"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="图片上传服务">
-        <el-select v-model="config.uploadType" default-first-option placeholder="请选择图片上传服务" style="width:100%">
+      <el-form-item :label="$t('settingTitleImageServer')">
+        <el-select v-model="config.uploadType" default-first-option :placeholder="$t('settingImageServerPlaceholder')" style="width:100%">
           <el-option label="sm.ms" value="sm.ms"></el-option>
           <el-option label="七牛" value="qiniu"></el-option>
         </el-select>
@@ -41,7 +41,7 @@
         </div>
       </transition>
       <el-form-item>
-        <el-button type="primary" @click.sync="saveConfig">保存配置</el-button>
+        <el-button type="primary" @click.sync="saveConfig">{{$t('save')}}</el-button>
       </el-form-item>
     </el-form>
   </el-main>
@@ -85,7 +85,7 @@
 
 <style scoped>
   .setting-main .el-form {
-    margin-top: 50px;
+    margin-top: 30px;
     width: 650px;
   }
 </style>

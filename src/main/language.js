@@ -29,7 +29,20 @@ let zh = {
   'menuCreate': '发表',
   'menuSettings': '配置',
   'menuAbout': '关于',
-  'searchPlaceholder': '想要查找什么...'
+  'searchPlaceholder': '想要查找什么...',
+  'articleTitlePlaceholder': '文章标题',
+  'articleContentPlaceholder': '开始编辑',
+  'selectTags': '请选择标签',
+  'selectCategories': '请选择分类',
+  'save': '保存',
+  'openToc': '开启目录',
+  'settingTitlePath': 'Hexo路径',
+  'settingTitleLanguage': '语言',
+  'settingLanguagePlaceholder': '请选择语言',
+  'chinese': '中文',
+  'english': '英文',
+  'settingTitleImageServer': '图片服务器',
+  'settingImageServerPlaceholder': '请选择图片服务器'
 }
 
 // english
@@ -63,7 +76,20 @@ let en = {
   'menuCreate': 'Create',
   'menuSettings': 'Settings',
   'menuAbout': 'About',
-  'searchPlaceholder': 'keyword...'
+  'searchPlaceholder': 'keyword...',
+  'articleTitlePlaceholder': 'Title...',
+  'articleContentPlaceholder': 'Content...',
+  'selectTags': 'Select tags',
+  'selectCategories': 'Select categories',
+  'save': 'Save',
+  'openToc': 'TOC',
+  'settingTitlePath': 'Hexo path',
+  'settingTitleLanguage': 'Language',
+  'settingLanguagePlaceholder': 'Select language',
+  'chinese': 'Chinese',
+  'english': 'English',
+  'settingTitleImageServer': 'Image server',
+  'settingImageServerPlaceholder': 'Select image server'
 }
 
 export default {

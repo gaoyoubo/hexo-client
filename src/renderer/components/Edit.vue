@@ -3,19 +3,19 @@
 
     <el-form :model="postForm" :rules="postFormRules" ref="postForm">
       <el-form-item prop="title">
-        <el-input v-model="postForm.title" :readonly="true" :disabled="true" placeholder="文章标题"></el-input>
+        <el-input v-model="postForm.title" :readonly="true" :disabled="true" :placeholder="$t('articleTitlePlaceholder')"></el-input>
       </el-form-item>
 
       <el-form-item prop="content" v-loading="uploading" :element-loading-text="uploadingText">
         <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs="true"
                       codeStyle="atom-one-dark"
                       @imgAdd="imgAdd" @fullScreen="fullScreen" @save="submitForm"
-                      :style="{height: contentHeight}" :boxShadow="false"/>
+                      :style="{height: contentHeight}" :boxShadow="false" :placeholder="$t('articleContentPlaceholder')"/>
       </el-form-item>
 
       <el-form-item prop="tags">
         <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
-                   style="width:100%;" placeholder="请选择标签" @input="formChanged = true">
+                   style="width:100%;" :placeholder="$t('selectTags')" @input="formChanged = true">
           <el-option v-for="tag in tags"
                      :key="tag"
                      :label="tag"
@@ -26,7 +26,7 @@
 
       <el-form-item prop="categories">
         <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
-                   style="width:100%;" placeholder="请选择分类" @input="formChanged = true">
+                   style="width:100%;" :placeholder="$t('selectCategories')" @input="formChanged = true">
           <el-option v-for="category in categories"
                      :key="category"
                      :label="category"
@@ -36,8 +36,8 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="success" @click="submitForm()">保存</el-button>
-        <el-switch v-model="postForm.toc" @input="formChanged = true" active-text="开启目录"></el-switch>
+        <el-button type="success" @click="submitForm()">{{$t('save')}}</el-button>
+        <el-switch v-model="postForm.toc" @input="formChanged = true" :active-text="$t('openToc')"></el-switch>
       </el-form-item>
     </el-form>
 
