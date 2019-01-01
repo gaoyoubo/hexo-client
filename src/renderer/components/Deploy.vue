@@ -14,26 +14,30 @@
     },
     methods: {
       async deploy () {
-        if (await this.isModified()) {
-          this.commit('Commit at ' + this.dateFormat('yyyy-MM-dd HH:mm:ss', new Date()))
+        let simpleStatus = await this.simpleStatus()
+        if (simpleStatus.modified) {
+          this.commit(simpleStatus.branch, 'Commit at ' + this.dateFormat('yyyy-MM-dd HH:mm:ss', new Date()))
         } else {
           this.$notify({message: '资料库无变更', type: 'warning'})
         }
       },
 
-      async isModified () {
+      async simpleStatus () {
+        let status = {modified: false, branch: 'master'}
         try {
           let statusSummary = await this.git().status()
-          if (statusSummary.modified.length > 0) return true
-          if (statusSummary.not_added.length > 0) return true
-          return false
+          if (statusSummary.modified.length > 0 || statusSummary.not_added.length > 0) {
+            status.modified = true
+          }
+          status.branch = statusSummary.current
+          return status
         } catch (e) {
           console.error(e)
-          return false
+          return status
         }
       },
 
-      async commit (msg) {
+      async commit (branch, msg) {
         let loading = this.$loading({
           lock: true,
           text: '发布中...',
@@ -43,7 +47,7 @@
         try {
           await this.git().add('./*')
           await this.git().commit(msg)
-          await this.git().push('origin', 'master')
+          await this.git().push('origin', branch)
           this.$notify({message: '发布成功', type: 'success'})
         } catch (e) {
           console.log(e)
