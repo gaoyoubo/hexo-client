@@ -3,14 +3,16 @@
 
     <el-form :model="postForm" :rules="postFormRules" ref="postForm">
       <el-form-item prop="title">
-        <el-input v-model="postForm.title" @input="formChanged = true" :placeholder="$t('articleTitlePlaceholder')"></el-input>
+        <el-input v-model="postForm.title" @input="formChanged = true"
+                  :placeholder="$t('articleTitlePlaceholder')"></el-input>
       </el-form-item>
 
       <el-form-item prop="content" v-loading="uploading" :element-loading-text="uploadingText">
         <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs="true"
                       codeStyle="atom-one-dark"
                       @imgAdd="imgAdd" @fullScreen="fullScreen" @save="submitForm"
-                      :style="{height: contentHeight}" :boxShadow="false" :placeholder="$t('articleContentPlaceholder')"/>
+                      :language="editorLanguage" :style="{height: contentHeight}" :boxShadow="false"
+                      :placeholder="$t('articleContentPlaceholder')"/>
       </el-form-item>
 
       <el-form-item prop="tags">
@@ -196,7 +198,15 @@
       ...mapGetters({
         tags: 'Hexo/tags',
         categories: 'Hexo/categories'
-      })
+      }),
+      editorLanguage () {
+        let config = this.$store.state.Config.config
+        if (config.language === 'zh') {
+          return 'zh-CN'
+        } else {
+          return 'en'
+        }
+      }
     }
   }
 </script>
