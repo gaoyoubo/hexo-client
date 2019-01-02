@@ -5,13 +5,15 @@
         <el-input v-model="config.path" style="width:100%"/>
       </el-form-item>
       <el-form-item :label="$t('settingTitleLanguage')">
-        <el-select v-model="config.language" default-first-option :placeholder="$t('settingLanguagePlaceholder')" style="width:100%">
+        <el-select v-model="config.language" default-first-option :placeholder="$t('settingLanguagePlaceholder')"
+                   style="width:100%">
           <el-option :label="$t('chinese')" value="zh"></el-option>
           <el-option :label="$t('english')" value="en"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('settingTitleImageServer')">
-        <el-select v-model="config.uploadType" default-first-option :placeholder="$t('settingImageServerPlaceholder')" style="width:100%">
+        <el-select v-model="config.uploadType" default-first-option :placeholder="$t('settingImageServerPlaceholder')"
+                   style="width:100%">
           <el-option label="sm.ms" value="sm.ms"></el-option>
           <el-option label="七牛" value="qiniu"></el-option>
         </el-select>
