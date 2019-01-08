@@ -1,7 +1,7 @@
 <template>
   <div class="tag-tree">
     <div class="toggle" :class="{open: open, close: !open}" @click="toggle">
-      <i :class="{'el-icon-arrow-left': open, 'el-icon-arrow-right': !open}"></i>
+      <i class="iconfont" :class="{'icon-arrow-left': open, 'icon-arrow-right': !open}" style="font-size:24px;"></i>
     </div>
     <transition name="el-fade-in">
       <div v-show="open" class="tool-box" :style="{height: toolboxHeight}">
@@ -15,26 +15,26 @@
                     ref="scrollbar" class="el-scrollbar">
         <el-menu default-active="all" :default-openeds="defaultOpeneds" @select="handleSelect">
           <el-menu-item index="all">
-            <v-icon :width="12" :height="12" name="archive"></v-icon>
+            <i class="iconfont icon-archive"></i>
             <span slot="title">全部</span>
           </el-menu-item>
           <el-submenu index="categories">
             <template slot="title">
-              <v-icon :width="12" :height="12" name="indent"></v-icon>
+              <i class="iconfont icon-categories"></i>
               <span slot="title">分类</span>
             </template>
             <el-menu-item v-for="cat in categories" :index="'cat#' + cat">
-              <v-icon :width="12" :height="12" name="list"></v-icon>
+              <i class="iconfont icon-category"></i>
               <span slot="title">{{cat}}</span>
             </el-menu-item>
           </el-submenu>
           <el-submenu index="tags">
             <template slot="title">
-              <v-icon :width="12" :height="12" name="tags"></v-icon>
+              <i class="iconfont icon-tags"></i>
               <span slot="title">标签</span>
             </template>
             <el-menu-item v-for="tag in tags" :index="'tag#' + tag">
-              <v-icon :width="12" :height="12" name="tag"></v-icon>
+              <i class="iconfont icon-tag"></i>
               <span slot="title">{{tag}}</span>
             </el-menu-item>
           </el-submenu>
@@ -49,11 +49,10 @@
   import Deploy from './Deploy'
 
   export default {
-    name: 'TagTree',
+    name: 'TreeNav',
     components: {Deploy},
     data () {
       return {
-        open: true,
         defaultOpeneds: ['categories', 'tags'],
         clientHeight: '', // 总高度
         scrollbarHeight: '', // 滚动条总高度
@@ -75,9 +74,9 @@
       },
       toggle () {
         if (this.open) {
-          this.open = false
+          this.$store.dispatch('UiStatus/closeTreeNav')
         } else {
-          this.open = true
+          this.$store.dispatch('UiStatus/openTreeNav')
         }
       },
       handleSelect (key, keyPath) {
@@ -98,7 +97,10 @@
       ...mapGetters({
         tags: 'Hexo/tags',
         categories: 'Hexo/categories'
-      })
+      }),
+      open () {
+        return this.$store.state.UiStatus.treeNavOpen
+      }
     }
   }
 </script>
