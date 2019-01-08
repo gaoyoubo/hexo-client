@@ -104,8 +104,20 @@ const actions = {
     return deferred.promise
   },
 
-  // 创建、修改文章
+  // 创建文章
   async createPost (context, postForm) {
+    let deferred = when.defer()
+    let hexo = context.state.instance
+    hexo.post.create(postForm, false).then(function () {
+      deferred.resolve()
+    }, function (err) {
+      deferred.reject(err)
+    })
+    return deferred.promise
+  },
+
+  // 修改文章
+  async editPost (context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
     hexo.post.create(postForm, true).then(function () {
@@ -186,6 +198,7 @@ const getters = {
         posts.push({
           id: post._id,
           title: post.title,
+          path: post.path,
           date: post.date.format('YYYY-MM-DD hh:mm:ss'),
           author: post.author,
           tags: post.tags.data,
@@ -196,7 +209,7 @@ const getters = {
     }
     return posts
   },
-  filtredPosts: state => {
+  filteredPosts: state => {
     let posts = []
     let temp = state.instance.locals.get('posts').sort('date', -1)
     if (temp && temp.length > 0) {

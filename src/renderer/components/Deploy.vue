@@ -25,7 +25,7 @@
         let status = {modified: false, branch: 'master'}
         try {
           let statusSummary = await this.git().status()
-          if (statusSummary.modified.length > 0 || statusSummary.not_added.length > 0) {
+          if (statusSummary.modified.length > 0 || statusSummary.not_added.length > 0 || statusSummary.deleted.length > 0) {
             status.modified = true
           }
           status.branch = statusSummary.current

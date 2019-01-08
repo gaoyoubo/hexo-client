@@ -81,7 +81,7 @@
 
     computed: {
       posts () {
-        return this.$store.getters['Hexo/filtredPosts']
+        return this.$store.getters['Hexo/filteredPosts']
       },
       selectedPostId () {
         let selectedPost = this.$store.getters['Hexo/selectedPost']
