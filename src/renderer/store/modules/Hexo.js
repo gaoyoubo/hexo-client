@@ -78,8 +78,6 @@ const actions = {
       return
     }
 
-    console.log('Selected tree', str)
-
     let tagPrefix = 'tag#'
     let catPrefix = 'cat#'
 
