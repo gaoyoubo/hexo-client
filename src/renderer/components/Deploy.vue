@@ -1,6 +1,5 @@
 <template>
-  <el-button style="margin: 0px; padding: 6px 8px;" size="mini" icon="el-icon-upload" type="success"
-             @click.sync="deploy">{{$t('deploy')}}
+  <el-button icon="el-icon-upload" size="small" type="success" @click.sync="deploy" circle>
   </el-button>
 </template>
 

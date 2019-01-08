@@ -16,10 +16,14 @@ import 'mavon-editor/dist/css/index.css'
 import VueParams from 'vue-params'
 import VueI18Next from 'vue-i18next'
 
+import 'vue-awesome/icons'
+import Icon from 'vue-awesome/components/Icon'
+
 Vue.use(ElementUI)
 Vue.use(mavonEditor)
 Vue.use(VueParams)
 Vue.use(VueI18Next)
+Vue.component('v-icon', Icon)
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = false

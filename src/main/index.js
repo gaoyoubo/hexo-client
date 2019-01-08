@@ -70,7 +70,7 @@ function createMenu () {
           }
         },
         {
-          label: i18next.t('publish'),
+          label: i18next.t('deploy'),
           accelerator: 'Shift+CmdOrCtrl+D',
           click: function (item, focusedWindow) {
             if (mainWindow) {
