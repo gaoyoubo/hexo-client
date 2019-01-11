@@ -2,10 +2,20 @@
   <el-main>
 
     <el-form :model="postForm" :rules="postFormRules" ref="postForm">
-      <el-form-item prop="title">
-        <el-input v-model="postForm.title" :readonly="true" :disabled="true"
-                  :placeholder="$t('articleTitlePlaceholder')"></el-input>
-      </el-form-item>
+      <el-row :gutter="10">
+        <el-col :span="12">
+          <el-form-item prop="title">
+            <el-input v-model="postForm.title" :disabled="true"
+                      :placeholder="$t('articleTitlePlaceholder')" style="width: 100%;"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item prop="path">
+            <el-input v-model="postForm.path" :disabled="true"
+                      :placeholder="$t('articlePathPlaceholder')" style="width: 100%;"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
       <el-form-item prop="content" v-loading="uploading" :element-loading-text="uploadingText">
         <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs="true"
@@ -56,6 +66,7 @@
       return {
         postForm: {
           title: '',
+          path: '',
           originContent: '',
           content: '',
           tags: [],
@@ -145,6 +156,16 @@
             case 'title':
               me.postForm.title = post.title.trim()
               break
+            case 'path':
+              let source = post.source.trim()
+              if (source) {
+                let start = source.indexOf('/')
+                let end = source.lastIndexOf('.md')
+                if (start !== -1 && end !== -1 && start !== end) {
+                  me.postForm.path = source.substring(start + 1, end)
+                }
+              }
+              break
             case '_content':
               me.postForm.originContent = post._content.trim()
               me.postForm.content = post._content.trim()
@@ -179,7 +200,7 @@
         let valid = await this.$store.dispatch('Hexo/validatePostForm', this.$refs.postForm)
         if (valid) {
           try {
-            await this.$store.dispatch('Hexo/createPost', this.postForm)
+            await this.$store.dispatch('Hexo/editPost', this.postForm)
             this.formChanged = false
             this.postForm.originContent = this.postForm.content
             this.$notify({title: '成功', message: '修改成功', type: 'success'})

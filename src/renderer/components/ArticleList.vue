@@ -1,17 +1,6 @@
 <template>
 
   <el-scrollbar style="height: 100%; width: 250px; min-width: 250px;" ref="scrollbar" class="el-scrollbar">
-    <div class="tool-box">
-      <div class="tool-box-content">
-        <el-button style="margin: 0px; padding: 6px 8px;" size="mini" icon="el-icon-edit" type="info"
-                   @click="createPost">{{$t('new')}}
-        </el-button>
-        <el-button style="margin: 0px; padding: 6px 8px;" size="mini" icon="el-icon-search" type="primary"
-                   @click="search">{{$t('search')}}
-        </el-button>
-        <deploy/>
-      </div>
-    </div>
     <div class="article-list" v-if="posts.length > 0">
       <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)"
            :data-id="post.id" v-bind:class="{active: post.id === selectedPostId}" :id="post.id">
@@ -39,10 +28,7 @@
 </template>
 
 <script>
-  import Deploy from './Deploy'
-
   export default {
-    components: {Deploy},
     data () {
       return {
         scrollWrap: null // 滚动条容器
@@ -90,27 +76,12 @@
           this.scrollWrap.scrollTop = scrollTop
           this.scrollWrap.scrollLeft = scrollLeft
         }
-      },
-
-      // 新建文章
-      createPost () {
-        this.$router.push({name: 'create'})
-      },
-
-      // 搜索
-      search () {
-        this.$store.dispatch('Search/show')
-      },
-
-      // generate
-      generate () {
-        this.$store.dispatch('Hexo/deploy')
       }
     },
 
     computed: {
       posts () {
-        return this.$store.getters['Hexo/posts']
+        return this.$store.getters['Hexo/filteredPosts']
       },
       selectedPostId () {
         let selectedPost = this.$store.getters['Hexo/selectedPost']
@@ -120,7 +91,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .el-scrollbar {
     width: 380px;
     border-right: 1px solid #E9E9E9;
@@ -130,27 +101,8 @@
     /*scroll-behavior: smooth;*/
   }
 
-  .tool-box {
-    width: 100%;
-    line-height: 40px;
-    position: absolute;
-    top: 0px;
-    border: none;
-    box-shadow: 0px 0px 10px #e4e7ed;
-    background-color: #fff;
-    z-index: 1;
-  }
-
-  .tool-box-content {
-    line-height: 40px;
-    /*margin-left: 10px;*/
-    text-align: center;
-    vertical-align: middle;
-  }
-
   .article-list {
     background-color: #FAFAFA;
-    margin-top: 40px;
   }
 
   .article-none-panel {

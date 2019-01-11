@@ -7,7 +7,9 @@ const fs = require('fs')
 const state = {
   instance: null,
   inited: false,
-  selectedPostId: null
+  selectedPostId: null,
+  selectedTag: null,
+  selectedCat: null
 }
 const mutations = {
   setInstance (state, hexo) {
@@ -18,6 +20,12 @@ const mutations = {
   },
   setSelectedPostId (state, postId) {
     state.selectedPostId = postId
+  },
+  setSelectedTag (state, tag) {
+    state.selectedTag = tag
+  },
+  setSelectedCat (state, cat) {
+    state.selectedCat = cat
   }
 }
 const actions = {
@@ -64,6 +72,29 @@ const actions = {
     context.commit('setSelectedPostId', postId)
   },
 
+  // 树形菜单中选中项目
+  selectTree (context, str) {
+    if (!str) {
+      return
+    }
+
+    let tagPrefix = 'tag#'
+    let catPrefix = 'cat#'
+
+    if (str.lastIndexOf(tagPrefix) === 0) {
+      let tag = str.substr(tagPrefix.length)
+      context.commit('setSelectedTag', tag)
+      context.commit('setSelectedCat', '')
+    } else if (str.lastIndexOf(catPrefix) === 0) {
+      let cat = str.substr(tagPrefix.length)
+      context.commit('setSelectedTag', '')
+      context.commit('setSelectedCat', cat)
+    } else {
+      context.commit('setSelectedTag', '')
+      context.commit('setSelectedCat', '')
+    }
+  },
+
   // 验证表单
   validatePostForm (context, postForm) {
     let deferred = when.defer()
@@ -73,8 +104,20 @@ const actions = {
     return deferred.promise
   },
 
-  // 创建、修改文章
+  // 创建文章
   async createPost (context, postForm) {
+    let deferred = when.defer()
+    let hexo = context.state.instance
+    hexo.post.create(postForm, false).then(function () {
+      deferred.resolve()
+    }, function (err) {
+      deferred.reject(err)
+    })
+    return deferred.promise
+  },
+
+  // 修改文章
+  async editPost (context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
     hexo.post.create(postForm, true).then(function () {
@@ -152,6 +195,40 @@ const getters = {
     let temp = state.instance.locals.get('posts').sort('date', -1)
     if (temp && temp.length > 0) {
       temp.forEach(post => {
+        posts.push({
+          id: post._id,
+          title: post.title,
+          path: post.path,
+          date: post.date.format('YYYY-MM-DD hh:mm:ss'),
+          author: post.author,
+          tags: post.tags.data,
+          categories: post.categories.data,
+          summary: utils.getPostSummary(post.content)
+        })
+      })
+    }
+    return posts
+  },
+  filteredPosts: state => {
+    let posts = []
+    let temp = state.instance.locals.get('posts').sort('date', -1)
+    if (temp && temp.length > 0) {
+      temp.forEach(post => {
+        let tags = []
+        let categories = []
+        post.tags.data.forEach(data => tags.push(data.name))
+        post.categories.data.forEach(data => categories.push(data.name))
+        if (state.selectedTag) {
+          if (!tags || tags.length === 0 || tags.indexOf(state.selectedTag) === -1) {
+            return
+          }
+        }
+        if (state.selectedCat) {
+          if (!categories || categories.length === 0 || categories.indexOf(state.selectedCat) === -1) {
+            return
+          }
+        }
+
         posts.push({
           id: post._id,
           title: post.title,

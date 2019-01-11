@@ -28,13 +28,13 @@
       <div>
         <h3>捐赠</h3>
         <div class="juanzeng">
-          <img src="../assets/alipay.png">
+          <img src="../assets/images/alipay.png">
           <div class="txt">
             <span>支付宝</span>
           </div>
         </div>
         <div class="juanzeng">
-          <img src="../assets/weixin.png">
+          <img src="../assets/images/weixin.png">
           <div class="txt">
             <span>微信</span>
           </div>

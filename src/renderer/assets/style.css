@@ -1,6 +1,8 @@
+@import "iconfont.css";
+
 * {
-    /*background: transparent;*/
-    font-family: -apple-system, "Source Code Pro", Consolas, Monaco, Menlo, Consolas, monospace;
+    background: transparent;
+    font-family: system, -apple-system, "Source Code Pro", "Microsoft YaHei", Menlo, Monaco, 'Courier New', monospace;
 }
 
 html, body {
@@ -8,7 +10,6 @@ html, body {
     overflow: hidden;
     margin: 0px;
     padding: 0px;
-    font-family: "Segoe UI", "Lucida Grande", Helvetica, Arial, "Microsoft YaHei", FreeSans, Arimo, "Droid Sans", "wenquanyi micro hei", "Hiragino Sans GB", "Hiragino Sans GB W3", FontAwesome, sans-serif;
     background-color: #ffffff;
 }
 
@@ -37,7 +38,7 @@ html, body {
     width: 64px;
     height: 64px;
     margin-top: 4px;
-    background: url("icon.png") no-repeat center center;
+    background: url("images/icon.png") no-repeat center center;
     background-size: 80%;
 }
 
@@ -92,7 +93,6 @@ html, body {
 }
 
 .article-entry {
-    font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
     font-size: 15px;
     line-height: 21px;
     padding: 0px;
@@ -107,7 +107,6 @@ html, body {
     margin: 0 3px;
     background: #ddd;
     border: 1px solid #ccc;
-    font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
     word-wrap: break-word;
     font-size: 14px;
 }
@@ -214,7 +213,6 @@ html, body {
     font-size: 10px;
     border: 1px solid #ccc;
     text-shadow: 0 1px #444;
-    font-family: Menlo, Monaco, "Andale Mono", "lucida console", "Courier New", monospace;
 }
 
 .article-entry pre code {

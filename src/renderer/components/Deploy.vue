@@ -1,6 +1,5 @@
 <template>
-  <el-button style="margin: 0px; padding: 6px 8px;" size="mini" icon="el-icon-upload" type="success"
-             @click.sync="deploy">{{$t('deploy')}}
+  <el-button icon="el-icon-upload" size="small" type="success" @click.sync="deploy" circle>
   </el-button>
 </template>
 
@@ -26,7 +25,7 @@
         let status = {modified: false, branch: 'master'}
         try {
           let statusSummary = await this.git().status()
-          if (statusSummary.modified.length > 0 || statusSummary.not_added.length > 0) {
+          if (statusSummary.modified.length > 0 || statusSummary.not_added.length > 0 || statusSummary.deleted.length > 0) {
             status.modified = true
           }
           status.branch = statusSummary.current

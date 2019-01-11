@@ -184,7 +184,6 @@
     box-sizing: border-box;
     padding: 12px 28px 12px 20px;
     border-bottom: 1px solid #e2e2e2;
-    font-family: "Microsoft Yahei Light", "Microsoft Yahei", Helvetica, Arial, sans-serif;
   }
 
   .ins-close {

@@ -2,7 +2,8 @@
 const state = {
   postListScrollTop: 0,
   postListScrollLeft: 0,
-  dialogFormVisible: false
+  dialogFormVisible: false,
+  treeNavOpen: true // 树形导航菜单是否开启
 }
 const mutations = {
   onscroll (state, obj) {
@@ -11,6 +12,9 @@ const mutations = {
   },
   setDialogFormVisible (state, visible) {
     state.dialogFormVisible = visible
+  },
+  setTreeNavOpen (state, open) {
+    state.treeNavOpen = open
   }
 }
 const actions = {
@@ -22,6 +26,12 @@ const actions = {
   },
   setDialogFormVisible (context, visible) {
     context.commit('setDialogFormVisible', visible)
+  },
+  openTreeNav (context) {
+    context.commit('setTreeNavOpen', true)
+  },
+  closeTreeNav (context) {
+    context.commit('setTreeNavOpen', false)
   }
 }
 export default {

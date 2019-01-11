@@ -2,10 +2,20 @@
   <el-main>
 
     <el-form :model="postForm" :rules="postFormRules" ref="postForm">
-      <el-form-item prop="title">
-        <el-input v-model="postForm.title" @input="formChanged = true"
-                  :placeholder="$t('articleTitlePlaceholder')"></el-input>
-      </el-form-item>
+      <el-row :gutter="10">
+        <el-col :span="12">
+          <el-form-item prop="title">
+            <el-input v-model="postForm.title" @input="formChanged = true"
+                      :placeholder="$t('articleTitlePlaceholder')" style="width: 100%;"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item prop="path">
+            <el-input v-model="postForm.path" @input="formChanged = true"
+                      :placeholder="$t('articlePathPlaceholder')" style="width: 100%;"></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
       <el-form-item prop="content" v-loading="uploading" :element-loading-text="uploadingText">
         <mavon-editor ref="editor" v-model="postForm.content" :toolbars="toolbars" :ishljs="true"
@@ -53,9 +63,22 @@
 
   export default {
     data () {
+      // let validatePath = function (rule, value, callback) {
+      //   if (value === '') {
+      //     callback()
+      //   } else {
+      //     let tmp = encodeURIComponent(value)
+      //     if (tmp !== value) {
+      //       callback(new Error('文章路径包含非法字符'))
+      //     } else {
+      //       callback()
+      //     }
+      //   }
+      // }
       return {
         postForm: {
           title: '',
+          path: '',
           originContent: '',
           content: '',
           tags: [],
@@ -67,6 +90,9 @@
             {required: true, message: '请输入标题', trigger: 'blur'},
             {min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur'}
           ],
+          // path: [
+          //   {validator: validatePath, trigger: 'blur'}
+          // ],
           content: [
             {required: true, message: '请输入内容', trigger: 'blur'}
           ]
@@ -144,6 +170,7 @@
             this.formChanged = false
             this.postForm.originContent = this.postForm.content
             this.$notify({title: '成功', message: '保存成功', type: 'success'})
+            this.$router.push({name: 'main'})
           } catch (err) {
             this.$notify.error({title: '错误', message: '保存失败'})
           }
