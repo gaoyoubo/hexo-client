@@ -3,16 +3,13 @@
     <div class="toggle" :class="{open: open, close: !open}" @click="toggle">
       <i class="iconfont" :class="{'icon-arrow-left': open, 'icon-arrow-right': !open}" style="font-size:24px;"></i>
     </div>
-    <transition name="el-fade-in">
-      <div v-show="open" class="tool-box" :style="{height: toolboxHeight}">
+    <div ref="collapse" class="collapse" :style="{width: open ? '200px' : '0px'}">
+      <div class="tool-box" :style="{height: toolboxHeight}">
         <el-button icon="el-icon-edit" type="info" size="small" @click="createPost" circle></el-button>
         <el-button icon="el-icon-search" type="primary" size="small" @click="search" circle></el-button>
         <deploy/>
       </div>
-    </transition>
-    <transition name="el-fade-in">
-      <el-scrollbar v-show="open" style="width: 200px; min-width: 200px;" :style="{height: scrollbarHeight}"
-                    ref="scrollbar" class="el-scrollbar">
+      <el-scrollbar :style="{height: scrollbarHeight}" ref="scrollbar" class="el-scrollbar">
         <el-menu default-active="all" :default-openeds="defaultOpeneds" @select="handleSelect">
           <el-menu-item index="all">
             <i class="iconfont icon-archive"></i>
@@ -40,7 +37,7 @@
           </el-submenu>
         </el-menu>
       </el-scrollbar>
-    </transition>
+    </div>
   </div>
 </template>
 
@@ -130,15 +127,23 @@
     left: 60px;
   }
 
-  .el-submenu .el-menu-item {
-    font-size: 12px;
-    height: 36px;
-    line-height: 36px;
+  .collapse {
+    width: 200px;
+    -webkit-transition: width 0.3s;
+    -moz-transition: width 0.3s;
+    -o-transition: width 0.3s;
+    transition: width 0.3s;
   }
 
   .tool-box {
     border-right: 1px solid #E9E9E9;
     text-align: center;
     padding-top: 5px;
+  }
+
+  .el-submenu .el-menu-item {
+    font-size: 12px;
+    height: 36px;
+    line-height: 36px;
   }
 </style>
