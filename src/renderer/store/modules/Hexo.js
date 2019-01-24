@@ -108,6 +108,9 @@ const actions = {
   async createPost (context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
+    if (postForm.path) {
+      postForm.path = postForm.path + '.md'
+    }
     hexo.post.create(postForm, false).then(function () {
       deferred.resolve()
     }, function (err) {
@@ -120,6 +123,9 @@ const actions = {
   async editPost (context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
+    if (postForm.path) {
+      postForm.path = postForm.path + '.md'
+    }
     hexo.post.create(postForm, true).then(function () {
       deferred.resolve()
     }, function (err) {
