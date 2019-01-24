@@ -108,7 +108,8 @@ const actions = {
   async createPost (context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
-    if (postForm.path) {
+    let suffix = '.md'
+    if (postForm.path && postForm.path.indexOf(suffix, this.length - suffix.length) === -1) { // 设置了path，并且path不以.md结尾
       postForm.path = postForm.path + '.md'
     }
     hexo.post.create(postForm, false).then(function () {
@@ -123,7 +124,8 @@ const actions = {
   async editPost (context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
-    if (postForm.path) {
+    let suffix = '.md'
+    if (postForm.path && postForm.path.indexOf(suffix, this.length - suffix.length) === -1) { // 设置了path，并且path不以.md结尾
       postForm.path = postForm.path + '.md'
     }
     hexo.post.create(postForm, true).then(function () {
