@@ -27,7 +27,10 @@ function createWindow () {
    */
   mainWindow = new BrowserWindow({
     show: false,
-    useContentSize: true
+    useContentSize: true,
+    webPreferences: {
+      webSecurity: false // 关掉他，为了在markdown编辑器中加载和显示本地路劲的图片
+    }
   })
 
   mainWindow.maximize()
