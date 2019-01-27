@@ -60,6 +60,7 @@
   import { mapGetters } from 'vuex'
   import qiniuUploader from '@/service/QiniuUploader'
   import smmsUploader from '@/service/SmmsUploader'
+  import githubUploader from '@/service/GithubUploader'
 
   export default {
     data () {
@@ -142,6 +143,7 @@
     mounted () {
       this.resize()
       window.addEventListener('resize', this.resize)
+      this.initMarkdownEditor()
     },
     beforeDestroy () {
       window.removeEventListener('resize', this.resize)
@@ -158,6 +160,17 @@
       }
     },
     methods: {
+      /**
+       * 初始化markdown编辑器
+       */
+      initMarkdownEditor () {
+        let sysConfig = this.$store.state.Config.config
+        this.$refs.editor.markdownIt.use(githubUploader.markdownItPlugin, {
+          match: '/images',
+          prefix: 'file://' + sysConfig.path + '/source'
+        })
+      },
+
       isFormChanged () {
         return this.formChanged || this.postForm.originContent.trim() !== this.postForm.content.trim()
       },
@@ -193,8 +206,16 @@
             me.$notify.error({message: '图片上传失败：' + err})
             me.uploading = false
           })
-        } else {
+        } else if (sysConfig.uploadtype === 'sm.ms') {
           smmsUploader.upload(file).then(url => {
+            me.$refs.editor.$img2Url(pos, url)
+            me.uploading = false
+          }, err => {
+            me.$notify.error({message: '图片上传失败：' + err})
+            me.uploading = false
+          })
+        } else {
+          githubUploader.upload(file, sysConfig).then(url => {
             me.$refs.editor.$img2Url(pos, url)
             me.uploading = false
           }, err => {

@@ -14,6 +14,7 @@
       <el-form-item :label="$t('settingTitleImageServer')">
         <el-select v-model="config.uploadType" default-first-option :placeholder="$t('settingImageServerPlaceholder')"
                    style="width:100%">
+          <el-option label="GitHub" value="github"></el-option>
           <el-option label="sm.ms" value="sm.ms"></el-option>
           <el-option label="七牛" value="qiniu"></el-option>
         </el-select>
