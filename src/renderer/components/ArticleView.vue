@@ -24,21 +24,59 @@
   const electron = require('electron')
   export default {
     data () {
-      return {}
+      return {
+        loading: false
+      }
     },
     updated () {
-      let articleDom = document.getElementsByClassName('article')
-      if (articleDom && articleDom.length > 0) {
-        let links = articleDom[0].getElementsByTagName('a')
-        for (let i = 0; i < links.length; i++) {
-          links[i].onclick = function (event) {
-            let href = event.target.getAttribute('href')
-            if (href) {
-              electron.shell.openExternal(href)
+      this.renderArticle()
+    },
+    mounted () {
+      this.renderArticle()
+    },
+    methods: {
+      renderArticle () {
+        this.loading = true
+        try {
+          this.renderImage()
+          this.renderLink()
+        } finally {
+          this.loading = false
+        }
+      },
+      // 渲染图片
+      renderImage () {
+        let contentDom = document.getElementsByClassName('article-entry')
+        if (contentDom && contentDom.length > 0) {
+          let sysConfig = this.$store.state.Config.config
+          let imgs = contentDom[0].getElementsByTagName('img')
+          for (let i = 0; i < imgs.length; i++) {
+            let img = imgs[i]
+            let src = img.getAttribute('src')
+            if (this.startWith(src, '/images')) {
+              img.setAttribute('src', 'file://' + sysConfig.path + '/source' + src)
             }
-            return false
           }
         }
+      },
+      // 渲染a标签
+      renderLink () {
+        let articleDom = document.getElementsByClassName('article')
+        if (articleDom && articleDom.length > 0) {
+          let links = articleDom[0].getElementsByTagName('a')
+          for (let i = 0; i < links.length; i++) {
+            links[i].onclick = function (event) {
+              let href = event.target.getAttribute('href')
+              if (href) {
+                electron.shell.openExternal(href)
+              }
+              return false
+            }
+          }
+        }
+      },
+      startWith (str, prefix) {
+        return str && prefix && str.indexOf(prefix) === 0
       }
     },
     computed: {
