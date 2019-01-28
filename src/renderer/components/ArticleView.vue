@@ -24,34 +24,27 @@
   const electron = require('electron')
   export default {
     data () {
-      return {
-        loading: false
-      }
-    },
-    updated () {
-      this.renderArticle()
+      return {}
     },
     mounted () {
       this.renderArticle()
     },
+    updated () {
+      this.renderArticle()
+    },
     methods: {
       renderArticle () {
-        this.loading = true
-        try {
-          this.renderImage()
-          this.renderLink()
-        } finally {
-          this.loading = false
-        }
+        this.renderImage()
+        this.renderLink()
       },
       // 渲染图片
       renderImage () {
         let contentDom = document.getElementsByClassName('article-entry')
         if (contentDom && contentDom.length > 0) {
           let sysConfig = this.$store.state.Config.config
-          let imgs = contentDom[0].getElementsByTagName('img')
-          for (let i = 0; i < imgs.length; i++) {
-            let img = imgs[i]
+          let images = contentDom[0].getElementsByTagName('img')
+          for (let i = 0; i < images.length; i++) {
+            let img = images[i]
             let src = img.getAttribute('src')
             if (this.startWith(src, '/images')) {
               img.setAttribute('src', 'file://' + sysConfig.path + '/source' + src)

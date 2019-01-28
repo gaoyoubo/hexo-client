@@ -105,33 +105,37 @@ const actions = {
   },
 
   // 创建文章
-  async createPost (context, postForm) {
+  createPost (context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
     let suffix = '.md'
     if (postForm.path && postForm.path.indexOf(suffix, this.length - suffix.length) === -1) { // 设置了path，并且path不以.md结尾
       postForm.path = postForm.path + '.md'
     }
-    hexo.post.create(postForm, false).then(function () {
-      deferred.resolve()
-    }, function (err) {
-      deferred.reject(err)
+    hexo.post.create(postForm, function (err, value) {
+      if (err) {
+        deferred.reject(err)
+      } else {
+        deferred.resolve(value)
+      }
     })
     return deferred.promise
   },
 
   // 修改文章
-  async editPost (context, postForm) {
+  editPost (context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
     let suffix = '.md'
     if (postForm.path && postForm.path.indexOf(suffix, this.length - suffix.length) === -1) { // 设置了path，并且path不以.md结尾
       postForm.path = postForm.path + '.md'
     }
-    hexo.post.create(postForm, true).then(function () {
-      deferred.resolve()
-    }, function (err) {
-      deferred.reject(err)
+    hexo.post.create(postForm, true, function (err, value) {
+      if (err) {
+        deferred.reject(err)
+      } else {
+        deferred.resolve(value)
+      }
     })
     return deferred.promise
   },
