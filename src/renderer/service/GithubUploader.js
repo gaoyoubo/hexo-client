@@ -3,6 +3,7 @@ import when from 'when'
 const fs = require('fs')
 const path = require('path')
 const uuid = require('uuid/v1')
+const moment = require('moment')
 
 class GithubUploader {
   upload (file, sysConfig) {
@@ -15,12 +16,8 @@ class GithubUploader {
         base: abstractImgPath
       })
 
-      let parent = path.resolve(filepath, '..')
-      try {
-        fs.statSync(parent)
-      } catch (e) {
-        fs.mkdirSync(parent, {recursive: true})
-      }
+      // 判断如果父目录不存在，那么创建
+      mkdirsSync(path.resolve(filepath, '..'))
 
       fs.writeFile(filepath, buffer, {'flag': 'w'}, function (err) {
         if (err) {
@@ -84,6 +81,17 @@ class GithubUploader {
   }
 }
 
+function mkdirsSync (dirname) {
+  if (fs.existsSync(dirname)) {
+    return true
+  } else {
+    if (mkdirsSync(path.dirname(dirname))) {
+      fs.mkdirSync(dirname)
+      return true
+    }
+  }
+}
+
 function fileToBuffer (file, callback) {
   let reader = new FileReader()
   reader.readAsArrayBuffer(file)
@@ -99,7 +107,7 @@ function fileToBuffer (file, callback) {
 function getAbstractImgPath (file) {
   let name = uuid()
   let ext = getFileExt(file)
-  return '/images/' + name + ext
+  return '/images/' + moment().format('YYYY/MM/DD/') + name + ext
 }
 
 /**
