@@ -17,6 +17,8 @@
 - 文章搜索
 
 ### 功能预览
+
+![](https://www.mspring.org/images/2019/01/29/9a633940-2384-11e9-a26e-272a27c47ef2.gif)
 ![](http://file.mspring.org/8a3e66058442f2dd9821e7a54090bee7!detail)
 ![](http://file.mspring.org/f2daf058f76496f56277abc6ff6fbef1!detail)
 ![](http://file.mspring.org/92be1e0368bf5e9b07cdc48c19c85954!detail)
