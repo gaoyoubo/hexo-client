@@ -40,11 +40,11 @@ class GithubUploader {
     function mapSrc (profiles) {
       return function (token) {
         if (token.type === 'image') {
-          const srcIndex = token.attrIndex('src')
-          const src = getAttr(token, 'src')
-          const width = getAttr(token, 'width')
-          const height = getAttr(token, 'height')
-          for (const profile of profiles) {
+          let srcIndex = token.attrIndex('src')
+          let src = getAttr(token, 'src')
+          let width = getAttr(token, 'width')
+          let height = getAttr(token, 'height')
+          for (let profile of profiles) {
             if (!profile.match || !profile.prefix) {
               continue
             }
@@ -52,13 +52,18 @@ class GithubUploader {
               if (width && height) {
                 profile.params = Object.assign({}, profile.params, {w: width, h: height})
               }
-
-              token.attrs[srcIndex][1] = profile.prefix + src
+              token.attrs[srcIndex][1] = getImageBase64(profile.prefix, src)
             }
           }
         }
         return token
       }
+    }
+
+    function getImageBase64 (dir, filename) {
+      let data = fs.readFileSync(dir + filename)
+      let base64 = data.toString('base64')
+      return 'data:image/jpg;base64,' + base64
     }
 
     function getAttr (token, attr) {

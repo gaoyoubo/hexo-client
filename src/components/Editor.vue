@@ -67,7 +67,7 @@
       let sysConfig = this.$store.state.Config.config
       this.$refs.editor.markdownIt.use(githubUploader.markdownItPlugin, {
         match: '/images',
-        prefix: 'file://' + sysConfig.path + '/source'
+        prefix: sysConfig.path + '/source'
       })
 
       this.resize()
