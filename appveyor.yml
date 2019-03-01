@@ -17,6 +17,6 @@ install:
   - node --version
 
 build_script:
-  - npm run build
+  - npm run electron:build
 
 test: off

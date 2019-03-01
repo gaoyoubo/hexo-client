@@ -22,7 +22,7 @@ install:
 - npm install
 
 script:
-- npm run build
+- npm run electron:build
 
 branches:
   only:
