@@ -3,6 +3,17 @@
   "version": "1.2.6",
   "private": true,
   "description": "Hexo桌面客户端",
+  "author": {
+    "name": "Gao Youbo",
+    "email": "gaoyoubo@foxmail.com",
+    "url": "https://www.mspring.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gaoyoubo/hexo-client.git"
+  },
+  "homepage": "https://github.com/gaoyoubo/hexo-client",
+  "license": "Apache License, Version 2.0",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -66,11 +77,5 @@
     "last 2 versions",
     "not ie <= 8"
   ],
-  "homepage": "https://github.com/gaoyoubo/hexo-client",
-  "license": "Apache License, Version 2.0",
   "main": "background.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/gaoyoubo/hexo-client.git"
-  }
 }
