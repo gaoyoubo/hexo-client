@@ -1,9 +1,13 @@
 'use strict'
 
-import { app, BrowserWindow, Menu, protocol } from 'electron'
+import { app, BrowserWindow, ipcMain, Menu, protocol } from 'electron'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
+import { ebtMain } from 'electron-baidu-tongji'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
+
+// 百度统计
+ebtMain(ipcMain)
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
