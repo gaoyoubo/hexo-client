@@ -3,7 +3,7 @@ sudo: required
 
 language: node_js
 node_js:
-- "node"
+- "8"
 
 matrix:
   include:
@@ -14,9 +14,9 @@ matrix:
     - sudo apt-get install --no-install-recommends -y rpm
   - os: osx
 
-cache:
-  directories:
-  - node_modules
+#cache:
+#  directories:
+#  - node_modules
 
 install:
 - npm install
