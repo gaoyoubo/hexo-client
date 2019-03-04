@@ -16,9 +16,9 @@ matrix:
     before_install:
     - npm install npm@latest -g
 
-cache:
-  directories:
-  - node_modules
+#cache:
+#  directories:
+#  - node_modules
 
 install:
 - npm install
