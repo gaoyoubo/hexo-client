@@ -6,7 +6,7 @@ image: Visual Studio 2017
 platform: Any CPU
 
 environment:
-  nodejs_version: 8
+  nodejs_version: 11
 
 init:
   - git config --global core.autocrlf input

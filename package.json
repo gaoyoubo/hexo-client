@@ -24,6 +24,7 @@
     "postuninstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "aws-sdk": "^2.413.0",
     "axios": "^0.18.0",
     "electron-store": "^2.0.0",
     "element-ui": "^2.4.5",
