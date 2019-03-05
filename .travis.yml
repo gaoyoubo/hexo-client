@@ -3,27 +3,29 @@ sudo: required
 
 language: node_js
 node_js:
-- "8"
+  - "node"
 
 matrix:
   include:
-  - os: osx
-  - os: linux
-    before_install:
-    - sudo apt-get -qq update
-    - sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
-    - sudo apt-get install --no-install-recommends -y rpm
+    - os: osx
+    - os: linux
+      before_install:
+        - sudo apt-get -qq update
+        - sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
+        - sudo apt-get install --no-install-recommends -y rpm
 
 cache:
   directories:
-  - node_modules
+    - node_modules
 
 install:
-- npm install
+  - npm uninstall hexo --save
+  - npm install
+  - npm install hexo --save
 
 script:
-- npm run electron:build
+  - npm run electron:build
 
 branches:
   only:
-  - master
+    - master
