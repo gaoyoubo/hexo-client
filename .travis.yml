@@ -10,12 +10,12 @@ matrix:
     - os: osx
       osx_image: xcode10.2
       node_js:
-        - 8
+        - "8"
     - os: linux
-#      before_install:
-#        - sudo apt-get -qq update
-#        - sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
-#        - sudo apt-get install --no-install-recommends -y rpm
+      before_install:
+        - sudo apt-get -qq update
+        - sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
+        - sudo apt-get install --no-install-recommends -y rpm
 
 cache:
   directories:
