@@ -1,7 +1,7 @@
 <template>
   <mavon-editor ref="editor" :value="value" :toolbars="toolbars" :ishljs="true"
                 @imgAdd="imgAdd" @fullScreen="fullScreen" @change="change"
-                :language="editorLanguage" :boxShadow="false"
+                :language="editorLanguage" :boxShadow="false" :subfield="true" defaultOpen="edit"
                 :placeholder="$t('articleContentPlaceholder')"
                 codeStyle="atom-one-dark"
                 :style="{height: contentHeight, width: '100%'}"

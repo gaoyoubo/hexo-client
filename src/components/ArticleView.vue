@@ -1,21 +1,25 @@
 <template>
   <el-scrollbar style="width: 100%">
     <el-main v-if="post" style="padding-top: 0px;">
-      <article class="article">
-        <div class="article-inner">
-          <header class="article-header">
-            <h1 class="article-title">{{ post.title }}</h1>
-            <label class="article-time">{{ post.date.format('YYYY-MM-DD HH:mm:ss') }}</label>
-            <label class="article-cat" v-for="(category, index) in post.categories.data">
-              <el-tag size="small">{{ category.name }}</el-tag>
-            </label>
-            <label class="article-tag" v-for="(tag, index) in post.tags.data">
-              <el-tag type="info" size="small">{{ tag.name }}</el-tag>
-            </label>
-          </header>
-          <div class="article-entry" v-html="post.content"></div>
-        </div>
-      </article>
+      <transition name="el-fade-in-linear">
+
+        <article class="article" v-show="inited">
+          <div class="article-inner">
+            <header class="article-header">
+              <h1 class="article-title">{{ post.title }}</h1>
+              <label class="article-time">{{ post.date.format('YYYY-MM-DD HH:mm:ss') }}</label>
+              <label class="article-cat" v-for="category in post.categories.data">
+                <el-tag size="small">{{ category.name }}</el-tag>
+              </label>
+              <label class="article-tag" v-for="tag in post.tags.data">
+                <el-tag type="info" size="small">{{ tag.name }}</el-tag>
+              </label>
+            </header>
+            <div class="article-entry" v-html="post.content"></div>
+          </div>
+        </article>
+
+      </transition>
     </el-main>
   </el-scrollbar>
 </template>
@@ -26,7 +30,9 @@
 
   export default {
     data () {
-      return {}
+      return {
+        inited: false
+      }
     },
     mounted () {
       this.renderArticle()
@@ -38,6 +44,7 @@
       renderArticle () {
         this.renderImage()
         this.renderLink()
+        this.inited = true
       },
       // 渲染图片
       renderImage () {
@@ -49,13 +56,20 @@
             let img = images[i]
             let src = img.getAttribute('src')
             if (this.startWith(src, '/images')) {
-              let path = sysConfig.path + '/source' + src
-              fs.readFile(path, function (err, data) {
-                if (!err) {
-                  let base64 = data.toString('base64')
-                  img.setAttribute('src', 'data:image/jpg;base64,' + base64)
-                }
-              })
+              try {
+                let path = sysConfig.path + '/source' + src
+                let data = fs.readFileSync(path)
+                let base64 = data.toString('base64')
+                img.setAttribute('src', 'data:image/jpg;base64,' + base64)
+              } catch (e) {
+                console.error(e)
+              }
+              // fs.readFile(path, function (err, data) {
+              //   if (!err) {
+              //     let base64 = data.toString('base64')
+              //     img.setAttribute('src', 'data:image/jpg;base64,' + base64)
+              //   }
+              // })
             }
           }
         }
