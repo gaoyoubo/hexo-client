@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow, Menu, protocol } from 'electron'
+import { app, BrowserWindow, protocol } from 'electron'
 import { createProtocol, installVueDevtools } from 'vue-cli-plugin-electron-builder/lib'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
@@ -74,7 +74,7 @@ app.on('ready', async () => {
     }
   }
   createWindow()
-  createMenu()
+  // createMenu()
 })
 
 // Exit cleanly on request from parent process in development mode.
@@ -92,23 +92,23 @@ if (isDevelopment) {
   }
 }
 
-function createMenu () {
-  const template = []
-  if (process.platform === 'darwin') {
-    template.unshift({
-      label: app.getName(),
-      submenu: [
-        {type: 'separator'},
-        {role: 'services', submenu: []},
-        {type: 'separator'},
-        {role: 'hide'},
-        {role: 'hideothers'},
-        {role: 'unhide'},
-        {type: 'separator'},
-        {role: 'quit'}
-      ]
-    })
-  }
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
-}
+// function createMenu () {
+//   const template = []
+//   if (process.platform === 'darwin') {
+//     template.unshift({
+//       label: app.getName(),
+//       submenu: [
+//         {type: 'separator'},
+//         {role: 'services', submenu: []},
+//         {type: 'separator'},
+//         {role: 'hide'},
+//         {role: 'hideothers'},
+//         {role: 'unhide'},
+//         {type: 'separator'},
+//         {role: 'quit'}
+//       ]
+//     })
+//   }
+//   const menu = Menu.buildFromTemplate(template)
+//   Menu.setApplicationMenu(menu)
+// }
