@@ -9,6 +9,8 @@ matrix:
   include:
     - os: osx
       osx_image: xcode10.2
+      node_js:
+        - 8
     - os: linux
 #      before_install:
 #        - sudo apt-get -qq update

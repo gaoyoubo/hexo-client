@@ -108,15 +108,12 @@
             <el-collapse-transition>
               <div class="card-body" v-show="show4">
                 <el-form-item v-for="item in frontMatters" :key="item.title" :label="item.title">
-
                   <el-input :value="item.value">
-                    <el-button slot="append" icon="el-icon-edit" @click="openEditFrontMatter(item)"></el-button>
+                    <el-button slot="prepend" icon="el-icon-edit" @click="openEditFrontMatter(item)"></el-button>
+                    <el-button slot="append" icon="el-icon-delete" @click="deleteFrontMatter(item)"></el-button>
                   </el-input>
-
                 </el-form-item>
-
                 <el-button type="success" plain icon="el-icon-plus" size="mini" @click="openAddFrontMatter">Add</el-button>
-
                 <front-matter ref="frontMatterEditor" @ok="addFrontMatter"/>
               </div>
             </el-collapse-transition>
@@ -289,6 +286,19 @@
         }
         if (!exists) {
           this.frontMatters.push(item)
+        }
+      },
+
+      deleteFrontMatter (item) {
+        let index = -1
+        for (let i = 0; i < this.frontMatters.length; i++) {
+          if (this.frontMatters[i].title === item.title) {
+            index = i
+            break
+          }
+        }
+        if (index > -1) {
+          this.frontMatters.splice(index, 1)
         }
       }
 
