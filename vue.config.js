@@ -8,5 +8,12 @@ module.exports = {
     }
   },
 
-  lintOnSave: undefined
+  lintOnSave: undefined,
+  publicPath: undefined,
+  outputDir: undefined,
+  assetsDir: undefined,
+  runtimeCompiler: undefined,
+  productionSourceMap: false,
+  parallel: undefined,
+  css: undefined
 }
