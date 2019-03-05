@@ -9,7 +9,7 @@
         <el-button icon="el-icon-search" type="primary" size="small" @click="search" circle></el-button>
         <deploy/>
       </div>
-      <el-scrollbar :style="{height: scrollbarHeight}" ref="scrollbar" class="el-scrollbar">
+      <el-scrollbar :style="{height: scrollbarHeight}" ref="scrollbar" class="el-scrollbar" view-style="height: 100%">
         <el-menu default-active="all" :default-openeds="defaultOpeneds" @select="handleSelect">
           <el-menu-item index="all">
             <i class="iconfont icon-archive"></i>
@@ -76,7 +76,7 @@
           this.$store.dispatch('UiStatus/openTreeNav')
         }
       },
-      handleSelect (key, keyPath) {
+      handleSelect (key) {
         this.$store.dispatch('Hexo/selectTree', key)
       },
 
@@ -145,5 +145,9 @@
     font-size: 12px;
     height: 36px;
     line-height: 36px;
+  }
+
+  .el-scrollbar__view .el-menu {
+    height: 100%!important;
   }
 </style>
