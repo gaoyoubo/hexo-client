@@ -35,8 +35,8 @@ https://github.com/gaoyoubo/hexo-client/releases
 npm install
 
 # dev
-npm run dev
+npm run electron:serve
 
 # build electron application for production
-npm run build
+npm run electron:build
 ```
