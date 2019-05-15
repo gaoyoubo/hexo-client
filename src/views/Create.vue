@@ -11,7 +11,7 @@
         </el-form-item>
         <!-- 内容 -->
         <el-form-item prop="content">
-          <markdown-editor v-model="postForm.content" @change="formChanged = true"/>
+          <markdown-editor v-model="postForm.content" @change="formChanged = true" @save="onSave"/>
         </el-form-item>
       </el-main>
       <el-aside class="aside">
@@ -114,7 +114,8 @@
                     <el-button slot="append" icon="el-icon-delete" @click="deleteFrontMatter(item)"></el-button>
                   </el-input>
                 </el-form-item>
-                <el-button type="success" plain icon="el-icon-plus" size="mini" @click="openAddFrontMatter">Add</el-button>
+                <el-button type="success" plain icon="el-icon-plus" size="mini" @click="openAddFrontMatter">Add
+                </el-button>
                 <front-matter ref="frontMatterEditor" @ok="addFrontMatter"/>
               </div>
             </el-collapse-transition>
@@ -176,7 +177,21 @@
       }
     },
     methods: {
+
       async submitForm () {
+        this.save(true)
+      },
+
+      async onSave () {
+        this.save(false)
+      },
+
+      /**
+       * 保存更改
+       * @param toMain 是否跳转到首页
+       * @returns {Promise<void>}
+       */
+      async save (toMain) {
         let valid = await this.$store.dispatch('Hexo/validatePostForm', this.$refs.postForm)
         if (valid) {
           try {
@@ -190,12 +205,14 @@
             this.formChanged = false
             this.postForm.originContent = this.postForm.content
             this.$notify({title: '成功', message: '保存成功', type: 'success'})
-            this.$router.push({name: 'main'})
+            if (toMain) {
+              this.$router.push({name: 'main'})
+            }
           } catch (err) {
             this.$notify.error({title: '错误', message: '保存失败'})
           }
         } else {
-          this.$notify.error({title: '错误', message: '表单验证失败'})
+          this.$notify.error({title: '错误', message: '表单数据验证失败'})
         }
       },
 

@@ -1,6 +1,6 @@
 <template>
   <mavon-editor ref="editor" :value="value" :toolbars="toolbars" :ishljs="true"
-                @imgAdd="imgAdd" @fullScreen="fullScreen" @change="change"
+                @imgAdd="imgAdd" @fullScreen="fullScreen" @change="change" @save="save"
                 :language="editorLanguage" :boxShadow="false" :subfield="true" defaultOpen="edit"
                 :placeholder="$t('articleContentPlaceholder')"
                 codeStyle="atom-one-dark"
@@ -55,7 +55,7 @@
           // undo: true, // 上一步
           // redo: true, // 下一步
           // trash: true, // 清空
-          // save: true, // 保存（触发events中的save事件）
+          save: true, // 保存（触发events中的save事件）
           /* 1.4.2 */
           navigation: true, // 导航目录
           /* 2.1.8 */
@@ -127,6 +127,12 @@
         if (value !== this.initValue) {
           this.$emit('change', value)
         }
+      },
+      /**
+       * 保存
+       */
+      save (value) {
+        this.$emit('save', value)
       },
       /**
        * 切换全屏

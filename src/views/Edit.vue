@@ -10,7 +10,7 @@
         </el-form-item>
         <!-- 内容 -->
         <el-form-item prop="content">
-          <markdown-editor v-model="postForm.content" :initValue="postForm.content" @change="formChanged = true"/>
+          <markdown-editor v-model="postForm.content" :initValue="postForm.content" @change="formChanged = true" @save="submitForm"/>
         </el-form-item>
       </el-main>
       <el-aside class="aside">
