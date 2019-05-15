@@ -99,7 +99,7 @@
             me.$notify.error({message: '图片上传失败：' + err})
             me.uploading = false
           })
-        } else if (sysConfig.uploadtype === 'sm.ms') {
+        } else if (sysConfig.uploadType === 'sm.ms') {
           smmsUploader.upload(file).then(url => {
             me.$refs.editor.$img2Url(pos, url)
             me.uploading = false
