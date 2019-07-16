@@ -108,14 +108,15 @@
             me.$notify.error({message: '图片上传失败：' + err})
             me.uploading = false
           })
-        } else if(sysConfig.uploadType === 'aliyunOss'){
-          aliyunOssUploader.upload(file, sysConfig).then(url => {
-            debugger
-            console.log(url)
-          }, err => {
-            debugger
-            console.log(err)
-          })
+        } else if (sysConfig.uploadType === 'aliyunOss') {
+          try {
+            let url = await aliyunOssUploader.upload(file, sysConfig)
+            me.$refs.editor.$img2Url(pos, url)
+            me.uploading = false
+          } catch (e) {
+            me.$notify.error({message: '图片上传失败：' + e})
+            me.uploading = false
+          }
         } else {
           githubUploader.upload(file, sysConfig).then(url => {
             me.$refs.editor.$img2Url(pos, url)
