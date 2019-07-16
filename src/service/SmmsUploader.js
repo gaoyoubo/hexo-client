@@ -14,7 +14,6 @@ class SmmsUploader {
 
     let deferred = when.defer()
     axios.post('https://sm.ms/api/upload', formData, config).then(response => {
-      console.log(response)
       if (response.status !== 200) {
         deferred.reject('网络错误')
       } else if (response.data.code === 'error') {
