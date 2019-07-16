@@ -26,9 +26,11 @@
   "dependencies": {
     "ali-oss": "^6.1.1",
     "axios": "^0.19.0",
+    "electron-google-analytics": "^0.1.0",
     "electron-store": "^2.0.0",
     "element-ui": "^2.4.5",
     "hexo": "^3.8.0",
+    "macaddress": "^0.2.9",
     "mavon-editor": "^2.7.4",
     "qiniu": "^7.2.1",
     "simple-git": "^1.107.0",

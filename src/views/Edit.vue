@@ -132,6 +132,7 @@
   import MarkdownEditor from '@/components/Editor'
   import FrontMatter from '@/components/FrontMatter'
   import Utils from '@/service/Utils'
+  import ClientAnalytics from '@/plugins/analytics'
 
   export default {
     components: {MarkdownEditor, FrontMatter},
@@ -255,6 +256,7 @@
             await this.$store.dispatch('Hexo/editPost', this.postForm)
             this.formChanged = false
             this.$notify({title: '成功', message: '修改成功', type: 'success'})
+            ClientAnalytics.event('article', 'editSubmit')
           } catch (err) {
             this.$notify.error({title: '错误', message: '修改失败'})
           }

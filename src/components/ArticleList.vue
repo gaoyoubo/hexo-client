@@ -28,6 +28,8 @@
 </template>
 
 <script>
+  import ClientAnalytics from '@/plugins/analytics'
+
   export default {
     data () {
       return {
@@ -44,6 +46,7 @@
     methods: {
       selected: function (selectedId) {
         this.$store.dispatch('Hexo/selectPost', selectedId)
+        ClientAnalytics.event('article', 'view')
       },
 
       editPost: function (id) {
@@ -54,6 +57,7 @@
         if (confirm(this.$t('deleteArticleConfirmMsg'))) {
           await this.$store.dispatch('Hexo/deletePost', id)
           this.$notify({title: this.$t('successTitle'), message: this.$t('deleteSuccessMsg'), type: 'success'})
+          ClientAnalytics.event('article', 'delete')
         }
       },
 

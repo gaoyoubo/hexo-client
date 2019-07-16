@@ -134,6 +134,7 @@
   import { mapGetters } from 'vuex'
   import MarkdownEditor from '@/components/Editor'
   import FrontMatter from '@/components/FrontMatter'
+  import ClientAnalytics from '@/plugins/analytics'
 
   export default {
     components: {MarkdownEditor, FrontMatter},
@@ -208,6 +209,7 @@
             if (toMain) {
               this.$router.push({name: 'main'})
             }
+            ClientAnalytics.event('article', 'createSubmit')
           } catch (err) {
             this.$notify.error({title: '错误', message: '保存失败'})
           }
