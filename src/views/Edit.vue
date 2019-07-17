@@ -10,7 +10,8 @@
         </el-form-item>
         <!-- 内容 -->
         <el-form-item prop="content">
-          <markdown-editor v-model="postForm.content" :initValue="postForm.content" @change="formChanged = true" @save="submitForm"/>
+          <markdown-editor v-model="postForm.content" :initValue="postForm.content" @change="formChanged = true"
+                           @save="submitForm"/>
         </el-form-item>
       </el-main>
       <el-aside class="aside">
@@ -32,15 +33,24 @@
                             :placeholder="$t('articlePathPlaceholder')" style="width: 100%;"></el-input>
                 </el-form-item>
 
-                <!-- 开启toc -->
-                <el-switch v-model="postForm.toc" @input="formChanged = true"
-                           :active-text="$t('openToc')"></el-switch>
-
-                <!-- 提交按钮 -->
-                <el-button type="primary" icon="el-icon-success" size="mini"
-                           style="float: right"
-                           @click="submitForm()">{{$t('save')}}
-                </el-button>
+                <div class="publish-settings">
+                  <el-col :span="8">
+                    <!-- 开启toc -->
+                    <el-switch v-model="postForm.toc" @input="formChanged = true"
+                               :active-text="$t('openToc')"></el-switch>
+                  </el-col>
+                  <el-col :span="8">
+                    <!-- 是否保存为草稿 -->
+                    <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post"
+                               active-text="草稿"></el-switch>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-button type="primary" icon="el-icon-success" size="mini"
+                               style="float: right;"
+                               @click="submitForm()">{{$t('save')}}
+                    </el-button>
+                  </el-col>
+                </div>
               </div>
             </el-collapse-transition>
           </div>
@@ -113,7 +123,8 @@
                     <el-button slot="append" icon="el-icon-delete" @click="deleteFrontMatter(item)"></el-button>
                   </el-input>
                 </el-form-item>
-                <el-button type="success" plain icon="el-icon-plus" size="mini" @click="openAddFrontMatter">Add</el-button>
+                <el-button type="success" plain icon="el-icon-plus" size="mini" @click="openAddFrontMatter">Add
+                </el-button>
                 <front-matter ref="frontMatterEditor" @ok="addFrontMatter"/>
               </div>
             </el-collapse-transition>
@@ -150,7 +161,8 @@
           tags: [],
           categories: [],
           date: '',
-          toc: false
+          toc: false,
+          layout: 'post', // 默认发表文章，还可取值draft表示发表草稿
         },
         frontMatters: [],
         postFormRules: {
@@ -231,12 +243,19 @@
           }
         }
 
+        // layout
+        if (!post.published) {
+          me.postForm.layout = 'draft'
+        } else {
+          me.postForm.layout = 'post'
+        }
+
         // frontMatter
         let frontMatter = Utils.frontMatter(post.raw)
         Object.keys(frontMatter).forEach(key => {
           me.frontMatters.push({
             title: key,
-            value: frontMatter[key]
+            value: frontMatter[key] + ''
           })
         })
 
@@ -314,7 +333,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .main {
     height: 100%;
     padding: 20px 10px 0px;
@@ -330,11 +349,11 @@
   .scrollbar {
     height: 100%;
     width: 300px !important;
-  }
 
-  .scrollbar .el-scrollbar__wrap {
-    overflow-x: hidden;
-    scroll-behavior: smooth;
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
   }
 
   .card {
@@ -343,19 +362,28 @@
     border: 1px solid #ebeef5;
     background-color: #fff;
     color: #303133;
-  }
 
-  .card .card-header {
-    padding: 10px 10px;
-    border-bottom: 1px solid #ebeef5;
-  }
+    .card-header {
+      padding: 10px 10px;
+      border-bottom: 1px solid #ebeef5;
+    }
 
-  .card .card-body {
-    padding: 10px;
-  }
+    .card-body {
+      padding: 10px;
 
-  .card .collapse {
-    float: right;
-    padding: 3px 0;
+      .publish-settings {
+        display: table;
+        width: 100%;
+
+        .el-col {
+          line-height: 28px;
+        }
+      }
+    }
+
+    .collapse {
+      float: right;
+      padding: 3px 0;
+    }
   }
 </style>

@@ -8,7 +8,7 @@ const SYSTEM_FRONT_MATTERS = [
   // 为了兼容之前的错误
   '_content', 'originContent',
   // 已经处理了的
-  'toc'
+  'toc', 'draft'
 ]
 
 class Utils {
@@ -46,7 +46,9 @@ class Utils {
       author: post.author,
       tags: post.tags.data,
       categories: post.categories.data,
-      summary: this.getPostSummary(post.content)
+      summary: this.getPostSummary(post.content),
+      layout: post.layout,
+      published: post.published,
     }
   }
 

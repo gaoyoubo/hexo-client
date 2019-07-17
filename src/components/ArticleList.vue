@@ -2,12 +2,12 @@
 
   <el-scrollbar style="height: 100%; width: 250px; min-width: 250px;" ref="scrollbar" class="el-scrollbar">
     <div class="article-list" v-if="posts.length > 0">
-      <div class="article-list-panel" v-for="(post, index) in posts" ref="post" @click="selected(post.id)"
+      <div class="article-list-panel" v-for="post in posts" :key="post.id" ref="post" @click="selected(post.id)"
            :data-id="post.id" v-bind:class="{active: post.id === selectedPostId}" :id="post.id">
         <div class="article-list-item">
           <h4 class="article-title">{{ post.title }}</h4>
           <div class="article-tags">
-            <span class="tag" v-for="(tag, index) in post.tags">#{{ tag.name }}</span>
+            <span class="tag" v-for="tag in post.tags" :key="tag.name">#{{ tag.name }}</span>
           </div>
           <span class="article-date">{{ post.date }}</span>
 

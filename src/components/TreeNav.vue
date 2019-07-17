@@ -15,6 +15,10 @@
             <i class="iconfont icon-archive"></i>
             <span slot="title">&nbsp;全部</span>
           </el-menu-item>
+          <el-menu-item index="drafts">
+            <i class="iconfont icon-draft"></i>
+            <span slot="title">&nbsp;草稿</span>
+          </el-menu-item>
           <el-submenu index="categories">
             <template slot="title">
               <i class="iconfont icon-categories"></i>

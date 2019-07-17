@@ -33,15 +33,25 @@
                             :placeholder="$t('articlePathPlaceholder')" style="width: 100%;"></el-input>
                 </el-form-item>
 
-                <!-- 开启toc -->
-                <el-switch v-model="postForm.toc" @input="formChanged = true"
-                           :active-text="$t('openToc')"></el-switch>
+                <div class="publish-settings">
+                  <el-col :span="8">
+                    <!-- 开启toc -->
+                    <el-switch v-model="postForm.toc" @input="formChanged = true"
+                               :active-text="$t('openToc')"></el-switch>
+                  </el-col>
+                  <el-col :span="8">
+                    <!-- 是否保存为草稿 -->
+                    <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post"
+                               active-text="草稿"></el-switch>
+                  </el-col>
+                  <el-col :span="8">
+                    <el-button type="primary" icon="el-icon-success" size="mini" :loading="saving"
+                               style="float: right;"
+                               @click="submitForm()">{{$t('save')}}
+                    </el-button>
+                  </el-col>
+                </div>
 
-                <!-- 提交按钮 -->
-                <el-button type="primary" icon="el-icon-success" size="mini"
-                           style="float: right;"
-                           @click="submitForm()">{{$t('save')}}
-                </el-button>
               </div>
             </el-collapse-transition>
           </div>
@@ -144,6 +154,7 @@
         show2: true,
         show3: true,
         show4: true,
+        saving: false,
         postForm: {
           title: '',
           path: '',
@@ -151,7 +162,8 @@
           content: '',
           tags: [],
           categories: [],
-          toc: false
+          toc: false,
+          layout: 'post', // 默认发表文章，还可取值draft表示发表草稿
         },
         frontMatters: [],
         postFormRules: {
@@ -195,6 +207,7 @@
       async save (toMain) {
         let valid = await this.$store.dispatch('Hexo/validatePostForm', this.$refs.postForm)
         if (valid) {
+          this.saving = true
           try {
             if (this.frontMatters && this.frontMatters.length > 0) {
               for (let i = 0; i < this.frontMatters.length; i++) {
@@ -202,6 +215,7 @@
                 this.postForm[item.title] = item.value
               }
             }
+            toMain = toMain && this.postForm.layout === 'post' // 如果是保存草稿，那么保存之后不要跳到首页去
             await this.$store.dispatch('Hexo/createPost', this.postForm)
             this.formChanged = false
             this.postForm.originContent = this.postForm.content
@@ -212,6 +226,8 @@
             ClientAnalytics.event('article', 'createSubmit')
           } catch (err) {
             this.$notify.error({title: '错误', message: '保存失败'})
+          } finally {
+            this.saving = false
           }
         } else {
           this.$notify.error({title: '错误', message: '表单数据验证失败'})
@@ -266,7 +282,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .main {
     height: 100%;
     padding: 20px 10px 0px;
@@ -282,11 +298,11 @@
   .scrollbar {
     height: 100%;
     width: 300px !important;
-  }
 
-  .scrollbar .el-scrollbar__wrap {
-    overflow-x: hidden;
-    scroll-behavior: smooth;
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
   }
 
   .card {
@@ -295,19 +311,29 @@
     border: 1px solid #ebeef5;
     background-color: #fff;
     color: #303133;
+
+    .card-header {
+      padding: 10px 10px;
+      border-bottom: 1px solid #ebeef5;
+    }
+
+    .card-body {
+      padding: 10px;
+
+      .publish-settings {
+        display: table;
+        width: 100%;
+
+        .el-col {
+          line-height: 28px;
+        }
+      }
+    }
+
+    .collapse {
+      float: right;
+      padding: 3px 0;
+    }
   }
 
-  .card .card-header {
-    padding: 10px 10px;
-    border-bottom: 1px solid #ebeef5;
-  }
-
-  .card .card-body {
-    padding: 10px;
-  }
-
-  .card .collapse {
-    float: right;
-    padding: 3px 0;
-  }
 </style>

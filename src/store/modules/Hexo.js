@@ -9,7 +9,8 @@ const state = {
   inited: false,
   selectedPostId: null,
   selectedTag: null,
-  selectedCat: null
+  selectedCat: null,
+  selectedDrafts: false,
 }
 const mutations = {
   setInstance (state, hexo) {
@@ -26,6 +27,9 @@ const mutations = {
   },
   setSelectedCat (state, cat) {
     state.selectedCat = cat
+  },
+  setSelectedDrafts (state, selectedDrafts) {
+    state.selectedDrafts = selectedDrafts
   }
 }
 const actions = {
@@ -56,7 +60,8 @@ const actions = {
     } else {
       let hexo = new Hexo(config.path, {
         debug: false,
-        silent: true // 开启安静模式。不在终端中显示任何信息。
+        silent: true, // 开启安静模式。不在终端中显示任何信息。
+        drafts: true, // 显示草稿，详见hexo/index.js#_showDrafts
       })
       await hexo.init()
       await hexo.watch()
@@ -111,13 +116,18 @@ const actions = {
       let tag = str.substr(tagPrefix.length)
       context.commit('setSelectedTag', tag)
       context.commit('setSelectedCat', '')
+      context.commit('setSelectedDrafts', false)
     } else if (str.lastIndexOf(catPrefix) === 0) {
       let cat = str.substr(tagPrefix.length)
       context.commit('setSelectedTag', '')
       context.commit('setSelectedCat', cat)
+      context.commit('setSelectedDrafts', false)
+    } else if (str === 'drafts') {
+      context.commit('setSelectedDrafts', true)
     } else {
       context.commit('setSelectedTag', '')
       context.commit('setSelectedCat', '')
+      context.commit('setSelectedDrafts', false)
     }
   },
 
@@ -297,18 +307,27 @@ const getters = {
     let temp = state.instance.locals.get('posts').sort('date', -1)
     if (temp && temp.length > 0) {
       temp.forEach(post => {
-        let tags = []
-        let categories = []
-        post.tags.data.forEach(data => tags.push(data.name))
-        post.categories.data.forEach(data => categories.push(data.name))
-        if (state.selectedTag) {
-          if (!tags || tags.length === 0 || tags.indexOf(state.selectedTag) === -1) {
+        if (state.selectedDrafts) { // 如果当前看的是草稿
+          if (post.published) {
             return
           }
-        }
-        if (state.selectedCat) {
-          if (!categories || categories.length === 0 || categories.indexOf(state.selectedCat) === -1) {
+        } else {
+          if (!post.published) {
             return
+          }
+          let tags = []
+          let categories = []
+          post.tags.data.forEach(data => tags.push(data.name))
+          post.categories.data.forEach(data => categories.push(data.name))
+          if (state.selectedTag) {
+            if (!tags || tags.length === 0 || tags.indexOf(state.selectedTag) === -1) {
+              return
+            }
+          }
+          if (state.selectedCat) {
+            if (!categories || categories.length === 0 || categories.indexOf(state.selectedCat) === -1) {
+              return
+            }
           }
         }
 
@@ -326,7 +345,14 @@ const getters = {
     let posts = state.instance.locals.get('posts').sort('date', -1)
     let selectedPostId = state.selectedPostId
     if (!selectedPostId && posts.length > 0) { // 如果没选中，那么默认显示第一篇
-      selectedPostId = posts.toArray()[0].toObject()._id
+      let arr = posts.toArray()
+      for (let i = 0; i < arr.length; i++) {
+        let p = arr[i]
+        if (p.published) {
+          selectedPostId = p._id
+          break
+        }
+      }
     }
     if (!selectedPostId) {
       return null
