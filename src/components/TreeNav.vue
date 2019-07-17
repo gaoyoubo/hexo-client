@@ -20,7 +20,7 @@
               <i class="iconfont icon-categories"></i>
               <span slot="title">&nbsp;分类</span>
             </template>
-            <el-menu-item v-for="cat in categories" :index="'cat#' + cat">
+            <el-menu-item v-for="cat in categories" :index="'cat#' + cat" :key="cat">
               <i class="iconfont icon-category"></i>
               <span slot="title">&nbsp;{{cat}}</span>
             </el-menu-item>
@@ -30,7 +30,7 @@
               <i class="iconfont icon-tags"></i>
               <span slot="title">&nbsp;标签</span>
             </template>
-            <el-menu-item v-for="tag in tags" :index="'tag#' + tag">
+            <el-menu-item v-for="tag in tags" :index="'tag#' + tag" :key="tag">
               <i class="iconfont icon-tag"></i>
               <span slot="title">&nbsp;{{tag}}</span>
             </el-menu-item>
