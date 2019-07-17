@@ -13,26 +13,26 @@
         <el-menu default-active="all" :default-openeds="defaultOpeneds" @select="handleSelect">
           <el-menu-item index="all">
             <i class="iconfont icon-archive"></i>
-            <span slot="title">全部</span>
+            <span slot="title">&nbsp;全部</span>
           </el-menu-item>
           <el-submenu index="categories">
             <template slot="title">
               <i class="iconfont icon-categories"></i>
-              <span slot="title">分类</span>
+              <span slot="title">&nbsp;分类</span>
             </template>
             <el-menu-item v-for="cat in categories" :index="'cat#' + cat">
               <i class="iconfont icon-category"></i>
-              <span slot="title">{{cat}}</span>
+              <span slot="title">&nbsp;{{cat}}</span>
             </el-menu-item>
           </el-submenu>
           <el-submenu index="tags">
             <template slot="title">
               <i class="iconfont icon-tags"></i>
-              <span slot="title">标签</span>
+              <span slot="title">&nbsp;标签</span>
             </template>
             <el-menu-item v-for="tag in tags" :index="'tag#' + tag">
               <i class="iconfont icon-tag"></i>
-              <span slot="title">{{tag}}</span>
+              <span slot="title">&nbsp;{{tag}}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
