@@ -1,6 +1,5 @@
 <template>
-  <el-button icon="el-icon-upload" size="small" type="success" @click.sync="deploy" circle>
-  </el-button>
+  <el-button icon="el-icon-upload" size="small" type="success" @click="deploy" circle></el-button>
 </template>
 
 <script>

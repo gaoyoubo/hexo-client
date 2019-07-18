@@ -4,7 +4,7 @@
     <div class="ins-search-container">
       <div class="ins-input-wrapper">
         <input type="text" class="ins-search-input" :placeholder="$t('searchPlaceholder')" x-webkit-speech="" ref="searchInput"
-               v-model.trim.change="keyword" @keyup.38="selectUp" @keyup.40="selectDown" @keyup.13="selectEnter"/>
+               v-model.trim="keyword" @keyup.38="selectUp" @keyup.40="selectDown" @keyup.13="selectEnter"/>
         <button type="button" class="close ins-close ins-selectable" data-dismiss="modal" aria-label="Close"
                 @click="hide">
           <span aria-hidden="true">×</span>
@@ -13,7 +13,7 @@
       <div class="ins-section-wrapper">
         <div class="ins-section-container" ref="container">
           <section class="ins-section" v-if="results.length > 0">
-            <div v-for="(item, index) in results" class="ins-selectable ins-search-item"
+            <div v-for="(item, index) in results" class="ins-selectable ins-search-item" :key="item.id"
                  ref="items" :class="{active: index === selectIndex}" @click="clickItem(item.id)">
               <header><i class="el-icon-document"></i>{{ item.title }}</header>
               <p class="ins-search-preview">{{ item.summary }}</p>

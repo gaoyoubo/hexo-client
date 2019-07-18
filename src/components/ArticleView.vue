@@ -8,10 +8,10 @@
             <header class="article-header">
               <h1 class="article-title">{{ post.title }}</h1>
               <label class="article-time">{{ post.date.format('YYYY-MM-DD HH:mm:ss') }}</label>
-              <label class="article-cat" v-for="category in post.categories.data">
+              <label class="article-cat" v-for="category in post.categories.data" :key="'cat:' + category.name">
                 <el-tag size="small">{{ category.name }}</el-tag>
               </label>
-              <label class="article-tag" v-for="tag in post.tags.data">
+              <label class="article-tag" v-for="tag in post.tags.data" :key="'tag:' + tag.name">
                 <el-tag type="info" size="small">{{ tag.name }}</el-tag>
               </label>
             </header>

@@ -12,7 +12,7 @@
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click.sync="setConfig">{{$t('okBtn')}}</el-button>
+      <el-button type="primary" @click="setConfig">{{$t('okBtn')}}</el-button>
     </div>
   </el-dialog>
 </template>
