@@ -11,10 +11,12 @@
 - 文章添加
 - 文章修改
 - 文章删除
-- 文章支持七牛图片上传
-- 支持hexo generate
-- 支持hexo deploy
+- 草稿功能
+- 多图床支持：aliyun-oss、七牛、sm.ms、Github
 - 文章搜索
+- 文章按分类、标签分组展示
+- 多语言支持
+- 支持[Travis-CI](https://travis-ci.org/)自动部署
 
 ### 功能预览
 
