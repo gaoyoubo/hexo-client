@@ -1,8 +1,8 @@
 {
   "name": "HexoClient",
-  "version": "1.2.9",
+  "version": "1.3.0",
   "private": true,
-  "description": "Hexo桌面客户端",
+  "description": "A cross-platform hexo client, build on electron.",
   "author": {
     "name": "Gao Youbo",
     "email": "gaoyoubo@foxmail.com",
