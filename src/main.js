@@ -10,6 +10,8 @@ import i18n from './plugins/i18n'
 
 Vue.config.productionTip = false
 
+window.appVersion = 'v1.2.9' // 当前版本号
+
 new Vue({
   router,
   store,
