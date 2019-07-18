@@ -60,6 +60,7 @@ const actions = {
     } else {
       let hexo = new Hexo(config.path, {
         debug: false,
+        // safe: true, // 安全模式，安全模式下不会加载第三方插件
         silent: true, // 开启安静模式。不在终端中显示任何信息。
         drafts: true, // 显示草稿，详见hexo/index.js#_showDrafts
       })
@@ -158,7 +159,8 @@ const actions = {
     if (postForm.path && postForm.path.indexOf(suffix, this.length - suffix.length) === -1) { // 设置了path，并且path不以.md结尾
       postForm.path = postForm.path + '.md'
     }
-    hexo.post.create(postForm, function (err, value) {
+    // let replace = postForm.layout === 'draft' // 如果是草稿，那么就要进行覆盖
+    hexo.post.create(postForm, true, function (err, value) {
       if (err) {
         deferred.reject(err)
       } else {
@@ -185,6 +187,30 @@ const actions = {
       if (err) {
         deferred.reject(err)
       } else {
+        deferred.resolve(value)
+      }
+    })
+    return deferred.promise
+  },
+
+  /**
+   * 发布草稿
+   * @param context
+   * @param postForm
+   * @returns {Q.Promise<T>}
+   */
+  publishPost (context, postForm) {
+    let deferred = when.defer()
+    let hexo = context.state.instance
+    let suffix = '.md'
+    if (postForm.path && postForm.path.indexOf(suffix, this.length - suffix.length) === -1) { // 设置了path，并且path不以.md结尾
+      postForm.slug = postForm.path + '.md'
+    }
+    hexo.post.publish(postForm, true, function (err, value) {
+      if (err) {
+        deferred.reject(err)
+      } else {
+        context.commit('setSelectedPostId', undefined) // 重置一下当前选中的文章
         deferred.resolve(value)
       }
     })

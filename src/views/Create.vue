@@ -6,7 +6,7 @@
       <el-main class="main">
         <!-- 标题 -->
         <el-form-item prop="title">
-          <el-input v-model="postForm.title" @input="formChanged = true"
+          <el-input v-model="postForm.title" @input="formChanged = true" :disabled="editLock"
                     :placeholder="$t('articleTitlePlaceholder')" style="width: 100%;"></el-input>
         </el-form-item>
         <!-- 内容 -->
@@ -29,7 +29,7 @@
               <div class="card-body" v-show="show1">
                 <!-- 路径 -->
                 <el-form-item prop="path">
-                  <el-input v-model="postForm.path" @input="formChanged = true"
+                  <el-input v-model="postForm.path" @input="formChanged = true" :disabled="editLock"
                             :placeholder="$t('articlePathPlaceholder')" style="width: 100%;"></el-input>
                 </el-form-item>
 
@@ -40,9 +40,12 @@
                                :active-text="$t('openToc')"></el-switch>
                   </el-col>
                   <el-col :span="8">
-                    <!-- 是否保存为草稿 -->
-                    <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post"
-                               active-text="草稿"></el-switch>
+                    <!-- 是否保存为草稿，如果切换成草稿之后，那么就不让切回去了, 否则来回切换会有问题 -->
+                    <el-tooltip class="item" effect="dark" content="内容保存之后无法再次切换草稿状态" placement="top">
+                      <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post"
+                                 :disabled="editLock"
+                                 active-text="草稿"></el-switch>
+                    </el-tooltip>
                   </el-col>
                   <el-col :span="8">
                     <el-button type="primary" icon="el-icon-success" size="mini" :loading="saving"
@@ -155,6 +158,7 @@
         show3: true,
         show4: true,
         saving: false,
+        editLock: false,
         postForm: {
           title: '',
           path: '',
@@ -190,7 +194,6 @@
       }
     },
     methods: {
-
       async submitForm () {
         this.save(true)
       },
@@ -205,9 +208,11 @@
        * @returns {Promise<void>}
        */
       async save (toMain) {
+        toMain = toMain && this.postForm.layout === 'post' // 如果是保存草稿，那么保存之后不要跳到首页去
         let valid = await this.$store.dispatch('Hexo/validatePostForm', this.$refs.postForm)
         if (valid) {
-          this.saving = true
+          this.saving = true // 保存中
+          this.editLock = true // 锁定编辑
           try {
             if (this.frontMatters && this.frontMatters.length > 0) {
               for (let i = 0; i < this.frontMatters.length; i++) {
@@ -215,7 +220,6 @@
                 this.postForm[item.title] = item.value
               }
             }
-            toMain = toMain && this.postForm.layout === 'post' // 如果是保存草稿，那么保存之后不要跳到首页去
             await this.$store.dispatch('Hexo/createPost', this.postForm)
             this.formChanged = false
             this.postForm.originContent = this.postForm.content

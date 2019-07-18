@@ -45,8 +45,9 @@
                                active-text="草稿"></el-switch>
                   </el-col>
                   <el-col :span="8">
+                    <!-- 不是草稿的时候实现保存按钮 -->
                     <el-button type="primary" icon="el-icon-success" size="mini"
-                               style="float: right;"
+                               style="float: right;" :loading="saving"
                                @click="submitForm()">{{$t('save')}}
                     </el-button>
                   </el-col>
@@ -154,6 +155,8 @@
         show3: true,
         show4: true,
         inited: false,
+        saving: false,
+        draft: false, // 是否是草稿
         postForm: {
           title: '',
           path: '',
@@ -246,8 +249,10 @@
         // layout
         if (!post.published) {
           me.postForm.layout = 'draft'
+          me.draft = true
         } else {
           me.postForm.layout = 'post'
+          me.draft = false
         }
 
         // frontMatter
@@ -265,6 +270,7 @@
       async submitForm () {
         let valid = await this.$store.dispatch('Hexo/validatePostForm', this.$refs.postForm)
         if (valid) {
+          this.saving = true
           try {
             if (this.frontMatters && this.frontMatters.length > 0) {
               for (let i = 0; i < this.frontMatters.length; i++) {
@@ -273,11 +279,22 @@
               }
             }
             await this.$store.dispatch('Hexo/editPost', this.postForm)
+
+            // 原本是草稿，现在标记为发布状态，那么本次操作是执行发布操作
+            let doPublish = this.draft && this.postForm.layout === 'post'
+            if (doPublish) {
+              await this.$store.dispatch('Hexo/publishPost', this.postForm)
+            }
             this.formChanged = false
             this.$notify({title: '成功', message: '修改成功', type: 'success'})
+            if (doPublish) {
+              this.$router.push({name: 'main'})
+            }
             ClientAnalytics.event('article', 'editSubmit')
           } catch (err) {
             this.$notify.error({title: '错误', message: '修改失败'})
+          } finally {
+            this.saving = false
           }
         } else {
           this.$notify.error({title: '错误', message: '表单验证失败'})
