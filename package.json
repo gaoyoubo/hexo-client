@@ -1,6 +1,6 @@
 {
   "name": "HexoClient",
-  "version": "1.3.0",
+  "version": "1.2.9",
   "private": true,
   "description": "A cross-platform hexo client, build on electron.",
   "author": {
