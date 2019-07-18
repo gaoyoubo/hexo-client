@@ -10,7 +10,8 @@
         </el-form-item>
         <!-- 内容 -->
         <el-form-item prop="content">
-          <markdown-editor v-model="postForm.content" :initValue="postForm.content" @change="formChanged = true" @save="submitForm"/>
+          <markdown-editor v-model="postForm.content" :initValue="postForm.content" @change="formChanged = true"
+                           @save="submitForm"/>
         </el-form-item>
       </el-main>
       <el-aside class="aside">
@@ -32,15 +33,25 @@
                             :placeholder="$t('articlePathPlaceholder')" style="width: 100%;"></el-input>
                 </el-form-item>
 
-                <!-- 开启toc -->
-                <el-switch v-model="postForm.toc" @input="formChanged = true"
-                           :active-text="$t('openToc')"></el-switch>
-
-                <!-- 提交按钮 -->
-                <el-button type="primary" icon="el-icon-success" size="mini"
-                           style="float: right"
-                           @click="submitForm()">{{$t('save')}}
-                </el-button>
+                <div class="publish-settings">
+                  <el-col :span="8">
+                    <!-- 开启toc -->
+                    <el-switch v-model="postForm.toc" @input="formChanged = true"
+                               :active-text="$t('openToc')"></el-switch>
+                  </el-col>
+                  <el-col :span="8">
+                    <!-- 是否保存为草稿 -->
+                    <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post"
+                               active-text="草稿"></el-switch>
+                  </el-col>
+                  <el-col :span="8">
+                    <!-- 不是草稿的时候实现保存按钮 -->
+                    <el-button type="primary" icon="el-icon-success" size="mini"
+                               style="float: right;" :loading="saving"
+                               @click="submitForm()">{{$t('save')}}
+                    </el-button>
+                  </el-col>
+                </div>
               </div>
             </el-collapse-transition>
           </div>
@@ -113,7 +124,8 @@
                     <el-button slot="append" icon="el-icon-delete" @click="deleteFrontMatter(item)"></el-button>
                   </el-input>
                 </el-form-item>
-                <el-button type="success" plain icon="el-icon-plus" size="mini" @click="openAddFrontMatter">Add</el-button>
+                <el-button type="success" plain icon="el-icon-plus" size="mini" @click="openAddFrontMatter">Add
+                </el-button>
                 <front-matter ref="frontMatterEditor" @ok="addFrontMatter"/>
               </div>
             </el-collapse-transition>
@@ -143,6 +155,8 @@
         show3: true,
         show4: true,
         inited: false,
+        saving: false,
+        draft: false, // 是否是草稿
         postForm: {
           title: '',
           path: '',
@@ -150,7 +164,8 @@
           tags: [],
           categories: [],
           date: '',
-          toc: false
+          toc: false,
+          layout: 'post', // 默认发表文章，还可取值draft表示发表草稿
         },
         frontMatters: [],
         postFormRules: {
@@ -231,12 +246,21 @@
           }
         }
 
+        // layout
+        if (!post.published) {
+          me.postForm.layout = 'draft'
+          me.draft = true
+        } else {
+          me.postForm.layout = 'post'
+          me.draft = false
+        }
+
         // frontMatter
         let frontMatter = Utils.frontMatter(post.raw)
         Object.keys(frontMatter).forEach(key => {
           me.frontMatters.push({
             title: key,
-            value: frontMatter[key]
+            value: frontMatter[key] + ''
           })
         })
 
@@ -246,6 +270,7 @@
       async submitForm () {
         let valid = await this.$store.dispatch('Hexo/validatePostForm', this.$refs.postForm)
         if (valid) {
+          this.saving = true
           try {
             if (this.frontMatters && this.frontMatters.length > 0) {
               for (let i = 0; i < this.frontMatters.length; i++) {
@@ -254,11 +279,22 @@
               }
             }
             await this.$store.dispatch('Hexo/editPost', this.postForm)
+
+            // 原本是草稿，现在标记为发布状态，那么本次操作是执行发布操作
+            let doPublish = this.draft && this.postForm.layout === 'post'
+            if (doPublish) {
+              await this.$store.dispatch('Hexo/publishPost', this.postForm)
+            }
             this.formChanged = false
             this.$notify({title: '成功', message: '修改成功', type: 'success'})
+            if (doPublish) {
+              this.$router.push({name: 'main'})
+            }
             ClientAnalytics.event('article', 'editSubmit')
           } catch (err) {
             this.$notify.error({title: '错误', message: '修改失败'})
+          } finally {
+            this.saving = false
           }
         } else {
           this.$notify.error({title: '错误', message: '表单验证失败'})
@@ -314,7 +350,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .main {
     height: 100%;
     padding: 20px 10px 0px;
@@ -330,11 +366,11 @@
   .scrollbar {
     height: 100%;
     width: 300px !important;
-  }
 
-  .scrollbar .el-scrollbar__wrap {
-    overflow-x: hidden;
-    scroll-behavior: smooth;
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
   }
 
   .card {
@@ -343,19 +379,28 @@
     border: 1px solid #ebeef5;
     background-color: #fff;
     color: #303133;
-  }
 
-  .card .card-header {
-    padding: 10px 10px;
-    border-bottom: 1px solid #ebeef5;
-  }
+    .card-header {
+      padding: 10px 10px;
+      border-bottom: 1px solid #ebeef5;
+    }
 
-  .card .card-body {
-    padding: 10px;
-  }
+    .card-body {
+      padding: 10px;
 
-  .card .collapse {
-    float: right;
-    padding: 3px 0;
+      .publish-settings {
+        display: table;
+        width: 100%;
+
+        .el-col {
+          line-height: 28px;
+        }
+      }
+    }
+
+    .collapse {
+      float: right;
+      padding: 3px 0;
+    }
   }
 </style>

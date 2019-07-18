@@ -10,17 +10,21 @@
         <deploy/>
       </div>
       <el-scrollbar :style="{height: scrollbarHeight}" ref="scrollbar" class="el-scrollbar" view-style="height: 100%">
-        <el-menu default-active="all" :default-openeds="defaultOpeneds" @select="handleSelect">
+        <el-menu :default-active="selectedTreeItem" :default-openeds="defaultOpeneds" @select="handleSelect">
           <el-menu-item index="all">
             <i class="iconfont icon-archive"></i>
             <span slot="title">&nbsp;全部</span>
+          </el-menu-item>
+          <el-menu-item index="drafts">
+            <i class="iconfont icon-draft"></i>
+            <span slot="title">&nbsp;草稿</span>
           </el-menu-item>
           <el-submenu index="categories">
             <template slot="title">
               <i class="iconfont icon-categories"></i>
               <span slot="title">&nbsp;分类</span>
             </template>
-            <el-menu-item v-for="cat in categories" :index="'cat#' + cat">
+            <el-menu-item v-for="cat in categories" :index="'cat#' + cat" :key="cat">
               <i class="iconfont icon-category"></i>
               <span slot="title">&nbsp;{{cat}}</span>
             </el-menu-item>
@@ -30,7 +34,7 @@
               <i class="iconfont icon-tags"></i>
               <span slot="title">&nbsp;标签</span>
             </template>
-            <el-menu-item v-for="tag in tags" :index="'tag#' + tag">
+            <el-menu-item v-for="tag in tags" :index="'tag#' + tag" :key="tag">
               <i class="iconfont icon-tag"></i>
               <span slot="title">&nbsp;{{tag}}</span>
             </el-menu-item>
@@ -93,7 +97,8 @@
     computed: {
       ...mapGetters({
         tags: 'Hexo/tags',
-        categories: 'Hexo/categories'
+        categories: 'Hexo/categories',
+        selectedTreeItem: 'Hexo/selectedTreeItem'
       }),
       open () {
         return this.$store.state.UiStatus.treeNavOpen
