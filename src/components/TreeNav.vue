@@ -10,7 +10,7 @@
         <deploy/>
       </div>
       <el-scrollbar :style="{height: scrollbarHeight}" ref="scrollbar" class="el-scrollbar" view-style="height: 100%">
-        <el-menu default-active="all" :default-openeds="defaultOpeneds" @select="handleSelect">
+        <el-menu :default-active="selectedTreeItem" :default-openeds="defaultOpeneds" @select="handleSelect">
           <el-menu-item index="all">
             <i class="iconfont icon-archive"></i>
             <span slot="title">&nbsp;全部</span>
@@ -97,7 +97,8 @@
     computed: {
       ...mapGetters({
         tags: 'Hexo/tags',
-        categories: 'Hexo/categories'
+        categories: 'Hexo/categories',
+        selectedTreeItem: 'Hexo/selectedTreeItem'
       }),
       open () {
         return this.$store.state.UiStatus.treeNavOpen

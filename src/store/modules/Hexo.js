@@ -363,6 +363,21 @@ const getters = {
     return posts
   },
   /**
+   * 当前选中的树形菜单项目
+   * @param state
+   * @returns {string}
+   */
+  selectedTreeItem: state => {
+    if (state.selectedDrafts) {
+      return 'drafts'
+    } else if (state.selectedCat) {
+      return 'cat#' + state.selectedCat
+    } else if (state.selectedTag) {
+      return 'tag#' + state.selectedTag
+    }
+    return 'all'
+  },
+  /**
    * 选中的文章
    * @param state
    * @returns {{}}
