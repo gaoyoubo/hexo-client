@@ -41,7 +41,7 @@
                   </el-col>
                   <el-col :span="8">
                     <!-- 是否保存为草稿 -->
-                    <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post"
+                    <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post" :disabled="isLockSwitchDraft()"
                                active-text="草稿"></el-switch>
                   </el-col>
                   <el-col :span="8">
@@ -194,6 +194,12 @@
       }
     },
     methods: {
+      // 是否锁定切换草稿
+      isLockSwitchDraft () {
+        // 当前文章不是草稿时，编辑时不能切换为草稿状态
+        return !this.draft
+      },
+
       async init () {
         let me = this
         let postId = this.$route.params.postId
