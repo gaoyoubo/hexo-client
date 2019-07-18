@@ -4,16 +4,14 @@
       <div>
         <h3>项目地址</h3>
         <ul>
-          <li>Github：<a @click="openUrl('https://github.com/gaoyoubo/hexo-client')" href="#">https://github.com/gaoyoubo/hexo-client</a>
-          </li>
+          <li>Github：<a @click="openUrl('https://github.com/gaoyoubo/hexo-client')" href="#">https://github.com/gaoyoubo/hexo-client</a></li>
           <li>Blog：<a @click="openUrl('http://www.mspring.org')" href="#">http://www.mspring.org</a></li>
-          <li>讨论：<a @click="openUrl('https://www.mlog.club/user/signin')" href="#">https://www.mlog.club</a></li>
         </ul>
       </div>
       <div>
         <h3>使用帮助</h3>
         <ul>
-          <li>帮助文档：<a @click="openUrl('https://www.mlog.club/article/5526')" href="#">点击查看帮助文档</a></li>
+          <li>帮助文档：<a @click="openUrl('https://www.mspring.org/2018/11/29/HexoClient%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/')" href="#">点击查看帮助文档</a></li>
           <li>提交问题：<a @click="openUrl('https://github.com/gaoyoubo/hexo-client/issues/new')" href="#">点击提交问题</a></li>
         </ul>
       </div>
