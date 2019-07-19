@@ -40,9 +40,11 @@
                                :active-text="$t('openToc')"></el-switch>
                   </el-col>
                   <el-col :span="8">
-                    <!-- 是否保存为草稿 -->
-                    <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post" :disabled="isLockSwitchDraft()"
-                               active-text="草稿"></el-switch>
+                    <!-- 是否保存为草稿，如果切换成草稿之后，那么就不让切回去了, 否则来回切换会有问题 -->
+                    <el-tooltip class="item" effect="dark" content="发布后的内容无法再切换为草稿" placement="top">
+                      <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post" :disabled="isLockSwitchDraft()"
+                              active-text="草稿"></el-switch>
+                    </el-tooltip>
                   </el-col>
                   <el-col :span="8">
                     <!-- 不是草稿的时候实现保存按钮 -->
