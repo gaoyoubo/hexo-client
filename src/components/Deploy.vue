@@ -1,17 +1,17 @@
 <template>
-  <el-button icon="el-icon-upload" size="small" type="success" @click="deploy" circle></el-button>
+    <el-button icon="el-icon-upload" size="small" type="success" @click="deploy" circle></el-button>
 </template>
 
 <script>
   export default {
     name: 'deploy',
-    data () {
+    data() {
       return {}
     },
-    mounted () {
+    mounted() {
     },
     methods: {
-      async deploy () {
+      async deploy() {
         let simpleStatus = await this.simpleStatus()
         if (simpleStatus.modified) {
           this.commit(simpleStatus.branch, 'Commit at ' + this.dateFormat('yyyy-MM-dd HH:mm:ss', new Date()))
@@ -20,7 +20,7 @@
         }
       },
 
-      async simpleStatus () {
+      async simpleStatus() {
         let status = {modified: false, branch: 'master'}
         try {
           let statusSummary = await this.git().status()
@@ -35,7 +35,25 @@
         }
       },
 
-      async commit (branch, msg) {
+      async deployHexoWithShell() {
+        if(!this.$store.state.Config.config.shellDeploy) return
+        const {exec} = require('child_process')
+        return new Promise((resolve, reject) => {
+          exec('hexo d -g', {cwd: this.$store.state.Config.config.path}, (err, stdout, stderr) => {
+            if (err) {
+              console.error(`shell err: ${err}`)
+              return reject(err)
+            }
+            if (stdout) resolve(stdout)
+            else {
+              console.error(`err: ${stderr}`)
+              return reject(stderr)
+            }
+          })
+        })
+      },
+
+      async commit(branch, msg) {
         let loading = this.$loading({
           lock: true,
           text: '发布中...',
@@ -43,6 +61,7 @@
           background: 'rgba(0, 0, 0, 0.7)'
         })
         try {
+          await this.deployHexoWithShell()
           await this.git().add('./*')
           await this.git().commit(msg)
           await this.git().push('origin', branch)
@@ -55,17 +74,17 @@
         }
       },
 
-      git () {
+      git() {
         let workingDir = this.workingDir()
         return require('simple-git/promise')(workingDir)
       },
 
-      workingDir () {
+      workingDir() {
         let config = this.$store.state.Config.config
         return config.path
       },
 
-      dateFormat (fmt, date) {
+      dateFormat(fmt, date) {
         var o = {
           'M+': date.getMonth() + 1,
           'd+': date.getDate(),
