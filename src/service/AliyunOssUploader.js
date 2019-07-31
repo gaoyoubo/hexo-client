@@ -61,7 +61,7 @@ class AliyunOssUploader {
       // 没配置host的情况下，使用默认的url
       return result.url
     }
-    return path.join(sysConfig.aliyunOssHost, result.name)
+    return sysConfig.aliyunOssHost + result.name
   }
 }
 
