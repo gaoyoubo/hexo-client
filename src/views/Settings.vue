@@ -1,237 +1,160 @@
 <template>
-    <el-main class="setting-main">
-        <el-form label-width="120px" label-position="left" :model="config">
-            <el-form-item :label="$t('settingTitlePath')">
-                <el-input v-model="config.path" style="width:100%"/>
-            </el-form-item>
-            <el-form-item :label="$t('settingTitleLanguage')">
-                <el-select v-model="config.language" default-first-option
-                           :placeholder="$t('settingLanguagePlaceholder')"
-                           style="width:100%">
-                    <el-option :label="$t('chinese')" value="zh"></el-option>
-                    <el-option :label="$t('english')" value="en"></el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item :label="$t('settingTitleImageServer')">
-                <el-select v-model="config.uploadType" default-first-option
-                           :placeholder="$t('settingImageServerPlaceholder')"
-                           style="width:100%">
-                    <el-option label="GitHub" value="github"></el-option>
-                    <el-option label="sm.ms" value="sm.ms"></el-option>
-                    <el-option label="七牛" value="qiniu"></el-option>
-                    <el-option label="AliyunOss" value="aliyunOss"></el-option>
-                </el-select>
-            </el-form-item>
-            <transition name="el-zoom-in-top">
-                <div v-show="config.uploadType==='qiniu'">
-                    <el-form-item label="七牛存储区域">
-                        <el-select v-model="config.qiniuZone" default-first-option placeholder="请选择机房"
-                                   style="width:100%">
-                            <el-option label="华东" value="huadong"></el-option>
-                            <el-option label="华北" value="huabei"></el-option>
-                            <el-option label="华南" value="huanan"></el-option>
-                            <el-option label="北美" value="beimei"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="AccessKey">
-                        <el-input v-model="config.qiniuAccessKey" style="width:100%" placeholder="七牛AccessKey"/>
-                    </el-form-item>
-                    <el-form-item label="SecretKey">
-                        <el-input v-model="config.qiniuSecretKey" style="width:100%" placeholder="七牛SecretKey"/>
-                    </el-form-item>
-                    <el-form-item label="Bucket">
-                        <el-input v-model="config.qiniuBucket" style="width:100%" placeholder="七牛Bucket"/>
-                    </el-form-item>
-                    <el-form-item label="Host">
-                        <el-input v-model="config.qiniuHost" style="width:100%" placeholder="七牛Host"/>
-                    </el-form-item>
-                </div>
-            </transition>
-            <el-form-item label="命令行自动部署">
-                <div v-if="config.shellDeploy" @click="turnOffShellDeploy" class="switch on animation"></div>
-                <div v-else @click="turnOnShellDeploy" class="switch off animation"></div>
-            </el-form-item>
+  <el-main class="setting-main">
+    <el-form label-width="120px" label-position="left" :model="config">
+      <el-form-item :label="$t('settingTitlePath')">
+        <el-input v-model="config.path" style="width:100%" />
+      </el-form-item>
+      <el-form-item :label="$t('settingTitleLanguage')">
+        <el-select
+          v-model="config.language"
+          default-first-option
+          :placeholder="$t('settingLanguagePlaceholder')"
+          style="width:100%"
+        >
+          <el-option :label="$t('chinese')" value="zh"></el-option>
+          <el-option :label="$t('english')" value="en"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="命令行自动部署">
+        <el-switch v-model="config.shellDeploy"></el-switch>
+      </el-form-item>
 
+      <el-form-item :label="$t('settingTitleImageServer')">
+        <el-select
+          v-model="config.uploadType"
+          default-first-option
+          :placeholder="$t('settingImageServerPlaceholder')"
+          style="width:100%"
+        >
+          <el-option label="GitHub" value="github"></el-option>
+          <el-option label="sm.ms" value="sm.ms"></el-option>
+          <el-option label="七牛" value="qiniu"></el-option>
+          <el-option label="AliyunOss" value="aliyunOss"></el-option>
+        </el-select>
+      </el-form-item>
+      <transition name="el-zoom-in-top">
+        <div v-show="config.uploadType==='qiniu'">
+          <el-form-item label="七牛存储区域">
+            <el-select
+              v-model="config.qiniuZone"
+              default-first-option
+              placeholder="请选择机房"
+              style="width:100%"
+            >
+              <el-option label="华东" value="huadong"></el-option>
+              <el-option label="华北" value="huabei"></el-option>
+              <el-option label="华南" value="huanan"></el-option>
+              <el-option label="北美" value="beimei"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="AccessKey">
+            <el-input v-model="config.qiniuAccessKey" style="width:100%" placeholder="七牛AccessKey" />
+          </el-form-item>
+          <el-form-item label="SecretKey">
+            <el-input v-model="config.qiniuSecretKey" style="width:100%" placeholder="七牛SecretKey" />
+          </el-form-item>
+          <el-form-item label="Bucket">
+            <el-input v-model="config.qiniuBucket" style="width:100%" placeholder="七牛Bucket" />
+          </el-form-item>
+          <el-form-item label="Host">
+            <el-input v-model="config.qiniuHost" style="width:100%" placeholder="七牛Host" />
+          </el-form-item>
+        </div>
+      </transition>
 
-            <transition name="el-zoom-in-top">
-                <div v-show="config.uploadType==='aliyunOss'">
-                    <el-form-item label="Endpoint">
-                        <el-input v-model="config.aliyunOssEndpoint" style="width:100%"
-                                  placeholder="Aliyun oss endpoint"/>
-                    </el-form-item>
-                    <el-form-item label="AccessId">
-                        <el-input v-model="config.aliyunOssAccessKeyId" style="width:100%"
-                                  placeholder="Aliyun oss accessKeyId"/>
-                    </el-form-item>
-                    <el-form-item label="AccessSecret">
-                        <el-input v-model="config.aliyunOssAccessKeySecret" style="width:100%"
-                                  placeholder="Aliyun oss accessKeySecret"/>
-                    </el-form-item>
-                    <el-form-item label="Bucket">
-                        <el-input v-model="config.aliyunOssBucket" style="width:100%" placeholder="Aliyun oss bucket"/>
-                    </el-form-item>
-                    <el-form-item label="Host">
-                        <el-input v-model="config.aliyunOssHost" style="width:100%" placeholder="Aliyun oss host"/>
-                    </el-form-item>
-                </div>
-            </transition>
+      <transition name="el-zoom-in-top">
+        <div v-show="config.uploadType==='aliyunOss'">
+          <el-form-item label="Endpoint">
+            <el-input
+              v-model="config.aliyunOssEndpoint"
+              style="width:100%"
+              placeholder="Aliyun oss endpoint"
+            />
+          </el-form-item>
+          <el-form-item label="AccessId">
+            <el-input
+              v-model="config.aliyunOssAccessKeyId"
+              style="width:100%"
+              placeholder="Aliyun oss accessKeyId"
+            />
+          </el-form-item>
+          <el-form-item label="AccessSecret">
+            <el-input
+              v-model="config.aliyunOssAccessKeySecret"
+              style="width:100%"
+              placeholder="Aliyun oss accessKeySecret"
+            />
+          </el-form-item>
+          <el-form-item label="Bucket">
+            <el-input
+              v-model="config.aliyunOssBucket"
+              style="width:100%"
+              placeholder="Aliyun oss bucket"
+            />
+          </el-form-item>
+          <el-form-item label="Host">
+            <el-input
+              v-model="config.aliyunOssHost"
+              style="width:100%"
+              placeholder="Aliyun oss host"
+            />
+          </el-form-item>
+        </div>
+      </transition>
 
-            <el-form-item>
-                <el-button type="primary" @click="saveConfig">{{$t('save')}}</el-button>
-            </el-form-item>
-        </el-form>
-    </el-main>
+      <el-form-item>
+        <el-button type="primary" @click="saveConfig">{{$t('save')}}</el-button>
+      </el-form-item>
+    </el-form>
+  </el-main>
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        config: {
-          base: '',
-          path: '',
-          language: '',
-          uploadType: '',
-          qiniuZone: '',
-          qiniuAccessKey: '',
-          qiniuSecretKey: '',
-          qiniuBucket: '',
-          qiniuHost: '',
-          aliyunOssEndpoint: '',
-          aliyunOssAccessKeyId: '',
-          aliyunOssAccessKeySecret: '',
-          aliyunOssBucket: '',
-          aliyunOssHost: '',
-          shellDeploy: false,
-        },
+export default {
+  data() {
+    return {
+      config: {
+        base: "",
+        path: "",
+        language: "",
+        uploadType: "",
+        qiniuZone: "",
+        qiniuAccessKey: "",
+        qiniuSecretKey: "",
+        qiniuBucket: "",
+        qiniuHost: "",
+        aliyunOssEndpoint: "",
+        aliyunOssAccessKeyId: "",
+        aliyunOssAccessKeySecret: "",
+        aliyunOssBucket: "",
+        aliyunOssHost: "",
+        shellDeploy: false
       }
-    },
-    created() {
-      // 不应该直接赋值到data中，vue模板渲染出错
-      // this.config = this.$store.state.Config.config
-      const config = JSON.parse(JSON.stringify(this.$store.state.Config.config))
-      this.config = {...this.config, ...config}
-    },
-    methods: {
-      async saveConfig() {
-        let config = this.$store.state.Config.config
-        let message = '保存成功'
-        if (config.language !== this.config.language) {
-          message = '保存成功，变更语言需要重启后生效。'
-        }
-        await this.$store.dispatch('Config/setConfig', this.config)
-        this.$notify.success({
-          title: '成功',
-          message: message
-        })
-      },
-      turnOffShellDeploy() {
-        this.config.shellDeploy = false
-      },
-      turnOnShellDeploy() {
-        this.config.shellDeploy = true
-      },
+    };
+  },
+  created() {
+    this.config = this.$store.state.Config.config
+  },
+  methods: {
+    async saveConfig() {
+      let config = this.$store.state.Config.config;
+      let message = "保存成功";
+      if (config.language !== this.config.language) {
+        message = "保存成功，变更语言需要重启后生效。";
+      }
+      await this.$store.dispatch("Config/setConfig", this.config);
+      this.$notify.success({
+        title: "成功",
+        message: message
+      });
     }
   }
+};
 </script>
 
 <style scoped>
-    .setting-main .el-form {
-        margin-top: 30px;
-        width: 650px;
-    }
-
-    .switch {
-        position: relative;
-        display: inline-block;
-        width: 35px;
-        height: 16px;
-        vertical-align: middle;
-        border-radius: 50px;
-        cursor: pointer;
-        background: #e4e4e4;
-    }
-
-    .switch::before {
-        content: '';
-        border-radius: 50%;
-        width: 18px;
-        height: 18px;
-        background: #646464;
-        box-shadow: 0 0 10px #afb1b3;
-        position: absolute;
-        top: -1px;
-        left: -2px;
-        z-index: 1;
-    }
-
-    .switch.on::before {
-        position: absolute;
-        left: 50%;
-        background: #038151;
-    }
-
-    .switch.on.animation::before {
-        position: absolute;
-        animation: switch-slide-on 0.6s;
-        animation-fill-mode: forwards;
-    }
-
-    .switch.off.animation {
-        animation: switch-slide-background-off 0.6s;
-        animation-fill-mode: forwards;
-    }
-
-    .switch.off.animation::before {
-        animation: switch-slide-off 0.6s;
-        animation-fill-mode: forwards;
-    }
-
-    .switch.on {
-        background: #04ac6c;
-    }
-
-    .switch.on.animation {
-        animation: switch-slide-background-on 0.6s;
-        animation-fill-mode: forwards;
-    }
-
-    @keyframes switch-slide-on {
-        0% {
-            left: -2px;
-        }
-        100% {
-            left: 50%;
-            background: #038151;
-        }
-    }
-
-    @keyframes switch-slide-background-on {
-        0% {
-            background: #e4e4e4;
-        }
-        100% {
-            background: #04ac6c;
-        }
-    }
-
-    @keyframes switch-slide-off {
-        0% {
-            left: 50%;
-            background: #038151;
-        }
-        100% {
-            left: -2px;
-        }
-    }
-
-    @keyframes switch-slide-background-off {
-        0% {
-            background: #04ac6c;
-        }
-        100% {
-            background: #e4e4e4;
-        }
-    }
-
+.setting-main .el-form {
+  margin-top: 30px;
+  width: 650px;
+}
 </style>
