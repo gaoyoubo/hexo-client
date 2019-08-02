@@ -30,6 +30,7 @@
 <script>
 import when from "when";
 const { exec } = require("child_process");
+const fixPath = require("fix-path");
 export default {
   name: "deploy",
   data() {
@@ -96,6 +97,7 @@ export default {
 
     doDeployHexoWithShell() {
       var deferred = when.defer();
+      fixPath();
       const workProcess = exec("hexo generate -d", {
         cwd: this.$store.state.Config.config.path,
         maxBuffer: 5000 * 1024 // 默认 200 * 1024
