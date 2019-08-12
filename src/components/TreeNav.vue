@@ -3,7 +3,8 @@
     <div class="toggle" :class="{open: open, close: !open}" @click="toggle">
       <i class="iconfont" :class="{'icon-arrow-left': open, 'icon-arrow-right': !open}" style="font-size:24px;"></i>
     </div>
-    <div ref="collapse" class="collapse" :style="{width: open ? '200px' : '0px'}">
+    <!-- <div ref="collapse" class="collapse" :style="{width: open ? '200px' : '0px'}"> -->
+    <div ref="collapse" class="collapse" :class="{'active': open}">
       <div class="tool-box" :style="{height: toolboxHeight}">
         <el-button icon="el-icon-edit" type="info" size="small" @click="createPost" circle></el-button>
         <el-button icon="el-icon-search" type="primary" size="small" @click="search" circle></el-button>
@@ -107,10 +108,7 @@
   }
 </script>
 
-<style scoped>
-  .tag-tree {
-  }
-
+<style lang="scss" scoped>
   .toggle {
     position: absolute;
     z-index: 999;
@@ -133,11 +131,12 @@
   }
 
   .collapse {
+    display: none;
     width: 200px;
-    -webkit-transition: width 0.3s;
-    -moz-transition: width 0.3s;
-    -o-transition: width 0.3s;
-    transition: width 0.3s;
+
+    &.active{
+      display: block;
+    }
   }
 
   .tool-box {
