@@ -11,6 +11,7 @@
 欢迎加入HexoClient用户群交流。
 - QQ群号：618213781
 - QQ群二维码
+
 ![](http://file.mspring.org/FjPi6HPuOAQwwaNKKyJzIbybJfWE)
 
 ### 功能简介
