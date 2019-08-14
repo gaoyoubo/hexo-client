@@ -7,6 +7,12 @@
 - HomePage: [https://github.com/gaoyoubo/hexo-client](https://github.com/gaoyoubo/hexo-client)
 - Electron AppCenter: [https://electronjs.org/apps/hexo-client](https://electronjs.org/apps/hexo-client)
 
+## QQ群
+欢迎加入HexoClient用户群交流。
+- QQ群号：618213781
+- QQ群二维码
+![](http://file.mspring.org/FjPi6HPuOAQwwaNKKyJzIbybJfWE)
+
 ### 功能简介
 - 文章添加
 - 文章修改
