@@ -15,6 +15,10 @@
         <i class="el-icon-edit"></i>
         <span slot="title">{{$t('menuCreate')}}</span>
       </el-menu-item>
+      <el-menu-item index="blogs">
+        <i class="iconfont icon-blog"></i>
+        <span slot="title">好博客</span>
+      </el-menu-item>
       <el-menu-item index="settings">
         <i class="el-icon-setting"></i>
         <span slot="title">{{$t('menuSettings')}}</span>
@@ -38,6 +42,7 @@
         switch (index) {
           case 'main':
           case 'create':
+          case 'blogs':
           case 'settings':
           case 'about':
             this.$router.push({name: index})
@@ -49,3 +54,9 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+.iconfont {
+  font-size: 24px;
+}
+</style>

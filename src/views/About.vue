@@ -2,6 +2,7 @@
   <el-main style="padding: 0px;">
     <div class="about-content">
       <div>
+        <h3>QQ群：<a @click="openQrcode" class="qq_qrcode">618213781</a></h3>
         <h3>项目地址</h3>
         <ul>
           <li>
