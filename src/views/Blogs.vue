@@ -21,7 +21,10 @@
           <el-collapse-transition>
             <div class="notice-content" v-show="showHelp">
               <p>好博客导航是一个收录优质、原创、计算机相关博客导航工具。</p>
-              <p>导航地址：<a @click="openUrl('https://mlog.club/links')">https://mlog.club/links</a></p>
+              <p>
+                导航地址：
+                <a @click="openUrl('https://mlog.club/links')">https://mlog.club/links</a>
+              </p>
               <h1>为什么要做`好博客`导航</h1>
               <p>我在网上看到过很多博客导航，但是收录的博客质量参差不齐，而且没有专业编程相关的技术类型博客导航，有很多优质好博客没有得到很好的展示机会，好博客导航主要就是为了解决一问题，让独立博主能够很好的展示自己，让自己的文章能够帮助更多人，让更多的程序员能够关注到自己喜欢的博客。</p>
               <p>后续我们还会对所有收录的博客进行分类、打标签，对优质博客进行推荐。</p>
@@ -37,7 +40,7 @@
           </el-collapse-transition>
         </div>
 
-        <div class="links">
+        <div class="links" v-if="linksPage">
           <div v-for="link in linksPage.results" :key="link.linkId" class="link">
             <div class="link-logo">
               <img v-if="link.logo" :src="link.logo" />
@@ -46,6 +49,15 @@
             <div class="link-title">
               <a :title="link.title" target="_blank" @click="openUrl(link.url)">{{ link.title }}</a>
             </div>
+          </div>
+          <div class="pagination">
+            <el-pagination
+              background
+              layout="prev,next"
+              :total="linksPage.page.total"
+              :page-size="linksPage.page.limit"
+              hide-on-single-page
+            ></el-pagination>
           </div>
         </div>
       </el-main>
@@ -91,7 +103,7 @@ export default {
     return {
       showHelp: false,
       submitFormVisible: false,
-      linksPage: {},
+      linksPage: null,
       submitForm: {
         title: "",
         url: "",
@@ -231,6 +243,10 @@ a {
 }
 .links {
   padding-bottom: 20px;
+
+  .pagination {
+    margin-top: 20px;
+  }
 
   .link {
     height: 50px;
