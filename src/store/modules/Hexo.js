@@ -13,22 +13,22 @@ const state = {
   selectedDrafts: false,
 }
 const mutations = {
-  setInstance (state, hexo) {
+  setInstance(state, hexo) {
     state.instance = hexo
   },
-  setInited (state) {
+  setInited(state) {
     state.inited = true
   },
-  setSelectedPostId (state, postId) {
+  setSelectedPostId(state, postId) {
     state.selectedPostId = postId
   },
-  setSelectedTag (state, tag) {
+  setSelectedTag(state, tag) {
     state.selectedTag = tag
   },
-  setSelectedCat (state, cat) {
+  setSelectedCat(state, cat) {
     state.selectedCat = cat
   },
-  setSelectedDrafts (state, selectedDrafts) {
+  setSelectedDrafts(state, selectedDrafts) {
     state.selectedDrafts = selectedDrafts
   }
 }
@@ -38,10 +38,10 @@ const actions = {
    * @param context
    * @returns {Promise<void>}
    */
-  async start (context) {
-    let loading = this._vm.$loading({lock: true, text: 'Loading...', spinner: 'el-icon-loading'})
+  async start(context) {
+    let loading = this._vm.$loading({ lock: true, text: 'Loading...', spinner: 'el-icon-loading' })
     try {
-      await context.dispatch('Config/initConfig', null, {root: true})
+      await context.dispatch('Config/initConfig', null, { root: true })
       await context.dispatch('init')
     } finally {
       loading.close()
@@ -53,23 +53,31 @@ const actions = {
    * @param context
    * @returns {Promise<void>}
    */
-  async init (context) {
+  async init(context) {
     let config = context.rootState.Config.config
     if (!config || !config.path) {
-      context.dispatch('UiStatus/setDialogFormVisible', true, {root: true})
+      context.dispatch('UiStatus/setDialogFormVisible', true, { root: true })
     } else {
-      let hexo = new Hexo(config.path, {
-        debug: false,
-        // safe: true, // 安全模式，安全模式下不会加载第三方插件
-        silent: true, // 开启安静模式。不在终端中显示任何信息。
-        drafts: true, // 显示草稿，详见hexo/index.js#_showDrafts
-      })
-      await hexo.init()
-      await hexo.watch()
+      try {
+        let hexo = new Hexo(config.path, {
+          debug: false,
+          // safe: true, // 安全模式，安全模式下不会加载第三方插件
+          silent: true, // 开启安静模式。不在终端中显示任何信息。
+          drafts: true, // 显示草稿，详见hexo/index.js#_showDrafts
+        })
 
-      context.dispatch('UiStatus/setDialogFormVisible', false, {root: true})
-      context.commit('setInstance', hexo)
-      context.commit('setInited')
+        await hexo.init()
+        await hexo.watch()
+
+        context.dispatch('UiStatus/setDialogFormVisible', false, { root: true })
+        context.commit('setInstance', hexo)
+        context.commit('setInited')
+      } catch (e) {
+        console.error(e)
+        this._vm.$alert('打开失败，你可以切换到开发者工具（View > Toggle Developer Tools）查看错误消息。异常反馈QQ群：618213781', '打开失败', {
+          confirmButtonText: '确定'
+        });
+      }
     }
   },
 
@@ -77,7 +85,7 @@ const actions = {
    * 销毁
    * @param context
    */
-  destroy (context) {
+  destroy(context) {
     context.state.instance.unwatch()
   },
 
@@ -87,8 +95,8 @@ const actions = {
    * @param postId
    * @returns {*}
    */
-  getPost (context, postId) {
-    return context.state.instance.locals.get('posts').findOne({_id: postId})
+  getPost(context, postId) {
+    return context.state.instance.locals.get('posts').findOne({ _id: postId })
   },
 
   /**
@@ -96,7 +104,7 @@ const actions = {
    * @param context
    * @param postId
    */
-  selectPost (context, postId) {
+  selectPost(context, postId) {
     context.commit('setSelectedPostId', postId)
   },
 
@@ -105,7 +113,7 @@ const actions = {
    * @param context
    * @param str
    */
-  selectTree (context, str) {
+  selectTree(context, str) {
     if (!str) {
       return
     }
@@ -138,7 +146,7 @@ const actions = {
    * @param postForm
    * @returns {Q.Promise<T>}
    */
-  validatePostForm (context, postForm) {
+  validatePostForm(context, postForm) {
     let deferred = when.defer()
     postForm.validate(function (valid) {
       deferred.resolve(valid)
@@ -152,7 +160,7 @@ const actions = {
    * @param postForm
    * @returns {Q.Promise<T>}
    */
-  createPost (context, postForm) {
+  createPost(context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
     let suffix = '.md'
@@ -176,7 +184,7 @@ const actions = {
    * @param postForm
    * @returns {Q.Promise<T>}
    */
-  editPost (context, postForm) {
+  editPost(context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
     let suffix = '.md'
@@ -199,7 +207,7 @@ const actions = {
    * @param postForm
    * @returns {Q.Promise<T>}
    */
-  publishPost (context, postForm) {
+  publishPost(context, postForm) {
     let deferred = when.defer()
     let hexo = context.state.instance
     let suffix = '.md'
@@ -223,7 +231,7 @@ const actions = {
    * @param postId
    * @returns {Q.Promise<T>}
    */
-  async deletePost (context, postId) {
+  async deletePost(context, postId) {
     let post = await context.dispatch('getPost', postId)
     let deferred = when.defer()
     fs.unlink(post.full_source, (err) => {
@@ -242,7 +250,7 @@ const actions = {
    * @param context
    * @returns {Promise<void>}
    */
-  async deploy (context) {
+  async deploy(context) {
     let vm = this._vm
     let loading = vm.$loading({
       lock: true,
@@ -398,7 +406,7 @@ const getters = {
     if (!selectedPostId) {
       return null
     }
-    let post = posts.findOne({_id: selectedPostId}).toObject()
+    let post = posts.findOne({ _id: selectedPostId }).toObject()
     return post
   }
 }
