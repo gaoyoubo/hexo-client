@@ -59,9 +59,8 @@
               <div class="link-content">
                 <a
                   class="link-title"
-                  :href="'/link/' + link.linkId"
                   :title="link.title"
-                  target="_blank"
+                  @click="openUrl(link.url)"
                 >{{ link.title }}</a>
                 <p class="link-summary">{{ link.summary }}</p>
               </div>
