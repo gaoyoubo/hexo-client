@@ -40,8 +40,10 @@
           </el-collapse-transition>
         </div>
 
-        <div class="links" v-if="linksPage">
-          <div v-for="link in linksPage.results" :key="link.linkId" class="link">
+        <div v-if="linksPage && linksPage.results.length">
+          <ul class="links">
+            <li v-for="link in linksPage.results" :key="link.linkId" class="link">
+              <!--
             <div class="link-logo">
               <img v-if="link.logo" :src="link.logo" />
               <img v-if="!link.logo" src="../assets/images/blog.png" />
@@ -49,11 +51,27 @@
             <div class="link-title">
               <a :title="link.title" target="_blank" @click="openUrl(link.url)">{{ link.title }}</a>
             </div>
-          </div>
+              -->
+              <div class="link-logo">
+                <img v-if="link.logo" :src="link.logo" />
+                <img v-if="!link.logo" src="../assets/images/blog.png" />
+              </div>
+              <div class="link-content">
+                <a
+                  class="link-title"
+                  :href="'/link/' + link.linkId"
+                  :title="link.title"
+                  target="_blank"
+                >{{ link.title }}</a>
+                <p class="link-summary">{{ link.summary }}</p>
+              </div>
+            </li>
+          </ul>
           <div class="pagination">
             <el-pagination
               background
               layout="prev,next"
+              @current-change="getBlogs"
               :total="linksPage.page.total"
               :page-size="linksPage.page.limit"
               hide-on-single-page
@@ -116,7 +134,7 @@ export default {
     this.getBlogs();
   },
   methods: {
-    async getBlogs() {
+    async getBlogs(page) {
       const loading = this.$loading({
         lock: true,
         text: "Loading",
@@ -124,7 +142,11 @@ export default {
         background: "rgba(0, 0, 0, 0.7)"
       });
       try {
-        const resp = await axios.get("https://mlog.club/api/link/links");
+        const resp = await axios.get("https://mlog.club/api/link/links", {
+          params: {
+            page: page || 1
+          }
+        });
         if (!resp.data.success) {
           // 服务器返回错误
           this.$message({
@@ -180,6 +202,7 @@ export default {
           });
           return;
         }
+        this.submitFormVisible = false; // 关闭form
         this.$message({
           showClose: true,
           message: "提交成功",
@@ -241,25 +264,28 @@ a {
     //   }
   }
 }
+
+.pagination {
+  margin: 0px;
+  float: right;
+}
+
 .links {
-  padding-bottom: 20px;
-
-  .pagination {
-    margin-top: 20px;
-  }
-
+  padding: 0px;
+  margin: 0px;
   .link {
-    height: 50px;
-    display: inline-block;
+    display: flex;
+    height: 62px;
     margin: 3px;
     padding: 5px;
-    border: 1px solid #eeeeee;
-    border-radius: 5%;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #eeeeee;
+    }
 
     &:hover {
       cursor: pointer;
-      background-color: #f7f5ee;
-      font-weight: bold;
+      background-color: #fafafa;
     }
 
     .link-logo {
@@ -269,17 +295,30 @@ a {
       img {
         max-width: 50px;
         max-height: 50px;
+        border-radius: 50%;
       }
     }
 
-    .link-title {
-      display: inline-block;
+    .link-content {
+      display: block;
       margin-left: 10px;
-      width: 120px;
-      a {
+
+      .link-title {
         font-size: 15px;
         font-weight: 600;
-        line-height: 50px;
+        color: #3273dc;
+
+        overflow: hidden;
+        word-break: break-all;
+        -webkit-line-clamp: 1;
+        text-overflow: ellipsis;
+        -webkit-box-orient: vertical;
+        display: -webkit-box;
+      }
+
+      .link-summary {
+        font-size: 14px;
+        margin-top: 3px;
 
         overflow: hidden;
         word-break: break-all;
