@@ -159,7 +159,7 @@ export default {
       if (simpleStatus.modified) {
         this.commit(
           simpleStatus.branch,
-          "Commit at " + this.dateFormat("yyyy-MM-dd HH:mm:ss", new Date())
+          "Commit at " + this.dateFormat("yyyy-MM-dd hh:mm:ss", new Date())
         );
       } else {
         this.$notify({ message: "资料库无变更", type: "warning" });

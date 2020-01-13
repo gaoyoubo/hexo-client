@@ -25,11 +25,6 @@ export default new Router({
       component: () => import('./views/Edit.vue')
     },
     {
-      path: '/blogs',
-      name: 'blogs',
-      component: () => import('./views/Blogs.vue')
-    },
-    {
       path: '/settings',
       name: 'settings',
       component: () => import('./views/Settings.vue')
