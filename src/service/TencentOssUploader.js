@@ -69,7 +69,7 @@ class TencentOssUploader {
           }
         })
     })
-    return data.Location
+    return "https://"+data.Location
   }
 }
 export default new TencentOssUploader()
