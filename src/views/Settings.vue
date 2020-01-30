@@ -30,6 +30,7 @@
           <el-option label="sm.ms" value="sm.ms"></el-option>
           <el-option label="七牛" value="qiniu"></el-option>
           <el-option label="AliyunOss" value="aliyunOss"></el-option>
+          <el-option label="TencentOss" value="tencentOss"></el-option>
         </el-select>
       </el-form-item>
       <transition name="el-zoom-in-top">
@@ -102,6 +103,39 @@
         </div>
       </transition>
 
+      <transition name="el-zoom-in-top">
+        <div v-show="config.uploadType==='tencentOss'">
+          <el-form-item label="SecretId">
+            <el-input
+              v-model="config.tencentOssSecretId"
+              style="width:100%"
+              placeholder="tencent oss SecretId"
+            />
+          </el-form-item>
+          <el-form-item label="SecretKey">
+            <el-input
+              v-model="config.tencentOssSecretKey"
+              style="width:100%"
+              placeholder="tencent oss SecretKey"
+            />
+          </el-form-item>
+          <el-form-item label="COS_REGION">
+            <el-input
+              v-model="config.tencentOssCOS_REGION"
+              style="width:100%"
+              placeholder="tencent oss COS_REGION"
+            />
+          </el-form-item>
+          <el-form-item label="Bucket">
+            <el-input
+              v-model="config.tencentOssBucket"
+              style="width:100%"
+              placeholder="tencent oss bucket"
+            />
+          </el-form-item>
+        </div>
+      </transition>
+
       <el-form-item>
         <el-button type="primary" @click="saveConfig">{{$t('save')}}</el-button>
       </el-form-item>
@@ -128,6 +162,10 @@ export default {
         aliyunOssAccessKeySecret: "",
         aliyunOssBucket: "",
         aliyunOssHost: "",
+        tencentOssSecretId: "",
+        tencentOssSecretKey: "",
+        tencentOssCOS_REGION: "",
+        tencentOssBucket: "",
         shellDeploy: false
       }
     };
