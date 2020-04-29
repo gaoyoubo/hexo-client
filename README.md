@@ -49,3 +49,8 @@ npm run electron:serve
 # build electron application for production
 npm run electron:build
 ```
+
+Thanks for [Jetbrains Open Source](https://www.jetbrains.com/?from=hexo-client)
+
+![image.png](https://i.loli.net/2020/04/29/cKwq67bgHotGZTU.png)
+[]
