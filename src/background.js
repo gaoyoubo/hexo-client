@@ -24,7 +24,9 @@ function createWindow() {
     useContentSize: true,
     autoHideMenuBar: true,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      nodeIntegrationInWorker: true,
+      nodeIntegrationInSubFrames: true
     }
   });
 

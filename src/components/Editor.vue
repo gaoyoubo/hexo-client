@@ -131,7 +131,7 @@ export default {
           me.$refs.editor.$img2Url(pos, url);
           me.uploading = false;
         } catch (e) {
-          console.error(e)
+          console.error(e);
           me.$notify.error({ message: "图片上传失败：" + e });
           me.uploading = false;
         }
@@ -141,7 +141,7 @@ export default {
           me.$refs.editor.$img2Url(pos, url);
           me.uploading = false;
         } catch (e) {
-          console.error(e)
+          console.error(e);
           me.$notify.error({ message: "图片上传失败：" + e });
           me.uploading = false;
         }

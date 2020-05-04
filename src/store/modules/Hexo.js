@@ -19,20 +19,20 @@ Hexo.prototype.myInit = function() {
   console.log("Working directory: %s", chalk.magenta(tildify(this.base_dir)));
 
   // Load internal plugins
-  // require("hexo/lib/plugins/console")(this);
-  // require("hexo/lib/plugins/filter")(this);
-  // require("hexo/lib/plugins/generator")(this);
+  require("hexo/lib/plugins/console")(this);
+  require("hexo/lib/plugins/filter")(this);
+  require("hexo/lib/plugins/generator")(this);
   require("hexo/lib/plugins/helper")(this);
-  // require("hexo/lib/plugins/processor")(this);
-  // require("hexo/lib/plugins/renderer")(this);
-  // require("hexo/lib/plugins/tag")(this);
+  require("hexo/lib/plugins/processor")(this);
+  require("hexo/lib/plugins/renderer")(this);
+  require("hexo/lib/plugins/tag")(this);
 
   // Load config
   return Promise.each(
     [
-      // 'update_package', // Update package.json
-      // 'load_config', // Load config
-      // 'load_plugins' // Load external plugins & scripts
+      // "update_package", // Update package.json
+      // "load_config", // Load config
+      // "load_plugins" // Load external plugins & scripts
     ],
     name => require(`./${name}`)(this)
   )
@@ -329,13 +329,13 @@ const actions = {
         await hexo.call("deploy", {});
         vm.$notify.success("发布成功");
       } catch (e) {
-        console.error(e)
+        console.error(e);
         vm.$notify.error("发布失败");
       } finally {
         loading.close();
       }
     } catch (err) {
-      console.error(err)
+      console.error(err);
       loading.close();
       vm.$notify.error("生成失败");
     }
