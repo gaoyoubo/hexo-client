@@ -73,8 +73,13 @@ export default {
             return;
           }
 
-          let current = me.calculateIntValue(window.appVersion);
-          let latest = me.calculateIntValue(ret.name);
+          const appVersion = require("electron").remote.app.getVersion();
+          console.log(
+            "Check update, current: " + appVersion + ", latest: " + ret.name
+          );
+
+          const current = me.calculateIntValue(appVersion);
+          const latest = me.calculateIntValue(ret.name);
 
           if (current >= latest) {
             // 没有新版本
