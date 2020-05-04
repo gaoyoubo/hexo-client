@@ -67,6 +67,7 @@ export default {
         function(err, data, res) {
           if (err) {
             console.error("Check update fail", err);
+            return;
           }
           let ret = JSON.parse(data.toString());
           if (ret.draft || ret.prerelease) {

@@ -3,6 +3,45 @@ import utils from "@/service/Utils";
 
 const Hexo = require("hexo");
 const fs = require("fs");
+const os = require("os");
+const Promise = require("bluebird");
+const tildify = require("tildify");
+const chalk = require("chalk");
+
+/**
+ * 自定义Hexo初始化方法，减少不必要的加载
+ *
+ * @see hexo/lib/hexo/index.js#init
+ * @returns {*}
+ */
+Hexo.prototype.myInit = function() {
+  console.log("Hexo version: %s", chalk.magenta(this.version));
+  console.log("Working directory: %s", chalk.magenta(tildify(this.base_dir)));
+
+  // Load internal plugins
+  // require("hexo/lib/plugins/console")(this);
+  // require("hexo/lib/plugins/filter")(this);
+  // require("hexo/lib/plugins/generator")(this);
+  require("hexo/lib/plugins/helper")(this);
+  // require("hexo/lib/plugins/processor")(this);
+  // require("hexo/lib/plugins/renderer")(this);
+  // require("hexo/lib/plugins/tag")(this);
+
+  // Load config
+  return Promise.each(
+    [
+      // 'update_package', // Update package.json
+      // 'load_config', // Load config
+      // 'load_plugins' // Load external plugins & scripts
+    ],
+    name => require(`./${name}`)(this)
+  )
+    .then(() => this.execFilter("after_init", null, { context: this }))
+    .then(() => {
+      // Ready to go!
+      this.emit("ready");
+    });
+};
 
 const state = {
   instance: null,
@@ -67,10 +106,11 @@ const actions = {
           debug: false,
           // safe: true, // 安全模式，安全模式下不会加载第三方插件
           silent: true, // 开启安静模式。不在终端中显示任何信息。
-          drafts: true // 显示草稿，详见hexo/index.js#_showDrafts
+          drafts: true, // 显示草稿，详见hexo/index.js#_showDrafts
+          config: os.homedir() + "/.hexo-client/_config.yml"
         });
 
-        await hexo.init();
+        await hexo.myInit();
         await hexo.watch();
 
         context.dispatch("UiStatus/setDialogFormVisible", false, {
@@ -289,11 +329,13 @@ const actions = {
         await hexo.call("deploy", {});
         vm.$notify.success("发布成功");
       } catch (e) {
+        console.error(e)
         vm.$notify.error("发布失败");
       } finally {
         loading.close();
       }
     } catch (err) {
+      console.error(err)
       loading.close();
       vm.$notify.error("生成失败");
     }

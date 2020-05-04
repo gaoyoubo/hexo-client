@@ -389,6 +389,7 @@ export default {
           }
           ClientAnalytics.event("article", "editSubmit");
         } catch (err) {
+          console.error(err);
           this.$notify.error({ title: "错误", message: "修改失败" });
         } finally {
           this.saving = false;

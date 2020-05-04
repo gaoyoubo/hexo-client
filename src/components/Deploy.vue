@@ -198,6 +198,7 @@ export default {
         await this.git().commit(msg);
         await this.git().push("origin", branch);
       } catch (e) {
+        console.error(e)
         success = false;
       } finally {
         loading.close();

@@ -313,6 +313,7 @@ export default {
           }
           ClientAnalytics.event("article", "createSubmit");
         } catch (err) {
+          console.error(err);
           this.$notify.error({ title: "错误", message: "保存失败" });
         } finally {
           this.saving = false;
