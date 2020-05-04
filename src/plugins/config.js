@@ -1,36 +1,36 @@
-const Store = require('electron-store')
-const os = require('os')
+const Store = require("electron-store");
+const os = require("os");
 
 class Config {
-  constructor () {
+  constructor() {
     this.store = new Store({
-      cwd: os.homedir() + '/.hexo-client',
-      name: 'sysConfig',
-      fileExtension: 'json'
-    })
+      cwd: os.homedir() + "/.hexo-client",
+      name: "sysConfig",
+      fileExtension: "json"
+    });
   }
 
-  all () {
-    return this.store.store
+  all() {
+    return this.store.store;
   }
 
-  get (key, defaultValue) {
-    return this.store.get(key, defaultValue)
+  get(key, defaultValue) {
+    return this.store.get(key, defaultValue);
   }
 
-  set (key, value) {
-    this.store.set(key, value)
+  set(key, value) {
+    this.store.set(key, value);
   }
 
-  setAll (options) {
+  setAll(options) {
     if (!options) {
-      return
+      return;
     }
-    let me = this
-    Object.keys(options).forEach(function (key) {
-      me.set(key, options[key])
-    })
+    let me = this;
+    Object.keys(options).forEach(function(key) {
+      me.set(key, options[key]);
+    });
   }
 }
 
-export default new Config()
+export default new Config();

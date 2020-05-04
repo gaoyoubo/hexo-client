@@ -1,17 +1,42 @@
 <template>
   <div class="tag-tree">
-    <div class="toggle" :class="{open: open, close: !open}" @click="toggle">
-      <i class="iconfont" :class="{'icon-arrow-left': open, 'icon-arrow-right': !open}" style="font-size:24px;"></i>
+    <div class="toggle" :class="{ open: open, close: !open }" @click="toggle">
+      <i
+        class="iconfont"
+        :class="{ 'icon-arrow-left': open, 'icon-arrow-right': !open }"
+        style="font-size:24px;"
+      ></i>
     </div>
     <!-- <div ref="collapse" class="collapse" :style="{width: open ? '200px' : '0px'}"> -->
-    <div ref="collapse" class="collapse" :class="{'active': open}">
-      <div class="tool-box" :style="{height: toolboxHeight}">
-        <el-button icon="el-icon-edit" type="info" size="small" @click="createPost" circle></el-button>
-        <el-button icon="el-icon-search" type="primary" size="small" @click="search" circle></el-button>
-        <deploy/>
+    <div ref="collapse" class="collapse" :class="{ active: open }">
+      <div class="tool-box" :style="{ height: toolboxHeight }">
+        <el-button
+          icon="el-icon-edit"
+          type="info"
+          size="small"
+          @click="createPost"
+          circle
+        ></el-button>
+        <el-button
+          icon="el-icon-search"
+          type="primary"
+          size="small"
+          @click="search"
+          circle
+        ></el-button>
+        <deploy />
       </div>
-      <el-scrollbar :style="{height: scrollbarHeight}" ref="scrollbar" class="el-scrollbar" view-style="height: 100%">
-        <el-menu :default-active="selectedTreeItem" :default-openeds="defaultOpeneds" @select="handleSelect">
+      <el-scrollbar
+        :style="{ height: scrollbarHeight }"
+        ref="scrollbar"
+        class="el-scrollbar"
+        view-style="height: 100%"
+      >
+        <el-menu
+          :default-active="selectedTreeItem"
+          :default-openeds="defaultOpeneds"
+          @select="handleSelect"
+        >
           <el-menu-item index="all">
             <i class="iconfont icon-archive"></i>
             <span slot="title">&nbsp;全部</span>
@@ -25,9 +50,13 @@
               <i class="iconfont icon-categories"></i>
               <span slot="title">&nbsp;分类</span>
             </template>
-            <el-menu-item v-for="cat in categories" :index="'cat#' + cat" :key="cat">
+            <el-menu-item
+              v-for="cat in categories"
+              :index="'cat#' + cat"
+              :key="cat"
+            >
               <i class="iconfont icon-category"></i>
-              <span slot="title">&nbsp;{{cat}}</span>
+              <span slot="title">&nbsp;{{ cat }}</span>
             </el-menu-item>
           </el-submenu>
           <el-submenu index="tags">
@@ -37,7 +66,7 @@
             </template>
             <el-menu-item v-for="tag in tags" :index="'tag#' + tag" :key="tag">
               <i class="iconfont icon-tag"></i>
-              <span slot="title">&nbsp;{{tag}}</span>
+              <span slot="title">&nbsp;{{ tag }}</span>
             </el-menu-item>
           </el-submenu>
         </el-menu>
@@ -47,111 +76,112 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import Deploy from './Deploy'
+import { mapGetters } from "vuex";
+import Deploy from "./Deploy";
 
-  export default {
-    name: 'TreeNav',
-    components: {Deploy},
-    data () {
-      return {
-        defaultOpeneds: ['categories', 'tags'],
-        clientHeight: '', // 总高度
-        scrollbarHeight: '', // 滚动条总高度
-        toolboxHeight: '' // 工具条高度
+export default {
+  name: "TreeNav",
+  components: { Deploy },
+  data() {
+    return {
+      defaultOpeneds: ["categories", "tags"],
+      clientHeight: "", // 总高度
+      scrollbarHeight: "", // 滚动条总高度
+      toolboxHeight: "" // 工具条高度
+    };
+  },
+  mounted() {
+    this.resize();
+    window.addEventListener("resize", this.resize);
+  },
+  beforeDestroy() {
+    window.removeEventListener("resize", this.resize);
+  },
+  methods: {
+    resize() {
+      this.clientHeight = document.documentElement.clientHeight + "px";
+      this.scrollbarHeight = document.documentElement.clientHeight - 45 + "px";
+      this.toolboxHeight = "40px";
+    },
+    toggle() {
+      if (this.open) {
+        this.$store.dispatch("UiStatus/closeTreeNav");
+      } else {
+        this.$store.dispatch("UiStatus/openTreeNav");
       }
     },
-    mounted () {
-      this.resize()
-      window.addEventListener('resize', this.resize)
+    handleSelect(key) {
+      this.$store.dispatch("Hexo/selectTree", key);
     },
-    beforeDestroy () {
-      window.removeEventListener('resize', this.resize)
-    },
-    methods: {
-      resize () {
-        this.clientHeight = (document.documentElement.clientHeight) + 'px'
-        this.scrollbarHeight = (document.documentElement.clientHeight - 45) + 'px'
-        this.toolboxHeight = '40px'
-      },
-      toggle () {
-        if (this.open) {
-          this.$store.dispatch('UiStatus/closeTreeNav')
-        } else {
-          this.$store.dispatch('UiStatus/openTreeNav')
-        }
-      },
-      handleSelect (key) {
-        this.$store.dispatch('Hexo/selectTree', key)
-      },
 
-      // 新建文章
-      createPost () {
-        this.$router.push({name: 'create'})
-      },
-
-      // 搜索
-      search () {
-        this.$store.dispatch('Search/show')
-      }
+    // 新建文章
+    createPost() {
+      this.$router.push({ name: "create" });
     },
-    computed: {
-      ...mapGetters({
-        tags: 'Hexo/tags',
-        categories: 'Hexo/categories',
-        selectedTreeItem: 'Hexo/selectedTreeItem'
-      }),
-      open () {
-        return this.$store.state.UiStatus.treeNavOpen
-      }
+
+    // 搜索
+    search() {
+      this.$store.dispatch("Search/show");
+    }
+  },
+  computed: {
+    ...mapGetters({
+      tags: "Hexo/tags",
+      categories: "Hexo/categories",
+      selectedTreeItem: "Hexo/selectedTreeItem"
+    }),
+    open() {
+      return this.$store.state.UiStatus.treeNavOpen;
     }
   }
+};
 </script>
 
 <style lang="scss" scoped>
-  .toggle {
-    position: absolute;
-    z-index: 999;
-    font-size: 28px;
-    cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s ease, background-color 0.1s ease;
-  }
+.toggle {
+  position: absolute;
+  z-index: 999;
+  font-size: 28px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, background-color 0.1s ease;
+}
 
-  .tag-tree:hover .toggle, .toggle:hover {
-    opacity: 1;
-  }
+.tag-tree:hover .toggle,
+.toggle:hover {
+  opacity: 1;
+}
 
-  .toggle.open {
-    left: 240px;
-  }
+.toggle.open {
+  left: 240px;
+}
 
-  .toggle.close {
-    left: 60px;
-  }
+.toggle.close {
+  left: 60px;
+}
 
-  .collapse {
-    display: none;
-    width: 200px;
+.collapse {
+  display: none;
+  width: 200px;
 
-    &.active{
-      display: block;
-    }
+  &.active {
+    display: block;
   }
+}
 
-  .tool-box {
-    border-right: 1px solid #E9E9E9;
-    text-align: center;
-    padding-top: 5px;
-  }
+.tool-box {
+  border-right: 1px solid #e9e9e9;
+  text-align: center;
+  padding-top: 5px;
+}
 
-  .el-submenu .el-menu-item {
-    font-size: 12px;
-    height: 36px;
-    line-height: 36px;
-  }
+.el-submenu .el-menu-item {
+  font-size: 12px;
+  height: 36px;
+  line-height: 36px;
+}
 
-  .el-scrollbar__view .el-menu {
-    height: 100%!important;
-  }
+.el-scrollbar__view .el-menu {
+  height: 100% !important;
+}
 </style>

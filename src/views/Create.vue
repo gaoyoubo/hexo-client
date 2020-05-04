@@ -1,83 +1,129 @@
 <template>
-
-  <el-form :model="postForm" :rules="postFormRules" ref="postForm" style="height: 100%">
-
+  <el-form
+    :model="postForm"
+    :rules="postFormRules"
+    ref="postForm"
+    style="height: 100%"
+  >
     <el-container style="height: 100%;">
       <el-main class="main">
         <!-- 标题 -->
         <el-form-item prop="title">
-          <el-input v-model="postForm.title" @input="formChanged = true" :disabled="editLock"
-                    :placeholder="$t('articleTitlePlaceholder')" style="width: 100%;"></el-input>
+          <el-input
+            v-model="postForm.title"
+            @input="formChanged = true"
+            :disabled="editLock"
+            :placeholder="$t('articleTitlePlaceholder')"
+            style="width: 100%;"
+          ></el-input>
         </el-form-item>
         <!-- 内容 -->
         <el-form-item prop="content">
-          <markdown-editor v-model="postForm.content" @change="formChanged = true" @save="onSave"/>
+          <markdown-editor
+            v-model="postForm.content"
+            @change="formChanged = true"
+            @save="onSave"
+          />
         </el-form-item>
       </el-main>
       <el-aside class="aside">
-
         <el-scrollbar class="scrollbar" ref="scrollbar">
-
           <div class="card">
             <div class="card-header">
               <span>发布</span>
-              <el-button class="collapse" type="text"
-                         :icon="show1 ? 'el-icon-arrow-up': 'el-icon-arrow-down'"
-                         @click="show1 = !show1"></el-button>
+              <el-button
+                class="collapse"
+                type="text"
+                :icon="show1 ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
+                @click="show1 = !show1"
+              ></el-button>
             </div>
             <el-collapse-transition>
               <div class="card-body" v-show="show1">
                 <!-- 路径 -->
                 <el-form-item prop="path">
-                  <el-input v-model="postForm.path" @input="formChanged = true" :disabled="editLock"
-                            :placeholder="$t('articlePathPlaceholder')" style="width: 100%;"></el-input>
+                  <el-input
+                    v-model="postForm.path"
+                    @input="formChanged = true"
+                    :disabled="editLock"
+                    :placeholder="$t('articlePathPlaceholder')"
+                    style="width: 100%;"
+                  ></el-input>
                 </el-form-item>
 
                 <div class="publish-settings">
                   <el-col :span="8">
                     <!-- 开启toc -->
-                    <el-switch v-model="postForm.toc" @input="formChanged = true"
-                               :active-text="$t('openToc')"></el-switch>
+                    <el-switch
+                      v-model="postForm.toc"
+                      @input="formChanged = true"
+                      :active-text="$t('openToc')"
+                    ></el-switch>
                   </el-col>
                   <el-col :span="8">
                     <!-- 是否保存为草稿，如果切换成草稿之后，那么就不让切回去了, 否则来回切换会有问题 -->
-                    <el-tooltip class="item" effect="dark" content="发布后的内容无法再切换为草稿" placement="top">
-                      <el-switch v-model="postForm.layout" active-value="draft" inactive-value="post"
-                                 :disabled="editLock"
-                                 active-text="草稿"></el-switch>
+                    <el-tooltip
+                      class="item"
+                      effect="dark"
+                      content="发布后的内容无法再切换为草稿"
+                      placement="top"
+                    >
+                      <el-switch
+                        v-model="postForm.layout"
+                        active-value="draft"
+                        inactive-value="post"
+                        :disabled="editLock"
+                        active-text="草稿"
+                      ></el-switch>
                     </el-tooltip>
                   </el-col>
                   <el-col :span="8">
-                    <el-button type="primary" icon="el-icon-success" size="mini" :loading="saving"
-                               style="float: right;"
-                               @click="submitForm()">{{$t('save')}}
+                    <el-button
+                      type="primary"
+                      icon="el-icon-success"
+                      size="mini"
+                      :loading="saving"
+                      style="float: right;"
+                      @click="submitForm()"
+                      >{{ $t("save") }}
                     </el-button>
                   </el-col>
                 </div>
-
               </div>
             </el-collapse-transition>
           </div>
-
 
           <!-- 标签 -->
           <div class="card">
             <div class="card-header">
               <span>标签</span>
-              <el-button class="collapse" type="text"
-                         :icon="show2 ? 'el-icon-arrow-up': 'el-icon-arrow-down'"
-                         @click="show2 = !show2">
+              <el-button
+                class="collapse"
+                type="text"
+                :icon="show2 ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
+                @click="show2 = !show2"
+              >
               </el-button>
             </div>
             <el-collapse-transition>
               <div class="card-body" v-show="show2">
                 <el-form-item prop="tags">
-                  <el-select v-model="postForm.tags" multiple filterable allow-create default-first-option
-                             style="width:100%;" :placeholder="$t('selectTags')" @input="formChanged = true">
-                    <el-option v-for="tag in tags"
-                               :key="tag"
-                               :label="tag"
-                               :value="tag">
+                  <el-select
+                    v-model="postForm.tags"
+                    multiple
+                    filterable
+                    allow-create
+                    default-first-option
+                    style="width:100%;"
+                    :placeholder="$t('selectTags')"
+                    @input="formChanged = true"
+                  >
+                    <el-option
+                      v-for="tag in tags"
+                      :key="tag"
+                      :label="tag"
+                      :value="tag"
+                    >
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -89,20 +135,33 @@
           <div class="card">
             <div class="card-header">
               <span>分类</span>
-              <el-button class="collapse" type="text"
-                         :icon="show3 ? 'el-icon-arrow-up': 'el-icon-arrow-down'"
-                         @click="show3 = !show3">
+              <el-button
+                class="collapse"
+                type="text"
+                :icon="show3 ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
+                @click="show3 = !show3"
+              >
               </el-button>
             </div>
             <el-collapse-transition>
               <div class="card-body" v-show="show3">
                 <el-form-item prop="categories">
-                  <el-select v-model="postForm.categories" multiple filterable allow-create default-first-option
-                             style="width:100%;" :placeholder="$t('selectCategories')" @input="formChanged = true">
-                    <el-option v-for="category in categories"
-                               :key="category"
-                               :label="category"
-                               :value="category">
+                  <el-select
+                    v-model="postForm.categories"
+                    multiple
+                    filterable
+                    allow-create
+                    default-first-option
+                    style="width:100%;"
+                    :placeholder="$t('selectCategories')"
+                    @input="formChanged = true"
+                  >
+                    <el-option
+                      v-for="category in categories"
+                      :key="category"
+                      :label="category"
+                      :value="category"
+                    >
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -113,231 +172,257 @@
           <!-- Front-matter -->
           <div class="card">
             <div class="card-header">
-              <span>Front-matter <i class="el-icon-question" style="cursor: pointer;" @click="openFrontMatterHelp"></i></span>
-              <el-button class="collapse" type="text"
-                         :icon="show4 ? 'el-icon-arrow-up': 'el-icon-arrow-down'"
-                         @click="show4 = !show4">
+              <span
+                >Front-matter
+                <i
+                  class="el-icon-question"
+                  style="cursor: pointer;"
+                  @click="openFrontMatterHelp"
+                ></i
+              ></span>
+              <el-button
+                class="collapse"
+                type="text"
+                :icon="show4 ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"
+                @click="show4 = !show4"
+              >
               </el-button>
             </div>
             <el-collapse-transition>
               <div class="card-body" v-show="show4">
-                <el-form-item v-for="item in frontMatters" :key="item.title" :label="item.title">
+                <el-form-item
+                  v-for="item in frontMatters"
+                  :key="item.title"
+                  :label="item.title"
+                >
                   <el-input :value="item.value">
-                    <el-button slot="prepend" icon="el-icon-edit" @click="openEditFrontMatter(item)"></el-button>
-                    <el-button slot="append" icon="el-icon-delete" @click="deleteFrontMatter(item)"></el-button>
+                    <el-button
+                      slot="prepend"
+                      icon="el-icon-edit"
+                      @click="openEditFrontMatter(item)"
+                    ></el-button>
+                    <el-button
+                      slot="append"
+                      icon="el-icon-delete"
+                      @click="deleteFrontMatter(item)"
+                    ></el-button>
                   </el-input>
                 </el-form-item>
-                <el-button type="success" plain icon="el-icon-plus" size="mini" @click="openAddFrontMatter">Add
+                <el-button
+                  type="success"
+                  plain
+                  icon="el-icon-plus"
+                  size="mini"
+                  @click="openAddFrontMatter"
+                  >Add
                 </el-button>
-                <front-matter ref="frontMatterEditor" @ok="addFrontMatter"/>
+                <front-matter ref="frontMatterEditor" @ok="addFrontMatter" />
               </div>
             </el-collapse-transition>
           </div>
-
         </el-scrollbar>
-
       </el-aside>
     </el-container>
-
   </el-form>
-
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import MarkdownEditor from '@/components/Editor'
-  import FrontMatter from '@/components/FrontMatter'
-  import ClientAnalytics from '@/plugins/analytics'
+import { mapGetters } from "vuex";
+import MarkdownEditor from "@/components/Editor";
+import FrontMatter from "@/components/FrontMatter";
+import ClientAnalytics from "@/plugins/analytics";
 
-  export default {
-    components: {MarkdownEditor, FrontMatter},
-    data () {
-      return {
-        show1: true,
-        show2: true,
-        show3: true,
-        show4: true,
-        saving: false,
-        editLock: false,
-        postForm: {
-          title: '',
-          path: '',
-          originContent: '',
-          content: '',
-          tags: [],
-          categories: [],
-          toc: false,
-          layout: 'post', // 默认发表文章，还可取值draft表示发表草稿
-        },
-        frontMatters: [],
-        postFormRules: {
-          title: [
-            {required: true, message: '请输入标题', trigger: 'blur'},
-            {min: 3, max: 50, message: '长度在 3 到 50 个字符', trigger: 'blur'}
-          ],
-          content: [
-            {required: true, message: '请输入内容', trigger: 'blur'}
-          ]
-        },
-        formChanged: false
+export default {
+  components: { MarkdownEditor, FrontMatter },
+  data() {
+    return {
+      show1: true,
+      show2: true,
+      show3: true,
+      show4: true,
+      saving: false,
+      editLock: false,
+      postForm: {
+        title: "",
+        path: "",
+        originContent: "",
+        content: "",
+        tags: [],
+        categories: [],
+        toc: false,
+        layout: "post" // 默认发表文章，还可取值draft表示发表草稿
+      },
+      frontMatters: [],
+      postFormRules: {
+        title: [
+          { required: true, message: "请输入标题", trigger: "blur" },
+          { min: 3, max: 50, message: "长度在 3 到 50 个字符", trigger: "blur" }
+        ],
+        content: [{ required: true, message: "请输入内容", trigger: "blur" }]
+      },
+      formChanged: false
+    };
+  },
+  beforeRouteLeave(to, from, next) {
+    if (this.formChanged) {
+      if (window.confirm("有未保存的更改，确认离开吗？")) {
+        next();
+      } else {
+        next(false);
       }
+    } else {
+      next();
+    }
+  },
+  methods: {
+    async submitForm() {
+      this.save(true);
     },
-    beforeRouteLeave (to, from, next) {
-      if (this.formChanged) {
-        if (window.confirm('有未保存的更改，确认离开吗？')) {
-          next()
-        } else {
-          next(false)
+
+    async onSave() {
+      this.save(false);
+    },
+
+    /**
+     * 保存更改
+     * @param toMain 是否跳转到首页
+     * @returns {Promise<void>}
+     */
+    async save(toMain) {
+      toMain = toMain && this.postForm.layout === "post"; // 如果是保存草稿，那么保存之后不要跳到首页去
+      let valid = await this.$store.dispatch(
+        "Hexo/validatePostForm",
+        this.$refs.postForm
+      );
+      if (valid) {
+        this.saving = true; // 保存中
+        this.editLock = true; // 锁定编辑
+        try {
+          if (this.frontMatters && this.frontMatters.length > 0) {
+            for (let i = 0; i < this.frontMatters.length; i++) {
+              let item = this.frontMatters[i];
+              this.postForm[item.title] = item.value;
+            }
+          }
+          await this.$store.dispatch("Hexo/createPost", this.postForm);
+          this.formChanged = false;
+          this.postForm.originContent = this.postForm.content;
+          this.$notify({ title: "成功", message: "保存成功", type: "success" });
+          if (toMain) {
+            this.$router.push({ name: "main" });
+          }
+          ClientAnalytics.event("article", "createSubmit");
+        } catch (err) {
+          this.$notify.error({ title: "错误", message: "保存失败" });
+        } finally {
+          this.saving = false;
         }
       } else {
-        next()
+        this.$notify.error({ title: "错误", message: "表单数据验证失败" });
       }
     },
-    methods: {
-      async submitForm () {
-        this.save(true)
-      },
 
-      async onSave () {
-        this.save(false)
-      },
+    openFrontMatterHelp() {
+      require("electron").shell.openExternal(
+        "https://hexo.io/docs/front-matter.html"
+      );
+    },
 
-      /**
-       * 保存更改
-       * @param toMain 是否跳转到首页
-       * @returns {Promise<void>}
-       */
-      async save (toMain) {
-        toMain = toMain && this.postForm.layout === 'post' // 如果是保存草稿，那么保存之后不要跳到首页去
-        let valid = await this.$store.dispatch('Hexo/validatePostForm', this.$refs.postForm)
-        if (valid) {
-          this.saving = true // 保存中
-          this.editLock = true // 锁定编辑
-          try {
-            if (this.frontMatters && this.frontMatters.length > 0) {
-              for (let i = 0; i < this.frontMatters.length; i++) {
-                let item = this.frontMatters[i]
-                this.postForm[item.title] = item.value
-              }
-            }
-            await this.$store.dispatch('Hexo/createPost', this.postForm)
-            this.formChanged = false
-            this.postForm.originContent = this.postForm.content
-            this.$notify({title: '成功', message: '保存成功', type: 'success'})
-            if (toMain) {
-              this.$router.push({name: 'main'})
-            }
-            ClientAnalytics.event('article', 'createSubmit')
-          } catch (err) {
-            this.$notify.error({title: '错误', message: '保存失败'})
-          } finally {
-            this.saving = false
-          }
-        } else {
-          this.$notify.error({title: '错误', message: '表单数据验证失败'})
-        }
-      },
+    openAddFrontMatter() {
+      this.$refs.frontMatterEditor.open();
+    },
 
-      openFrontMatterHelp () {
-        require('electron').shell.openExternal('https://hexo.io/docs/front-matter.html')
-      },
+    openEditFrontMatter(item) {
+      this.$refs.frontMatterEditor.open(item.title, item.value);
+    },
 
-      openAddFrontMatter () {
-        this.$refs.frontMatterEditor.open()
-      },
-
-      openEditFrontMatter (item) {
-        this.$refs.frontMatterEditor.open(item.title, item.value)
-      },
-
-      addFrontMatter (item) {
-        let exists = false
-        for (let i = 0; i < this.frontMatters.length; i++) {
-          if (this.frontMatters[i].title === item.title) {
-            exists = true
-            this.frontMatters[i].value = item.value
-            break
-          }
-        }
-        if (!exists) {
-          this.frontMatters.push(item)
-        }
-      },
-
-      deleteFrontMatter (item) {
-        let index = -1
-        for (let i = 0; i < this.frontMatters.length; i++) {
-          if (this.frontMatters[i].title === item.title) {
-            index = i
-            break
-          }
-        }
-        if (index > -1) {
-          this.frontMatters.splice(index, 1)
+    addFrontMatter(item) {
+      let exists = false;
+      for (let i = 0; i < this.frontMatters.length; i++) {
+        if (this.frontMatters[i].title === item.title) {
+          exists = true;
+          this.frontMatters[i].value = item.value;
+          break;
         }
       }
+      if (!exists) {
+        this.frontMatters.push(item);
+      }
     },
-    computed: {
-      ...mapGetters({
-        tags: 'Hexo/tags',
-        categories: 'Hexo/categories'
-      })
+
+    deleteFrontMatter(item) {
+      let index = -1;
+      for (let i = 0; i < this.frontMatters.length; i++) {
+        if (this.frontMatters[i].title === item.title) {
+          index = i;
+          break;
+        }
+      }
+      if (index > -1) {
+        this.frontMatters.splice(index, 1);
+      }
     }
+  },
+  computed: {
+    ...mapGetters({
+      tags: "Hexo/tags",
+      categories: "Hexo/categories"
+    })
   }
+};
 </script>
 
 <style scoped lang="scss">
-  .main {
-    height: 100%;
-    padding: 20px 10px 0px;
+.main {
+  height: 100%;
+  padding: 20px 10px 0px;
+}
+
+.aside {
+  height: 100%;
+  width: 300px !important;
+  padding-top: 20px;
+  padding-right: 10px;
+}
+
+.scrollbar {
+  height: 100%;
+  width: 300px !important;
+
+  .el-scrollbar__wrap {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+}
+
+.card {
+  margin-bottom: 10px;
+  margin-right: 10px;
+  border: 1px solid #ebeef5;
+  background-color: #fff;
+  color: #303133;
+
+  .card-header {
+    padding: 10px 10px;
+    border-bottom: 1px solid #ebeef5;
   }
 
-  .aside {
-    height: 100%;
-    width: 300px !important;
-    padding-top: 20px;
-    padding-right: 10px;
-  }
+  .card-body {
+    padding: 10px;
 
-  .scrollbar {
-    height: 100%;
-    width: 300px !important;
+    .publish-settings {
+      display: table;
+      width: 100%;
 
-    .el-scrollbar__wrap {
-      overflow-x: hidden;
-      scroll-behavior: smooth;
-    }
-  }
-
-  .card {
-    margin-bottom: 10px;
-    margin-right: 10px;
-    border: 1px solid #ebeef5;
-    background-color: #fff;
-    color: #303133;
-
-    .card-header {
-      padding: 10px 10px;
-      border-bottom: 1px solid #ebeef5;
-    }
-
-    .card-body {
-      padding: 10px;
-
-      .publish-settings {
-        display: table;
-        width: 100%;
-
-        .el-col {
-          line-height: 28px;
-        }
+      .el-col {
+        line-height: 28px;
       }
     }
-
-    .collapse {
-      float: right;
-      padding: 3px 0;
-    }
   }
 
+  .collapse {
+    float: right;
+    padding: 3px 0;
+  }
+}
 </style>

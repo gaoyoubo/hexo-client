@@ -12,13 +12,13 @@
     <div
       v-if="showConsoleLoading"
       class="loading-console el-loading-mask loading-console is-fullscreen"
-      :style="{width: deployConsoleWidth, height: deployConsoleHeight}"
+      :style="{ width: deployConsoleWidth, height: deployConsoleHeight }"
     >
       <div class="el-loading-spinner">
         <i class="el-icon-loading"></i>
         <!-- <div class="el-loading-text"> -->
         <el-scrollbar class="el-loading-text el-scrollbar">
-          <pre>{{deployConsoleText}}</pre>
+          <pre>{{ deployConsoleText }}</pre>
           <div ref="consoleScrollEnd"></div>
         </el-scrollbar>
         <!-- </div> -->

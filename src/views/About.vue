@@ -10,11 +10,14 @@
             <a
               @click="openUrl('https://github.com/gaoyoubo/hexo-client')"
               href="#"
-            >https://github.com/gaoyoubo/hexo-client</a>
+              >https://github.com/gaoyoubo/hexo-client</a
+            >
           </li>
           <li>
             Blog：
-            <a @click="openUrl('http://www.mspring.org')" href="#">http://www.mspring.org</a>
+            <a @click="openUrl('http://www.mspring.org')" href="#"
+              >http://www.mspring.org</a
+            >
           </li>
         </ul>
       </div>
@@ -29,16 +32,24 @@
           <li>
             帮助文档：
             <a
-              @click="openUrl('https://www.mspring.org/2018/11/29/HexoClient%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/')"
+              @click="
+                openUrl(
+                  'https://www.mspring.org/2018/11/29/HexoClient%E4%BD%BF%E7%94%A8%E5%B8%AE%E5%8A%A9/'
+                )
+              "
               href="#"
-            >点击查看帮助文档</a>
+              >点击查看帮助文档</a
+            >
           </li>
           <li>
             提交问题：
             <a
-              @click="openUrl('https://github.com/gaoyoubo/hexo-client/issues/new')"
+              @click="
+                openUrl('https://github.com/gaoyoubo/hexo-client/issues/new')
+              "
               href="#"
-            >点击提交问题</a>
+              >点击提交问题</a
+            >
           </li>
         </ul>
       </div>
@@ -46,7 +57,9 @@
         <h3>站在巨人肩上</h3>
         <ul>
           <li>
-            <a @click="openUrl('https://github.com/electron/electron')" href="#">electron</a>
+            <a @click="openUrl('https://github.com/electron/electron')" href="#"
+              >electron</a
+            >
           </li>
           <li>
             <a @click="openUrl('https://cn.vuejs.org')" href="#">Vue.js</a>
@@ -55,10 +68,13 @@
             <a
               @click="openUrl('https://github.com/SimulatedGREG/electron-vue')"
               href="#"
-            >electron-vue</a>
+              >electron-vue</a
+            >
           </li>
           <li>
-            <a @click="openUrl('http://element-cn.eleme.io')" href="#">element-ui</a>
+            <a @click="openUrl('http://element-cn.eleme.io')" href="#"
+              >element-ui</a
+            >
           </li>
         </ul>
       </div>
@@ -79,7 +95,12 @@
       </div>
     </div>
 
-    <el-dialog title="扫码进群" :visible.sync="qrcodeVisible" width="540px" height="740px">
+    <el-dialog
+      title="扫码进群"
+      :visible.sync="qrcodeVisible"
+      width="540px"
+      height="740px"
+    >
       <img class="qrcode" src="../assets/images/qq.jpg" />
     </el-dialog>
   </el-main>

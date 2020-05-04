@@ -7,22 +7,19 @@
 </template>
 
 <script>
-  import TreeNav from '@/components/TreeNav'
-  import ArticleList from '@/components/ArticleList'
-  import ArticleView from '@/components/ArticleView'
+import TreeNav from "@/components/TreeNav";
+import ArticleList from "@/components/ArticleList";
+import ArticleView from "@/components/ArticleView";
 
-  export default {
-    name: 'main-page',
-    components: {TreeNav, ArticleList, ArticleView},
-    data () {
-      return {}
-    },
-    mounted () {
-    },
-    methods: {}
-  }
+export default {
+  name: "main-page",
+  components: { TreeNav, ArticleList, ArticleView },
+  data() {
+    return {};
+  },
+  mounted() {},
+  methods: {}
+};
 </script>
 
-<style>
-
-</style>
+<style></style>

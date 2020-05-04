@@ -34,7 +34,7 @@
         </el-select>
       </el-form-item>
       <transition name="el-zoom-in-top">
-        <div v-show="config.uploadType==='qiniu'">
+        <div v-show="config.uploadType === 'qiniu'">
           <el-form-item label="七牛存储区域">
             <el-select
               v-model="config.qiniuZone"
@@ -49,22 +49,38 @@
             </el-select>
           </el-form-item>
           <el-form-item label="AccessKey">
-            <el-input v-model="config.qiniuAccessKey" style="width:100%" placeholder="七牛AccessKey" />
+            <el-input
+              v-model="config.qiniuAccessKey"
+              style="width:100%"
+              placeholder="七牛AccessKey"
+            />
           </el-form-item>
           <el-form-item label="SecretKey">
-            <el-input v-model="config.qiniuSecretKey" style="width:100%" placeholder="七牛SecretKey" />
+            <el-input
+              v-model="config.qiniuSecretKey"
+              style="width:100%"
+              placeholder="七牛SecretKey"
+            />
           </el-form-item>
           <el-form-item label="Bucket">
-            <el-input v-model="config.qiniuBucket" style="width:100%" placeholder="七牛Bucket" />
+            <el-input
+              v-model="config.qiniuBucket"
+              style="width:100%"
+              placeholder="七牛Bucket"
+            />
           </el-form-item>
           <el-form-item label="Host">
-            <el-input v-model="config.qiniuHost" style="width:100%" placeholder="七牛Host" />
+            <el-input
+              v-model="config.qiniuHost"
+              style="width:100%"
+              placeholder="七牛Host"
+            />
           </el-form-item>
         </div>
       </transition>
 
       <transition name="el-zoom-in-top">
-        <div v-show="config.uploadType==='aliyunOss'">
+        <div v-show="config.uploadType === 'aliyunOss'">
           <el-form-item label="Endpoint">
             <el-input
               v-model="config.aliyunOssEndpoint"
@@ -104,7 +120,7 @@
       </transition>
 
       <transition name="el-zoom-in-top">
-        <div v-show="config.uploadType==='tencentOss'">
+        <div v-show="config.uploadType === 'tencentOss'">
           <el-form-item label="SecretId">
             <el-input
               v-model="config.tencentOssSecretId"
@@ -137,7 +153,9 @@
       </transition>
 
       <el-form-item>
-        <el-button type="primary" @click="saveConfig">{{$t('save')}}</el-button>
+        <el-button type="primary" @click="saveConfig">{{
+          $t("save")
+        }}</el-button>
       </el-form-item>
     </el-form>
   </el-main>
@@ -171,7 +189,7 @@ export default {
     };
   },
   created() {
-    this.config = this.$store.state.Config.config
+    this.config = this.$store.state.Config.config;
   },
   methods: {
     async saveConfig() {
