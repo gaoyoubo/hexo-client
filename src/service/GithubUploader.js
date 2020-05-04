@@ -2,7 +2,7 @@ import when from "when";
 
 const fs = require("fs");
 const path = require("path");
-const uuid = require("uuid/v1");
+import { v4 as uuid } from "uuid";
 const moment = require("moment");
 
 class GithubUploader {

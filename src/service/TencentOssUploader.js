@@ -2,7 +2,7 @@ import when from "when";
 
 const COS = require("cos-nodejs-sdk-v5");
 const moment = require("moment");
-const uuid = require("uuid/v1");
+import { v4 as uuid } from "uuid";
 const path = require("path");
 
 class TencentOssUploader {
