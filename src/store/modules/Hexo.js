@@ -110,7 +110,7 @@ const actions = {
           config: os.homedir() + "/.hexo-client/_config.yml"
         });
 
-        await hexo.myInit();
+        await hexo.init();
         await hexo.watch();
 
         context.dispatch("UiStatus/setDialogFormVisible", false, {
