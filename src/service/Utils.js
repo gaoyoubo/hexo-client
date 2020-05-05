@@ -1,9 +1,12 @@
 const hexoUtil = require("hexo-util");
 const yfm = require("hexo-front-matter");
 
-// 系统预订的front matters
+/**
+ * 系统预订的front matters
+ https://hexo.io/zh-cn/docs/front-matter.html
+ * @type {string[]}
+ */
 const SYSTEM_FRONT_MATTERS = [
-  // https://hexo.io/zh-cn/docs/front-matter.html
   "layout",
   "title",
   "date",
