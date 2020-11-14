@@ -27,10 +27,10 @@
           style="width:100%"
         >
           <el-option label="GitHub" value="github"></el-option>
-          <el-option label="sm.ms" value="sm.ms"></el-option>
           <el-option label="七牛" value="qiniu"></el-option>
-          <el-option label="AliyunOss" value="aliyunOss"></el-option>
-          <el-option label="TencentOss" value="tencentOss"></el-option>
+          <el-option label="阿里云OSS" value="aliyunOss"></el-option>
+          <el-option label="腾讯云OSS" value="tencentOss"></el-option>
+          <el-option label="sm.ms" value="sm.ms"></el-option>
         </el-select>
       </el-form-item>
       <transition name="el-zoom-in-top">
@@ -125,28 +125,28 @@
             <el-input
               v-model="config.tencentOssSecretId"
               style="width:100%"
-              placeholder="tencent oss SecretId"
+              placeholder="Tencent oss SecretId"
             />
           </el-form-item>
           <el-form-item label="SecretKey">
             <el-input
               v-model="config.tencentOssSecretKey"
               style="width:100%"
-              placeholder="tencent oss SecretKey"
+              placeholder="Tencent oss SecretKey"
             />
           </el-form-item>
           <el-form-item label="COS_REGION">
             <el-input
               v-model="config.tencentOssCOS_REGION"
               style="width:100%"
-              placeholder="tencent oss COS_REGION"
+              placeholder="Tencent oss COS_REGION"
             />
           </el-form-item>
           <el-form-item label="Bucket">
             <el-input
               v-model="config.tencentOssBucket"
               style="width:100%"
-              placeholder="tencent oss bucket"
+              placeholder="Tencent oss bucket"
             />
           </el-form-item>
         </div>

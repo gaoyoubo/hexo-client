@@ -4,7 +4,6 @@ import router from "./router";
 import store from "./store";
 import "./assets/style.css";
 import "./plugins/element.js";
-import "./plugins/editor.js";
 import "./plugins/analytics.js";
 import i18n from "./plugins/i18n";
 

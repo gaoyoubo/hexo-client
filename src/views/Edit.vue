@@ -22,7 +22,6 @@
         <el-form-item prop="content">
           <markdown-editor
             v-model="postForm.content"
-            :initValue="postForm.content"
             @change="formChanged = true"
             @save="submitForm"
           />
